@@ -43,6 +43,8 @@ class Server {
 
 		void	connectNewClient();
 		void	handleNewInput(int fd);
+		//void 	deleteClient(int fd);
+		Client	*getClientByFd(int fd);
 		void	startListening();
 		void	turnOn();
 		void	turnOff();

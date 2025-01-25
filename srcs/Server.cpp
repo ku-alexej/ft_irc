@@ -79,12 +79,44 @@ void	Server::connectNewClient() {
 
 	std::cout << "[INFO]: Client fd=" << fdIn << " connected" << std::endl;
 }
+// void	Server::deleteClient(int fd) {
+// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+// 		if (it->getFd() == toDelete.getFd())
+// 			this->_clients.erase(it);
+// }
 
+
+Client* Server::getClientByFd(int fd) {
+    for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+        if (it->getFd() == fd) {
+            return &(*it); 
+        }
+    }
+    return NULL;  
+}
 // --- handle new input ---
 void	Server::handleNewInput(int fd) {
-	// std::cout << "You are the dancing bear" << std::endl;
+	//std::cout << "You are the dancing bear" << std::endl;
+	char buff[1024]; 
+	memset(buff, 0, sizeof(buff));
+	Client *client = getClientByFd(fd);
+	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0); //-> receive the data
+	std::cout << "fd" << fd << std::endl;
+	if(bytes <= 0){
+		std::cout << RED << "Client <" << client->getFd() << "> Disconnected" << std::endl;
+		//deleteClient(fd); 
+		// define cleaning
+		close(fd); 
+	}
 
-	(void) fd;
+	else{ //-> print the received data
+		client -> setBuffer(buff);
+		std::cout << client->getBuffer() << std::endl;
+
+	
+		//std::cout << YEL << "Client <" << fd << "> Data: " << buff;
+		//here you can add your code to process the received : parse, check, authenticate, handle the command, etc...
+	}
 }
 
 // --- turn on/off ---
