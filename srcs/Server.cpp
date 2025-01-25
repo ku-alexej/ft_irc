@@ -113,7 +113,7 @@ void	Server::handleNewInput(int fd) {
 		client -> setBuffer(buff);
 		std::cout << client->getBuffer() << std::endl;
 
-	
+			
 		//std::cout << YEL << "Client <" << fd << "> Data: " << buff;
 		//here you can add your code to process the received : parse, check, authenticate, handle the command, etc...
 	}
