@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/25 11:50:12 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:28:28 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,34 @@ Server::~Server() {
 
 // --- setters ---
 
+// --- reply ---
+// static size_t	reply(std::string msg, int fd) {
+// 	if (msg[msg.size() - 1] != '\n')
+// 		msg += "\n";
+
+// 	ssize_t	sent_size = send(fd, msg.c_str(), msg.length(), 0);
+// 	if(sent_size != (ssize_t) msg.length())
+// 		std::cout << "[ERROR]: The message has not been sent entirely." << std::endl;
+// 	return (sent_size);
+// }
+
+void showMsg(int fd) {
+	char buff[512]; 
+	memset(buff, 0, sizeof(buff)); 
+
+	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0); 
+
+	if(bytes < 0) {
+		std::cout << RED << "[ERROR]: Client fd=" << fd << ": recv error" << RES << std::endl;
+		// Kick off the client from the server
+	} else if (bytes == 0) {
+		std::cout << RED << "[WARN]: Client fd=" << fd << ": empty buffer" << RES << std::endl;
+	} else {
+		buff[bytes] = '\0';
+		std::cout << YEL << "Client <" << fd << "> Data:\n" << RES << buff << std::endl;
+	}
+}
+
 // --- handle new client ---
 void	Server::connectNewClient() {
 	int					fdIn;
@@ -82,8 +110,8 @@ void	Server::connectNewClient() {
 
 // --- handle new input ---
 void	Server::handleNewInput(int fd) {
-	// std::cout << "You are the dancing bear" << std::endl;
-
+	std::cout << "You are the dancing bear" << std::endl;
+	showMsg(fd);
 	(void) fd;
 }
 
