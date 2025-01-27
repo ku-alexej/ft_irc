@@ -95,6 +95,17 @@ Client* Server::getClientByFd(int fd) {
     return NULL;  
 }
 // --- handle new input ---
+std::vector<std::string> Server::splitIrssiCommandinToken(std::string cmd)
+{
+    std::vector<std::string> result;
+    std::istringstream iss(cmd);
+    std::string token;
+
+    while (iss >> token) {
+        result.push_back(token);
+    }
+    return result;
+}
 
 std::vector<std::string> Server::parse_input(std::string buffer)
 {
@@ -104,13 +115,30 @@ std::vector<std::string> Server::parse_input(std::string buffer)
 	while(std::getline(stm, line))
 	{
 		size_t find = line.find_first_of("\r\n");
-		// ERROR MANAGEMENT 
-		line = line.substr(0,find);
+		if(find != std::string::npos)
+			line = line.substr(0,find);
 		commands.push_back(line);
 		
 	}
+	for (size_t i = 0; i < commands.size(); ++i)
+    {
+        std::cout << "Command " << i << ": " << commands[i] << "\n";
+    }
 	return commands;
 }	
+
+int Server::exec(std::string cmd,int fd)
+{
+	std::vector<std::string> tokens;
+	(void) fd;
+	tokens = splitIrssiCommandinToken(cmd);
+	for (size_t i = 0; i < tokens.size(); ++i)
+    {
+        std::cout << "Command V2 -> " << i << ": " << tokens[i] << "\n";
+    }
+
+	return (0);
+}
 void	Server::handleNewInput(int fd) {
 	//std::cout << "You are the dancing bear" << std::endl;
 	char buff[1024]; 
@@ -129,8 +157,11 @@ void	Server::handleNewInput(int fd) {
 		client -> setBuffer(buff);
 		std::cout << client->getBuffer() << std::endl;	
 		//todo verify buffer is not empty
-		std::cout << YEL << "Client <" << fd << "> Data: " << buff;
+		//std::cout << YEL << "Client <" << fd << "> Data: " << buff;
 		std::vector<std::string> cmds = parse_input(client->getBuffer());
+		for(size_t i = 0; i < cmds.size(); i++)
+			exec(cmds[i], fd);
+			
 		// here that should be splitted
 		//here you can add your code to process the received : parse, check, authenticate, handle the command, etc...
 	}

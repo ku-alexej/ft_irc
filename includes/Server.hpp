@@ -45,8 +45,10 @@ class Server {
 
 		void	connectNewClient();
 		void	handleNewInput(int fd);
+		int 	exec(std::string cmd, int fd);
 		//void 	deleteClient(int fd);
 		std::vector<std::string> parse_input(std::string buffer);
+		std::vector<std::string> splitIrssiCommandinToken(std::string cmd);
 		Client	*getClientByFd(int fd);
 		void	startListening();
 		void	turnOn();
