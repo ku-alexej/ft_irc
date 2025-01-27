@@ -103,6 +103,7 @@ std::vector<std::string> Server::splitIrssiCommandinToken(std::string cmd)
 
     while (iss >> token) {
         result.push_back(token);
+		token.clear();
     }
     return result;
 }
@@ -162,8 +163,6 @@ void	Server::handleNewInput(int fd) {
 		for(size_t i = 0; i < cmds.size(); i++)
 			exec(cmds[i], fd);
 			
-		// here that should be splitted
-		//here you can add your code to process the received : parse, check, authenticate, handle the command, etc...
 	}
 }
 
