@@ -22,6 +22,8 @@
 # include <poll.h>
 # include <fcntl.h>
 # include <arpa/inet.h>
+#include <sstream>
+
 // # include <sstream>
 // # include <sys/socket.h>
 // # include <sys/types.h>
@@ -44,6 +46,7 @@ class Server {
 		void	connectNewClient();
 		void	handleNewInput(int fd);
 		//void 	deleteClient(int fd);
+		std::vector<std::string> parse_input(std::string buffer);
 		Client	*getClientByFd(int fd);
 		void	startListening();
 		void	turnOn();

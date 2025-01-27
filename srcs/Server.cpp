@@ -95,6 +95,22 @@ Client* Server::getClientByFd(int fd) {
     return NULL;  
 }
 // --- handle new input ---
+
+std::vector<std::string> Server::parse_input(std::string buffer)
+{
+	std::vector<std::string> commands;
+	std::istringstream stm(buffer);
+	std::string line;
+	while(std::getline(stm, line))
+	{
+		size_t find = line.find_first_of("\r\n");
+		// ERROR MANAGEMENT 
+		line = line.substr(0,find);
+		commands.push_back(line);
+		
+	}
+	return commands;
+}	
 void	Server::handleNewInput(int fd) {
 	//std::cout << "You are the dancing bear" << std::endl;
 	char buff[1024]; 
@@ -111,10 +127,11 @@ void	Server::handleNewInput(int fd) {
 
 	else{ //-> print the received data
 		client -> setBuffer(buff);
-		std::cout << client->getBuffer() << std::endl;
-
-			
-		//std::cout << YEL << "Client <" << fd << "> Data: " << buff;
+		std::cout << client->getBuffer() << std::endl;	
+		//todo verify buffer is not empty
+		std::cout << YEL << "Client <" << fd << "> Data: " << buff;
+		std::vector<std::string> cmds = parse_input(client->getBuffer());
+		// here that should be splitted
 		//here you can add your code to process the received : parse, check, authenticate, handle the command, etc...
 	}
 }
