@@ -23,14 +23,15 @@ void    Server::exec(std::string cmd, int fd) {
 		cmdPass(tokens, fd);
 	if (tokens[0] == "NICK")
 	    cmdNick(tokens, fd);
-	// if (tokens[0] == "NAME")
-	//     cmdName();
+	if (tokens[0] == "NAME")
+	    cmdName(tokens, fd);
 }
 
 void	Server::cmdNick(std::vector<std::string> tokens, int fd) 
 {
 	
 	std::cout << "cmdPass - setNickname:" << std::endl;
+	//check the name/nick is set
 	Client *client = getClientByFd(fd);
 	if (tokens[1].empty())
 		std::cout << "[NICK] is not defined" << std::endl;
@@ -43,6 +44,7 @@ void 	Server::cmdName(std::vector<std::string> tokens, int fd)
 
 	std::cout << "cmdPass - setNickname:" << std::endl;
 	Client *client = getClientByFd(fd);
+	//check the name/nick is set
 	if (tokens[1].empty())
 		std::cout << "[NICK] is not defined" << std::endl;
 	client -> setUsername(tokens[1]);
