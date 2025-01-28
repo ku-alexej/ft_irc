@@ -14,16 +14,39 @@
 
 void    Server::exec(std::string cmd, int fd) {
 	std::vector<std::string> tokens;
-	(void) fd;
 	tokens = splitIrssiCommandinToken(cmd);
 	
 	std::cout << "[INFO]: " << GRN << "token=" << RES;
 	printStringVector(tokens);
-
+	
 	if (tokens[0] == "PASS")
 		cmdPass(tokens, fd);
+	if (tokens[0] == "NICK")
+	    cmdNick(tokens, fd);
 	// if (tokens[0] == "NAME")
 	//     cmdName();
+}
+
+void	Server::cmdNick(std::vector<std::string> tokens, int fd) 
+{
+	
+	std::cout << "cmdPass - setNickname:" << std::endl;
+	Client *client = getClientByFd(fd);
+	if (tokens[1].empty())
+		std::cout << "[NICK] is not defined" << std::endl;
+	client -> setNickname(tokens[1]);
+	std::cout << client -> getNickname() << std::endl;
+}
+
+void 	Server::cmdName(std::vector<std::string> tokens, int fd)
+{
+
+	std::cout << "cmdPass - setNickname:" << std::endl;
+	Client *client = getClientByFd(fd);
+	if (tokens[1].empty())
+		std::cout << "[NICK] is not defined" << std::endl;
+	client -> setUsername(tokens[1]);
+	std::cout << client -> getUsername() << std::endl;
 }
 
 

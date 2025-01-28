@@ -46,6 +46,8 @@ class Server {
 		void	connectNewClient();
 		void	handleNewInput(int fd, int fdsIndex);
 		void	exec(std::string cmd, int fd);
+		void 	cmdNick(std::vector<std::string> tokens, int fd);
+		void 	cmdName(std::vector<std::string> tokens, int fd);
 		//void 	deleteClient(int fd);
 		std::vector<std::string>	parsCommands(std::string buffer);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
@@ -55,7 +57,7 @@ class Server {
 		// void	cmdUser();
 		// void	cmdQuit();
 		// void	cmdPing();
-		// void	cmdCap();
+
 		
 		Client	*getClientByFd(int fd);
 		void	deleteClient(Client toDelete);
