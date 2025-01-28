@@ -6,14 +6,15 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 15:39:30 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:45:31 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REPLYES_HPP
 # define REPLYES_HPP
 
-# define CRLF "\r\n"
+# define CRLF		"\r\n"
+# define CMD_LEN	512
 
 // client = nickname of user
 
@@ -77,6 +78,8 @@
 
 
 // --- replyes ---
+// "001" // after correct pass + nick + blallala
+# define RPL_WELCOME(client, nickName, userName, hostName)				"001: " + client + " :Welcome to the IRC Network, " + nickName + "!" + userName + "@" + hostName + "]"
 // "276" // WHOIS
 # define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276: " + client + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
 // "301" // WHOIS PRIVMSG

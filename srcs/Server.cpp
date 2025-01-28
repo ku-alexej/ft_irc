@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 17:28:58 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:53:54 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,43 +44,36 @@ Server::~Server() {
 // --- getters ---
 
 // --- setters ---
+// void	Server::deleteClient(int fd) {
+// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+// 		if (it->getFd() == toDelete.getFd())
+// 			this->_clients.erase(it);
+// }
 
-// --- print ---
-void	printStringVector(std::vector<std::string> v) {
-	for (size_t i = 0; i < v.size(); i++) {
-		std::cout << "[" << v[i] << "]";
-		if (i + 1 < v.size())
-			std::cout << GRN << "->" << RES;
-	}
-	std::cout << std::endl;
+void	Server::deleteClient(Client toDelete) {
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if (it->getFd() == toDelete.getFd()) {
+			this->_clients.erase(it);
+			std::cout << "[INFO]: client fd=" << toDelete.getFd() << " was deleted" << std::endl;
+			return ;
+		}
 }
 
-void	printBuffer(std::string str) {
-	std::cout << CYN << "[INFO]: buffer=[";
-	for (int i = 0; str[i] != '\0'; i++) {
-		if (str[i] == '\n')
-			std::cout << "\\n";
-		else if (str[i] == '\r')
-			std::cout << "\\r";
-		else 
-			std::cout << str[i];
+Client* Server::getClientByFd(int fd) {
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		if (it->getFd() == fd) {
+			return &(*it);
+		}
 	}
-	std::cout << "]" << RES << std::endl;
+	return (NULL);
 }
 
-void	printClientBuffer(Client client) {
-	std::string str = client.getBuffer();
-	
-	std::cout << YEL << "[INFO]: client fd=" << client.getFd() << " buffer=[";
-	for (int i = 0; str[i] != '\0'; i++) {
-		if (str[i] == '\n')
-			std::cout << "\\n";
-		else if (str[i] == '\r')
-			std::cout << "\\r";
-		else 
-			std::cout << str[i];
-	}
-	std::cout << "]" << RES << std::endl;
+void	Server::deleteFromFds(int fdsIndex) {
+	std::vector<struct pollfd>::iterator it = _fds.begin();
+	for (int i = 0; i < fdsIndex; i++) 
+		it++;
+	if (it != _fds.end())
+		_fds.erase(it);
 }
 
 // --- reply ---
@@ -93,23 +86,6 @@ void	printClientBuffer(Client client) {
 // 		std::cout << "[ERROR]: The message has not been sent entirely." << std::endl;
 // 	return (sent_size);
 // }
-
-void showMsg(int fd) {
-	char buff[512];
-	memset(buff, 0, sizeof(buff));
-
-	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
-
-	if(bytes < 0) {
-		std::cout << RED << "[ERROR]: Client fd=" << fd << ": recv error" << RES << std::endl;
-		// Kick off the client from the server
-	} else if (bytes == 0) {
-		std::cout << RED << "[WARN]: Client fd=" << fd << ": empty buffer" << RES << std::endl;
-	} else {
-		buff[bytes] = '\0';
-		std::cout << YEL << "Client <" << fd << "> Data:\n" << RES << buff << std::endl;
-	}
-}
 
 // --- handle new client ---
 void	Server::connectNewClient() {
@@ -145,37 +121,7 @@ void	Server::connectNewClient() {
 
 	std::cout << "[INFO]: Client fd=" << fdIn << " connected" << std::endl;
 }
-// void	Server::deleteClient(int fd) {
-// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-// 		if (it->getFd() == toDelete.getFd())
-// 			this->_clients.erase(it);
-// }
 
-void	Server::deleteClient(Client toDelete) {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-		if (it->getFd() == toDelete.getFd()) {
-			this->_clients.erase(it);
-			std::cout << "[INFO]: client fd=" << toDelete.getFd() << " was deleted" << std::endl;
-			return ;
-		}
-}
-
-Client* Server::getClientByFd(int fd) {
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if (it->getFd() == fd) {
-			return &(*it);
-		}
-	}
-	return (NULL);
-}
-
-void	Server::deleteFromFds(int fdsIndex) {
-	std::vector<struct pollfd>::iterator it = _fds.begin();
-	for (int i = 0; i < fdsIndex; i++) 
-		it++;
-	if (it != _fds.end())
-		_fds.erase(it);
-}
 
 // --- handle new input ---
 std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
@@ -189,17 +135,6 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
 		token.clear();
 	}
 	return (result);
-}
-
-int	Server::exec(std::string cmd, int fd) {
-	std::vector<std::string> tokens;
-	(void) fd;
-	tokens = splitIrssiCommandinToken(cmd);
-	
-	std::cout << "[INFO]: " << GRN << "token=" << RES;
-	printStringVector(tokens);
-
-	return (0);
 }
 
 std::vector<std::string>	Server::parsCommands(std::string buffer) {

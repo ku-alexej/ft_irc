@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/25 12:09:21 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:23:06 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ class Client {
 		int							getFd();
 		bool						getOnline();
 		bool						getOperator();
+		bool						getPassOk();
 		bool						getRegistred();
+		std::string					getReplyBuffer();
 		std::string					getBuffer();
 		std::string					getIp();
 		std::string					getUsername();
@@ -44,13 +46,16 @@ class Client {
 		void	setFd(int newFd);
 		void	setOnline(bool isOnline);
 		void	setOperator(bool isOperator);
+		void	setPassOk(bool isPassOk);
 		void	setRegistred(bool isRegistred);
+		void	setReplyBuffer(std::string newReply);
 		void	setBuffer(std::string newBuffer);
 		void	setIp(std::string newIp);
 		void	setUsername(std::string newUsername);
 		void	setNickname(std::string newNickname);
 
 		// --- member functions ---
+		void	clearReplyBuffer();
 		void	clearBuffer();
 		void	addInvite(std::string newInvite);
 		void	deleteInvite(std::string toDelete);
@@ -60,7 +65,9 @@ class Client {
 		int							_fd;
 		bool						_online;
 		bool						_operator;
+		bool						_passOk;
 		bool						_registred;
+		std::string					_replyBuffer;
 		std::string					_buffer;
 		std::string					_ip;
 		std::string					_username;
