@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/25 11:39:20 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:41:10 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Colors.hpp"
-# include "Replies.hpp"
+# include "Replyes.hpp"
 
 class Server {
 	public:
