@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/01/24 14:48:22 by akurochk         ###   ########.fr        #
+#    Updated: 2025/01/28 17:55:57 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ NAME =	ircserv
 SRC =	main.cpp \
 		Client.cpp \
 		Channel.cpp \
-		Server.cpp
+		Server.cpp \
+		ServerCommands.cpp \
+		ServerPrint.cpp
 
 # path of sources
 PATH_SRCS =	./srcs

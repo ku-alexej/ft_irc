@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/24 14:42:51 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:41:28 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ void	Channel::addClient(Client newClient) {
 
 void	Channel::deleteClient(Client toDelete) {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-		if (it->getFd() == toDelete.getFd())
+		if (it->getFd() == toDelete.getFd()) {
 			this->_clients.erase(it);
+			return ;
+		}
 }
 
 void	Channel::clearClients() {
@@ -105,8 +107,10 @@ void	Channel::addOperators(Client newOperator) {
 
 void	Channel::deleteOperator(Client toDelete) {
 	for (std::vector<Client>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
-		if (it->getFd() == toDelete.getFd())
+		if (it->getFd() == toDelete.getFd()) {
 			this->_operators.erase(it);
+			return ;
+		}
 }
 
 void	Channel::clearOperators() {

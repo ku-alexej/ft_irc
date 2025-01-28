@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/25 11:39:20 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:14:58 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Colors.hpp"
-# include "Replies.hpp"
+# include "Replyes.hpp"
 
 class Server {
 	public:
@@ -44,16 +44,32 @@ class Server {
 		~Server();
 
 		void	connectNewClient();
-		void	handleNewInput(int fd);
-		int 	exec(std::string cmd, int fd);
+		void	handleNewInput(int fd, int fdsIndex);
+		void	exec(std::string cmd, int fd);
 		//void 	deleteClient(int fd);
-		std::vector<std::string> parse_input(std::string buffer);
-		std::vector<std::string> splitIrssiCommandinToken(std::string cmd);
+		std::vector<std::string>	parsCommands(std::string buffer);
+		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
+
+		void	cmdPass(std::vector<std::string> tokens, int fd);
+		// void	cmdNick();
+		// void	cmdUser();
+		// void	cmdQuit();
+		// void	cmdPing();
+		// void	cmdCap();
+		
 		Client	*getClientByFd(int fd);
+		void	deleteClient(Client toDelete);
+		void	deleteFromFds(int fdsIndex);
+		
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
 		static void	signalHandler(int signum);
+
+		void	printStringVector(std::vector<std::string> v);
+		void	printBuffer(std::string str);
+		void	printClientBuffer(Client client);
+		
 	private:
 		int							_fd;
 		int							_port;
