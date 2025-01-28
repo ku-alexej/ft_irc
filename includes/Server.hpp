@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 15:41:10 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:51:55 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,22 @@ class Server {
 		~Server();
 
 		void	connectNewClient();
-		void	handleNewInput(int fd);
+		void	handleNewInput(int fd, int fdsIndex);
 		int 	exec(std::string cmd, int fd);
 		//void 	deleteClient(int fd);
-		std::vector<std::string> parse_input(std::string buffer);
+		std::vector<std::string> parsCommands(std::string buffer);
 		std::vector<std::string> splitIrssiCommandinToken(std::string cmd);
+		
+		
 		Client	*getClientByFd(int fd);
+		void	deleteClient(Client toDelete);
+		void	deleteFromFds(int fdsIndex);
+		
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
 		static void	signalHandler(int signum);
+		
 	private:
 		int							_fd;
 		int							_port;
