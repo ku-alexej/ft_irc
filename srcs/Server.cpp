@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 17:53:54 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:54:07 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,6 @@ void	Server::deleteFromFds(int fdsIndex) {
 	if (it != _fds.end())
 		_fds.erase(it);
 }
-
-// --- reply ---
-// static size_t	reply(std::string msg, int fd) {
-// 	if (msg[msg.size() - 1] != '\n')
-// 		msg += "\n";
-
-// 	ssize_t	sent_size = send(fd, msg.c_str(), msg.length(), 0);
-// 	if(sent_size != (ssize_t) msg.length())
-// 		std::cout << "[ERROR]: The message has not been sent entirely." << std::endl;
-// 	return (sent_size);
-// }
 
 // --- handle new client ---
 void	Server::connectNewClient() {
@@ -182,10 +171,21 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
 		
-		for (size_t i = 0; i < cmds.size(); i++)
+		for (size_t i = 0; i < cmds.size(); i++) {
 			exec(cmds[i], fd);
-
+		}
+		sentReply(fd);
 	}
+}
+
+void	Server::sentReply(int fd) {
+	Client *client = getClientByFd(fd);
+	
+	std::cout << "[INFO]: reply to client fd=" << client->getFd() << std::endl;
+	printBuffer(client->getReplyBuffer());
+	ssize_t sended = send(client->getFd(), (client->getReplyBuffer()).c_str(), (client->getReplyBuffer()).size(), 0);
+	if (sended > 0)
+		client->clearReplyBuffer();
 }
 
 // --- turn on/off ---

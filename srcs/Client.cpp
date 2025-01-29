@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 18:31:26 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:46:45 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // --- constructors ---
 Client::Client() {
 	this->_fd			= -1;
+	this->_capOn		= false;
 	this->_online		= false;
 	this->_operator		= false;
 	this->_passOk		= false;
@@ -33,6 +34,7 @@ Client::Client(const Client &src) {
 
 Client::Client(int fd, std::string username, std::string nickname) {
 	this->_fd			= fd;
+	this->_capOn		= false;
 	this->_online		= false;
 	this->_operator		= false;
 	this->_passOk		= false;
@@ -48,6 +50,7 @@ Client::Client(int fd, std::string username, std::string nickname) {
 Client	&Client::operator=(const Client &src) {
 	if (this != &src) {
 		this->_fd			= src._fd;
+		this->_capOn		= src._capOn;
 		this->_online		= src._online;
 		this->_operator		= src._operator;
 		this->_passOk		= src._passOk;
@@ -67,6 +70,7 @@ Client::~Client() {}
 
 // --- getters ---
 int							Client::getFd()				{return (this->_fd);}
+bool						Client::getCapOn()			{return (this->_capOn);}
 bool						Client::getOnline()			{return (this->_online);}
 bool						Client::getOperator()		{return (this->_operator);}
 bool						Client::getPassOk()			{return (this->_passOk);}
@@ -80,6 +84,7 @@ std::vector<std::string>	Client::getInvites()		{return (this->_invites);}
 
 // --- setters ---
 void	Client::setFd(int newFd)						{this->_fd			= newFd;}
+void	Client::setCapOn(bool isCapOn)					{this->_capOn		= isCapOn;}
 void	Client::setOnline(bool isOnline)				{this->_online		= isOnline;}
 void	Client::setOperator(bool isOperator)			{this->_operator	= isOperator;}
 void	Client::setPassOk(bool isPassOk)				{this->_passOk		= isPassOk;}
@@ -123,4 +128,9 @@ void	Client::setReplyBuffer(std::string newReply) {
 	if(newReply.size() > CMD_LEN - 2)
     	newReply.resize(CMD_LEN - 2);
   	this->_replyBuffer += (newReply + CRLF);
+	// std::cout << "set: " << YEL << _replyBuffer << RES << std::endl;
+}
+
+void	Client::trimmReplyBuffer(size_t bytes) {
+	this->_replyBuffer.erase(0, bytes);
 }

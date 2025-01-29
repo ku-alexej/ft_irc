@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 18:23:06 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:44:17 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <string>
 # include <vector>
+# include <iostream> // dell after
+# include "Colors.hpp" // dell
 
 class Client {
 	public:
@@ -31,6 +33,7 @@ class Client {
 
 		// --- getters ---
 		int							getFd();
+		bool						getCapOn();
 		bool						getOnline();
 		bool						getOperator();
 		bool						getPassOk();
@@ -44,6 +47,7 @@ class Client {
 
 		// --- setters ---
 		void	setFd(int newFd);
+		void	setCapOn(bool isCapOn);
 		void	setOnline(bool isOnline);
 		void	setOperator(bool isOperator);
 		void	setPassOk(bool isPassOk);
@@ -60,9 +64,11 @@ class Client {
 		void	addInvite(std::string newInvite);
 		void	deleteInvite(std::string toDelete);
 		void	clearInvites();
+		void	trimmReplyBuffer(size_t bytes);
 
 	private:
 		int							_fd;
+		bool						_capOn;
 		bool						_online;
 		bool						_operator;
 		bool						_passOk;

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 18:14:58 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:01:03 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,22 @@ class Server {
 
 		void	connectNewClient();
 		void	handleNewInput(int fd, int fdsIndex);
-		void	exec(std::string cmd, int fd);
+		void	sentReply(int fd);
+		
 		//void 	deleteClient(int fd);
 		std::vector<std::string>	parsCommands(std::string buffer);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
 
+		void	exec(std::string cmd, int fd);
+		void	cmdCap(std::vector<std::string> tokens, int fd);
 		void	cmdPass(std::vector<std::string> tokens, int fd);
-		// void	cmdNick();
-		// void	cmdUser();
+		void	cmdNick(std::vector<std::string> tokens, int fd);
+		void	cmdUser(std::vector<std::string> tokens, int fd);
+		void	cmdPing(std::vector<std::string> tokens, int fd);
+
 		// void	cmdQuit();
 		// void	cmdPing();
-		// void	cmdCap();
+
 		
 		Client	*getClientByFd(int fd);
 		void	deleteClient(Client toDelete);
