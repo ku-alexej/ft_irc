@@ -22,7 +22,7 @@ void	Server::printStringVector(std::vector<std::string> v) {
 }
 
 void	Server::printBuffer(std::string str) {
-	std::cout << CYN << "[INFO]: buffer=[";
+	std::cout << CYN << "[INFO]: RECV buffer=[";
 	for (int i = 0; str[i] != '\0'; i++) {
 		if (str[i] == '\n')
 			std::cout << "\\n";
@@ -37,7 +37,7 @@ void	Server::printBuffer(std::string str) {
 void	Server::printClientBuffer(Client client) {
 	std::string str = client.getBuffer();
 	
-	std::cout << YEL << "[INFO]: client fd=" << client.getFd() << " buffer=[";
+	std::cout << YEL << "[INFO]: client fd=" << client.getFd() << "CLIENT buffer=[";
 	for (int i = 0; str[i] != '\0'; i++) {
 		if (str[i] == '\n')
 			std::cout << "\\n";

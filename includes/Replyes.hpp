@@ -48,7 +48,9 @@
 // "432" // NICK
 # define ERR_ERRONEUSNICKNAME(client, nickName)						"432 " + client + " " + nickName + " :Erroneus nickname"
 // "433" // NICK
-# define ERR_NICKNAMEINUSE(client, nickName)						"433 " + client + " " + nickName + " :Nickname is already in use"
+#define ERR_NICKNAMEINUSE(oldNick, triedNick) \
+  (":" + _serverName + " 433 " + oldNick + " " + triedNick + " :Nickname is already in use")
+
 // "436" // NICK
 // # define ERR_NICKCOLLISION(client, nickName, userName, hostName)	"436 " + client + " " + nickName + " :Nickname collision KILL from " + userName + "@" + hostName + ""
 // "441" // KICK
@@ -79,7 +81,7 @@
 
 // --- replyes ---
 // "001" // after correct pass + nick + blallala
-# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + client + " :Welcome to the IRC Network, " + nickName + "!" + userName + "@" + hostName + "]"
+# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + client + " :Welcome to the IRC Network, " + nickName + "!" + userName + "@" + hostName
 // "276" // WHOIS
 # define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276 " + client + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
 // "301" // WHOIS PRIVMSG

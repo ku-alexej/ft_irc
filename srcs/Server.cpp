@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 17:46:49 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:22:27 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // --- constructors ---
 Server::Server() {
+
 
 }
 
@@ -28,6 +29,7 @@ Server::Server(int port, std::string password) {
 	_serverAddress.sin_addr.s_addr = INADDR_ANY;
 	_serverAddress.sin_port = htons(_port);
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
+	_serverName = "IRC";
 }
 
 // --- operators ---
@@ -182,8 +184,8 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 		
 		for (size_t i = 0; i < cmds.size(); i++) {
 			exec(cmds[i], fd);
+			sentReply(fd);
 		}
-		sentReply(fd);
 	}
 }
 
@@ -193,8 +195,8 @@ void	Server::sentReply(int fd) {
 	std::cout << "[INFO]: reply to client fd=" << client->getFd() << std::endl;
 	printBuffer(client->getReplyBuffer());
 	ssize_t sended = send(client->getFd(), (client->getReplyBuffer()).c_str(), (client->getReplyBuffer()).size(), 0);
-	if (sended > 0)
-		client->clearReplyBuffer();
+	(void)  sended;
+	client->clearReplyBuffer();
 }
 
 // --- turn on/off ---
