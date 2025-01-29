@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 15:54:07 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:46:49 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,15 @@ Client* Server::getClientByFd(int fd) {
 	return (NULL);
 }
 
+Client* Server::getClientByNick(std::string nick) {
+	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		if (it->getNickname() == nick) {
+			return &(*it);
+		}
+	}
+	return (NULL);
+}
+
 void	Server::deleteFromFds(int fdsIndex) {
 	std::vector<struct pollfd>::iterator it = _fds.begin();
 	for (int i = 0; i < fdsIndex; i++) 
@@ -84,7 +93,7 @@ void	Server::connectNewClient() {
 	socklen_t			len;
 	Client				newClient;
 
-	std::cout << "[INFO]: Connect new client" << std::endl;
+	std::cout << UGRN << "[INFO]: Connect new client" << RES << std::endl;
 	len = sizeof(clientAddress);
 	fdIn = accept(_fd, (sockaddr *)&(clientAddress), &len);
 
@@ -108,7 +117,7 @@ void	Server::connectNewClient() {
 	_clients.push_back(newClient);
 	_fds.push_back(clientIn);
 
-	std::cout << "[INFO]: Client fd=" << fdIn << " connected" << std::endl;
+	std::cout << UGRN << "[INFO]: Client fd=" << fdIn << " connected" << RES << std::endl;
 }
 
 

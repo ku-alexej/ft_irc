@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/01/28 17:55:57 by akurochk         ###   ########.fr        #
+#    Updated: 2025/01/29 18:01:32 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,13 @@ SRC =	main.cpp \
 		Channel.cpp \
 		Server.cpp \
 		ServerCommands.cpp \
-		ServerPrint.cpp
+		ServerPrint.cpp \
+		cmdCAP.cpp \
+		cmdNICK.cpp \
+		cmdPASS.cpp \
+		cmdPING.cpp \
+		cmdUSER.cpp \
+		cmdWHOIS.cpp
 
 # path of sources
 PATH_SRCS =	./srcs

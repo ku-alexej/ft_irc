@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 15:57:23 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:03:49 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@
 # define RPL_WHOISOPERATOR(client, nickName)							"313 " + client + " " + nickName + " :is an IRC operator"
 // "317" // WHOIS
 # define RPL_WHOISIDLE(client, nickName, secs, signon)					"317 " + client + " " + nickName + " " + secs + " " + signon + " :seconds idle, signon time"
+// "318" // WHOIS
+# define RPL_ENDOFWHOIS(client, nickName)								"318 " + client + " " + nickName + " :End of /WHOIS list"
 // "319" // WHOIS
 # define RPL_WHOISCHANNELS(client, nickName, channelName)				"319 " + client + " " + nickName + " :[prefix]" + channelName + "{ [prefix]" + channelName + "}"
 // "320" // WHOIS

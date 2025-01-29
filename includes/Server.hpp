@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 16:01:03 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:56:06 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,14 @@ class Server {
 		void	cmdNick(std::vector<std::string> tokens, int fd);
 		void	cmdUser(std::vector<std::string> tokens, int fd);
 		void	cmdPing(std::vector<std::string> tokens, int fd);
+		void	cmdWhois(std::vector<std::string> tokens, int fd);
 
 		// void	cmdQuit();
 		// void	cmdPing();
 
 		
 		Client	*getClientByFd(int fd);
+		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
 		
