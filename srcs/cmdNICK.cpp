@@ -46,9 +46,14 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 	}
 
 	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		std::cout << "\033[31m[Verify that nick is unique:\n"
+          << "  Token: " << tokens[1] << "\n"
+          << "  Name:  " << it->getNickname() << "\033[0m"
+          << std::endl;
+
 		if (toLower(tokens[1]) == toLower(it->getNickname())) {
 			// std::cout << "cmdNick - 3" << std::endl;
-			c->setReplyBuffer(ERR_NICKNAMEINUSE(c->getNickname(), tokens[1]));
+			c->setReplyBuffer(ERR_NICKNAMEINUSE(it->getNickname(), tokens[1]));
 			return ;
 		}
 	}

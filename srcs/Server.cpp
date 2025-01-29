@@ -15,6 +15,7 @@
 // --- constructors ---
 Server::Server() {
 
+
 }
 
 Server::Server(const Server &src) {
@@ -28,6 +29,7 @@ Server::Server(int port, std::string password) {
 	_serverAddress.sin_addr.s_addr = INADDR_ANY;
 	_serverAddress.sin_port = htons(_port);
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
+	_serverName = "IRC";
 }
 
 // --- operators ---
@@ -193,8 +195,8 @@ void	Server::sentReply(int fd) {
 	std::cout << "[INFO]: reply to client fd=" << client->getFd() << std::endl;
 	printBuffer(client->getReplyBuffer());
 	ssize_t sended = send(client->getFd(), (client->getReplyBuffer()).c_str(), (client->getReplyBuffer()).size(), 0);
-	if (sended > 0)
-		client->clearReplyBuffer();
+	(void)  sended;
+	client->clearReplyBuffer();
 }
 
 // --- turn on/off ---

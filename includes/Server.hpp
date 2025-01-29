@@ -78,6 +78,7 @@ class Server {
 		void	printClientBuffer(Client client);
 		
 	private:
+		std::string 				_serverName;
 		int							_fd;
 		int							_port;
 		static bool					_stayTurnedOn;
