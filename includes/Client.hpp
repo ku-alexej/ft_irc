@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 15:44:17 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:54:09 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ class Client {
 		std::string					getBuffer();
 		std::string					getIp();
 		std::string					getUsername();
+		std::string					getHostname();
+		std::string					getServername();
+		std::string					getRealname();
 		std::string					getNickname();
 		std::vector<std::string>	getInvites();
 
@@ -56,6 +59,9 @@ class Client {
 		void	setBuffer(std::string newBuffer);
 		void	setIp(std::string newIp);
 		void	setUsername(std::string newUsername);
+		void	setHostname(std::string newHostname);
+		void	setServername(std::string newServername);
+		void	setRealname(std::string newRealname);
 		void	setNickname(std::string newNickname);
 
 		// --- member functions ---
@@ -77,6 +83,9 @@ class Client {
 		std::string					_buffer;
 		std::string					_ip;
 		std::string					_username;
+		std::string					_hostname;		// mimi
+		std::string					_servername;	// mimi
+		std::string					_realname;		// mimi
 		std::string					_nickname;
 		std::vector<std::string>	_invites;
 };
