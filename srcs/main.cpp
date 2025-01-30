@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:18 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/24 14:45:53 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:12:27 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char **av) {
 	if (!isInputValid(ac, av))
 		return (EXIT_FAILURE);
 
-	Server server(atoi(av[1]), av[2]);
+	Server server(atoi(av[1]), av[2], SERVER_NAME);
 	try {
 		std::cout << GRN << "[INFO]: turning on the server" << RES << std::endl;
 		signal(SIGINT, Server::signalHandler);
