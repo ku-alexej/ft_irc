@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 17:54:17 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:16:07 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Server::printBuffer(std::string str) {
 			std::cout << "\\n";
 		else if (str[i] == '\r')
 			std::cout << "\\r";
-		else 
+		else
 			std::cout << str[i];
 	}
 	std::cout << "]" << RES << std::endl;
@@ -36,14 +36,14 @@ void	Server::printBuffer(std::string str) {
 
 void	Server::printClientBuffer(Client client) {
 	std::string str = client.getBuffer();
-	
+
 	std::cout << YEL << "[INFO]: client fd=" << client.getFd() << " buffer=[";
 	for (int i = 0; str[i] != '\0'; i++) {
 		if (str[i] == '\n')
 			std::cout << "\\n";
 		else if (str[i] == '\r')
 			std::cout << "\\r";
-		else 
+		else
 			std::cout << str[i];
 	}
 	std::cout << "]" << RES << std::endl;

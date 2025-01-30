@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 16:38:10 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:15:59 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ Client* Server::getClientByNick(std::string nick) {
 
 void	Server::deleteFromFds(int fdsIndex) {
 	std::vector<struct pollfd>::iterator it = _fds.begin();
-	for (int i = 0; i < fdsIndex; i++) 
+	for (int i = 0; i < fdsIndex; i++)
 		it++;
 	if (it != _fds.end())
 		_fds.erase(it);
@@ -128,7 +128,7 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
 		result.push_back(token);
 		token.clear();
 	}
-	
+
 	return (result);
 }
 
@@ -174,7 +174,7 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
-		
+
 		for (size_t i = 0; i < cmds.size(); i++)
 			exec(cmds[i], fd);
 		sentReply(fd);
@@ -183,7 +183,7 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 
 void	Server::sentReply(int fd) {
 	Client *client = getClientByFd(fd);
-		
+
 	std::cout << CYN << "[INFO]: reply to client fd=" << client->getFd() << RES << std::endl;
 	printBuffer(client->getReplyBuffer());
 
@@ -215,7 +215,7 @@ void	Server::turnOn() {
 
 	// Client fox = Client(100, "akurochk", "akurochk");	// debug client
 	// _clients.push_back(fox);								// debug client
-	
+
 	startListening();
 	std::cout << GRN << "[INFO]: the server fd=" << _fd << " was opened" << RES << std::endl;
 	std::cout << "[INFO]: Waiting for connections ..." << std::endl;

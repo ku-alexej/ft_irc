@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 16:09:58 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:16:43 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Server {
 		void	connectNewClient();
 		void	handleNewInput(int fd, int fdsIndex);
 		void	sentReply(int fd);
-		
+
 		std::vector<std::string>	parsCommands(std::string buffer);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
 
@@ -57,14 +57,22 @@ class Server {
 		void	cmdUser(std::vector<std::string> tokens, int fd);
 		void	cmdPing(std::vector<std::string> tokens, int fd);
 		void	cmdWhois(std::vector<std::string> tokens, int fd);
+		void	cmdJoin(std::vector<std::string> tokens, int fd);
+		void	cmdPart(std::vector<std::string> tokens, int fd);
+		void	cmdTopic(std::vector<std::string> tokens, int fd);
+		void	cmdInvite(std::vector<std::string> tokens, int fd);
+		void	cmdKick(std::vector<std::string> tokens, int fd);
+		void	cmdMode(std::vector<std::string> tokens, int fd);
+		void	cmdQuit(std::vector<std::string> tokens, int fd);
+
 
 		// void	cmdQuit();
-		
+
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
-		
+
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
@@ -73,7 +81,7 @@ class Server {
 		void	printStringVector(std::vector<std::string> v);
 		void	printBuffer(std::string str);
 		void	printClientBuffer(Client client);
-		
+
 	private:
 		int							_fd;
 		int							_port;
