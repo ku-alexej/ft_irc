@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:31 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 19:01:55 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:55:00 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 void 	Server::cmdUser(std::vector<std::string> tokens, int fd) {
 
-	std::cout << "cmdUser - 0" << std::endl;
 	Client *c = getClientByFd(fd);
 	
 	//check the name/nick is set
 	if (tokens.size() < 5) {
-		// std::cout << "cmdUser - 1" << std::endl;
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
 		return ;
 	}
 
 	if (c->getUsername() != "") {
-		// std::cout << "cmdUser - 2" << std::endl;
 		c->setReplyBuffer(ERR_ALREADYREGISTERED(c->getNickname()));
 		return ;
 	}
@@ -41,10 +38,7 @@ void 	Server::cmdUser(std::vector<std::string> tokens, int fd) {
 	c->setHostname(tokens[2]);
 	c->setServername(tokens[3]);
 	c->setRealname(realname);
-	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "", !c->getCapOn()) {
-		// std::cout << "cmdUser - 3" << std::endl;
-		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getIp()));
-	}
 	
-	std::cout << "cmdUser - X user=[" << c->getUsername() << "]" << std::endl;
+	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "", !c->getCapOn())
+		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
 }

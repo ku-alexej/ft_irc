@@ -6,15 +6,13 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:22 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 17:58:21 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:54:06 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 void	Server::cmdCap(std::vector<std::string> tokens, int fd) {
-
-	std::cout << "cmdCap - 0" << std::endl;
 	Client *c = getClientByFd(fd);
 	
 	if (tokens.size() < 2) {
@@ -30,8 +28,6 @@ void	Server::cmdCap(std::vector<std::string> tokens, int fd) {
 	if (tokens[1] == "END") {
 		c->setCapOn(false);		
 		if (c->getPassOk() && c->getNickname() != "" && c->getUsername() != "")
-				c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getIp()));	
+				c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));	
 	}
-	
-	std::cout << "cmdCap - X [" << c->getUsername() << "]" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 19:22:27 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:58:53 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ Server::~Server() {
 // --- getters ---
 
 // --- setters ---
-// void	Server::deleteClient(int fd) {
-// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-// 		if (it->getFd() == toDelete.getFd())
-// 			this->_clients.erase(it);
-// }
 
 void	Server::deleteClient(Client toDelete) {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
@@ -132,6 +127,7 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
 		result.push_back(token);
 		token.clear();
 	}
+	
 	return (result);
 }
 
@@ -145,7 +141,6 @@ std::vector<std::string>	Server::parsCommands(std::string buffer) {
 		if(find != std::string::npos)
 			line = line.substr(0,find);
 		commands.push_back(line);
-
 	}
 
 	return (commands);
@@ -156,8 +151,7 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 	memset(buff, 0, sizeof(buff));
 	Client *client = getClientByFd(fd);
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
-	std::cout << "[INFO]: recived data from client fd=" << fd << std::endl;
-	printBuffer(buff);
+	std::cout << YEL << "[INFO]: recived data from client fd=" << fd << RES << std::endl;
 
 	if (bytes < 0) {
 		std::cout << RED << "[INFO]: client fd=" << client->getFd() << " can't read data" << RES << std::endl;
@@ -180,21 +174,20 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
 		
-		for (size_t i = 0; i < cmds.size(); i++) {
+		for (size_t i = 0; i < cmds.size(); i++)
 			exec(cmds[i], fd);
-			sentReply(fd);
-		}
+		sentReply(fd);
 	}
 }
 
 void	Server::sentReply(int fd) {
 	Client *client = getClientByFd(fd);
-	
-	std::cout << "[INFO]: reply to client fd=" << client->getFd() << std::endl;
+		
+	std::cout << CYN << "[INFO]: reply to client fd=" << client->getFd() << RES << std::endl;
 	printBuffer(client->getReplyBuffer());
-	ssize_t sended = send(client->getFd(), (client->getReplyBuffer()).c_str(), (client->getReplyBuffer()).size(), 0);
-	if (sended > 0)
-		client->clearReplyBuffer();
+
+	send(client->getFd(), (client->getReplyBuffer()).c_str(), (client->getReplyBuffer()).size(), 0);
+	client->clearReplyBuffer();
 }
 
 // --- turn on/off ---
@@ -218,6 +211,10 @@ void	Server::startListening() {
 }
 
 void	Server::turnOn() {
+
+	Client fox = Client(100, "akurochk", "akurochk");
+	_clients.push_back(fox);
+	
 	startListening();
 	std::cout << GRN << "[INFO]: the server fd=" << _fd << " was opened" << RES << std::endl;
 	std::cout << "[INFO]: Waiting for connections ..." << std::endl;
@@ -225,10 +222,10 @@ void	Server::turnOn() {
 	while (Server::_stayTurnedOn) {
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_stayTurnedOn)
 			throw (std::runtime_error("Error: poll()"));
-		// std::cout << "_fds.siz() = " << _fds.size() << std::endl;
-		for (size_t i = 0; i < _fds.size(); i++)
+		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN)
 				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd, i);
+		}
 	}
 
 	turnOff();
