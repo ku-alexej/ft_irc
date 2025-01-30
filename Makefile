@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/01/30 14:37:45 by akurochk         ###   ########.fr        #
+#    Updated: 2025/01/30 18:32:36 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,14 @@ SRC =	main.cpp \
 		cmdPASS.cpp \
 		cmdPING.cpp \
 		cmdUSER.cpp \
-		cmdWHOIS.cpp
+		cmdWHOIS.cpp \
+		cmdJOIN.cpp \
+		cmdPART.cpp \
+		cmdTOPIC.cpp \
+		cmdINVITE.cpp \
+		cmdKICK.cpp \
+		cmdMODE.cpp \
+		cmdQUIT.cpp
 
 # path of sources
 PATH_SRCS =	./srcs

@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmdMode.cpp                                        :+:      :+:    :+:   */
+/*   cmdTOPIC.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 18:13:43 by akurochk         ###   ########.fr       */
+/*   Created: 2025/01/30 18:11:17 by akurochk          #+#    #+#             */
+/*   Updated: 2025/01/30 18:31:05 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
-
+void	Server::cmdTopic(std::vector<std::string> tokens, int fd) {
+	(void) tokens;
+	(void) fd;
 }
