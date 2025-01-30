@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/01/29 18:01:32 by akurochk         ###   ########.fr        #
+#    Updated: 2025/01/30 14:37:45 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,4 +64,8 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+run:	re
+		clear
+		./ircserv 1234 4545
+
+.PHONY: all clean fclean re run

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 18:54:09 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:52:48 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include <string>
 # include <vector>
-# include <iostream> // dell after
-# include "Colors.hpp" // dell
+# include <iostream>		// dell after
+# include "Colors.hpp"		// dell
 
 class Client {
 	public:
@@ -83,9 +83,9 @@ class Client {
 		std::string					_buffer;
 		std::string					_ip;
 		std::string					_username;
-		std::string					_hostname;		// mimi
-		std::string					_servername;	// mimi
-		std::string					_realname;		// mimi
+		std::string					_hostname;
+		std::string					_servername;
+		std::string					_realname;
 		std::string					_nickname;
 		std::vector<std::string>	_invites;
 };

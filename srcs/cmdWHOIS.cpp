@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:16 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 19:05:22 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:55:29 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@
 
 
 void	Server::cmdWhois(std::vector<std::string> tokens, int fd) {
-
-	std::cout << "cmdWhois - 0" << std::endl;
 	Client *c = getClientByFd(fd);
 	Client *t;
 	
@@ -58,6 +56,4 @@ void	Server::cmdWhois(std::vector<std::string> tokens, int fd) {
 			 
 	c->setReplyBuffer(RPL_WHOISUSER(c->getNickname(), t->getNickname(), t->getUsername(), t->getHostname(), t->getRealname()));
 	c->setReplyBuffer(RPL_ENDOFWHOIS(c->getNickname(), t->getNickname()));
-	
-	std::cout << "cmdWhois - X" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 16:56:06 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:53:34 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ class Server {
 		void	handleNewInput(int fd, int fdsIndex);
 		void	sentReply(int fd);
 		
-		//void 	deleteClient(int fd);
 		std::vector<std::string>	parsCommands(std::string buffer);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
 
@@ -60,8 +59,6 @@ class Server {
 		void	cmdWhois(std::vector<std::string> tokens, int fd);
 
 		// void	cmdQuit();
-		// void	cmdPing();
-
 		
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
@@ -83,7 +80,6 @@ class Server {
 		static bool					_stayTurnedOn;
 		std::string					_password;
 		struct sockaddr_in			_serverAddress;
-		// struct sockaddr_in			_clientAddress;
 		struct pollfd				_clientIn;
 		std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
