@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 18:16:43 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:41:22 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <cstdlib>
 # include <cstring>
 # include <vector>
+# include <map>
 # include <netinet/in.h>
 # include <poll.h>
 # include <fcntl.h>
@@ -50,6 +51,7 @@ class Server {
 		std::vector<std::string>	parsCommands(std::string buffer);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
 
+		void	initCmdMap();
 		void	exec(std::string cmd, int fd);
 		void	cmdCap(std::vector<std::string> tokens, int fd);
 		void	cmdPass(std::vector<std::string> tokens, int fd);
@@ -64,9 +66,6 @@ class Server {
 		void	cmdKick(std::vector<std::string> tokens, int fd);
 		void	cmdMode(std::vector<std::string> tokens, int fd);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
-
-
-		// void	cmdQuit();
 
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
@@ -93,6 +92,7 @@ class Server {
 		std::vector<Client>			_clients;
 		std::vector<Channel>		_channels;
 		std::vector<struct pollfd>	_fds;
+		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };
 
 #endif

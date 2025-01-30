@@ -6,19 +6,33 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 18:15:59 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 19:41:08 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // --- constructors ---
-Server::Server() {
-
-}
+Server::Server() {}
 
 Server::Server(const Server &src) {
 	(void) src;
+}
+
+void	Server::initCmdMap() {
+	this->_cmdMap["CAP"]	= &Server::cmdCap;
+	this->_cmdMap["PASS"]	= &Server::cmdPass;
+	this->_cmdMap["NICK"]	= &Server::cmdNick;
+	this->_cmdMap["USER"]	= &Server::cmdUser;
+	this->_cmdMap["PING"]	= &Server::cmdPing;
+	this->_cmdMap["WHOIS"]	= &Server::cmdWhois;
+	this->_cmdMap["JOIN"]	= &Server::cmdJoin;
+	this->_cmdMap["PART"]	= &Server::cmdPart;
+	this->_cmdMap["TOPIC"]	= &Server::cmdTopic;
+	this->_cmdMap["INVITE"]	= &Server::cmdInvite;
+	this->_cmdMap["KICK"]	= &Server::cmdKick;
+	this->_cmdMap["MODE"]	= &Server::cmdMode;
+	this->_cmdMap["QUIT"]	= &Server::cmdQuit;
 }
 
 Server::Server(int port, std::string password, std::string serverName) {
@@ -29,6 +43,7 @@ Server::Server(int port, std::string password, std::string serverName) {
 	_serverAddress.sin_addr.s_addr = INADDR_ANY;
 	_serverAddress.sin_port = htons(_port);
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
+	this->initCmdMap();
 }
 
 // --- operators ---
@@ -38,9 +53,7 @@ Server	&Server::operator=(const Server &src) {
 }
 
 // --- destructors ---
-Server::~Server() {
-
-}
+Server::~Server() {}
 
 // --- getters ---
 
