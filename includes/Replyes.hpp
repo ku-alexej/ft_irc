@@ -6,21 +6,22 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 16:02:53 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:50:59 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REPLYES_HPP
 # define REPLYES_HPP
 
-# define CRLF		"\r\n"
-# define CMD_LEN	512
+# define CRLF			"\r\n"
+# define CMD_LEN		512
+# define SERVER_NAME	"DarkForest"
 
 // client = nickname of user
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
-# define ERR_NOSUCHNICK(client, nickOrChannel)						"401 " + (client.empty() ? "empty" : client) + " " + nickOrChannel + ":No such nick/channel"
+# define ERR_NOSUCHNICK(client, nickOrChannel)						"401 " + (client.empty() ? "empty" : client) + " " + nickOrChannel + " :No such nick/channel"
 // "402" // WHOIS PRIVMSG
 # define ERR_NOSUCHSERVER(client, serverName)						"402 " + (client.empty() ? "empty" : client) + " " + serverName + " :No such server"
 // "403:" // JOIN PART MODE TOPIC INVITE KICK
@@ -50,7 +51,7 @@
 // "433" // NICK
 # define ERR_NICKNAMEINUSE(client, nickName)						"433 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname is already in use"
 // "436" // NICK
-// # define ERR_NICKCOLLISION(client, nickName, userName, hostName)	"436 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname collision KILL from " + userName + "@" + hostName + ""
+// # define ERR_NICKCOLLISION(client, nickName, userName, hostName)	"436 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname collision KILL from ~" + userName + "@" + hostName + ""
 // "441" // KICK
 # define ERR_USERNOTINCHANNEL(client, nickName, channelName)		"441 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :They aren't on that channel"
 // "442" // PART TOPIC INVITE KICK
@@ -79,7 +80,7 @@
 
 // --- replyes ---
 // "001" // after correct pass + nick + blallala
-# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + (client.empty() ? "empty" : client) + " :Welcome to the IRC Network, " + nickName + "!" + userName + "@" + hostName
+# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + (client.empty() ? "empty" : client) + " :Welcome to the IRC Network, " + nickName + "!~" + userName + "@" + hostName
 // "276" // WHOIS
 # define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276 " + (client.empty() ? "empty" : client) + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
 // "301" // WHOIS PRIVMSG
@@ -87,7 +88,7 @@
 // "307" // WHOIS
 # define RPL_WHOISREGNICK(client, nickName)								"307 " + (client.empty() ? "empty" : client) + " " + nickName + " :has identified for this nick"
 // "311" // WHOIS
-# define RPL_WHOISUSER(client, nickName, userName, hostname, realName)	"311 " + (client.empty() ? "empty" : client) + " " + nickName + " " + userName + " " + hostname + " * :" + realName + ""
+# define RPL_WHOISUSER(client, nickName, userName, hostname, realName)	"311 " + (client.empty() ? "empty" : client) + " " + nickName + " ~" + userName + " " + hostname + " * :" + realName + ""
 // "312" // WHOIS
 # define RPL_WHOISSERVER(client, nickName, serverName, serverInfo)		"312 " + (client.empty() ? "empty" : client) + " " + nickName + " " + serverName + " :" + serverInfo + ""
 // "313" // WHOIS
@@ -115,7 +116,7 @@
 // "338" // WHOIS
 # define RPL_WHOISACTUALLY(client, nickName)							"338 " + (client.empty() ? "empty" : client) + " " + nickName + " :is actually ..."
 																	// "" + (client.empty() ? "empty" : client) + " " + nickName + " <host|ip> :Is actually using host"
-																	// "" + (client.empty() ? "empty" : client) + " " + nickName + " " + userName + "@<hostname> <ip> :Is actually using host"
+																	// "" + (client.empty() ? "empty" : client) + " " + nickName + " ~" + userName + "@<hostname> <ip> :Is actually using host"
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:31 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 15:55:00 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:36:07 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void 	Server::cmdUser(std::vector<std::string> tokens, int fd) {
 
 	Client *c = getClientByFd(fd);
 	
-	//check the name/nick is set
 	if (tokens.size() < 5) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
 		return ;

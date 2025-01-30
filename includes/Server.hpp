@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 15:53:34 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:09:58 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Server {
 	public:
 		Server();
 		Server(const Server &src);
-		Server(int port, std::string password);
+		Server(int port, std::string password, std::string serverName);
 		Server &operator=(const Server &src);
 		~Server();
 
@@ -79,6 +79,7 @@ class Server {
 		int							_port;
 		static bool					_stayTurnedOn;
 		std::string					_password;
+		std::string					_serverName;
 		struct sockaddr_in			_serverAddress;
 		struct pollfd				_clientIn;
 		std::vector<Client>			_clients;

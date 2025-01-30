@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 15:54:16 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:39:09 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,16 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 			return ;
 		}
 	}
-		
+	
+	std::string oldName = c->getNickname();
 	c->setNickname(tokens[1]);
-	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "", !c->getCapOn())
+
+	// examples of possible replyes when change nickname:
+	// :dan-!d@localhost NICK Mamoped
+	// :WiZ NICK Kilroy					<- the code use this one
+	
+	if (!oldName.empty() && !c->getCapOn())
+		c->setReplyBuffer(":" + oldName + " NICK " + tokens[1]);
+	else if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "", !c->getCapOn())
 		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
 }
