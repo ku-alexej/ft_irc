@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 15:58:53 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:38:10 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ Server::Server(const Server &src) {
 	(void) src;
 }
 
-Server::Server(int port, std::string password) {
+Server::Server(int port, std::string password, std::string serverName) {
 	_port = port;
+	_serverName = serverName;
 	_password = password;
 	_serverAddress.sin_family = AF_INET;
 	_serverAddress.sin_addr.s_addr = INADDR_ANY;
@@ -212,8 +213,8 @@ void	Server::startListening() {
 
 void	Server::turnOn() {
 
-	Client fox = Client(100, "akurochk", "akurochk");
-	_clients.push_back(fox);
+	// Client fox = Client(100, "akurochk", "akurochk");	// debug client
+	// _clients.push_back(fox);								// debug client
 	
 	startListening();
 	std::cout << GRN << "[INFO]: the server fd=" << _fd << " was opened" << RES << std::endl;
