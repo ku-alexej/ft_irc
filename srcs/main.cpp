@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:18 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 16:12:27 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:15:55 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	isInputValid(int ac, char **av) {
 		std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
 		return (false);
 	}
-	
+
 	std::string port = av[1];
 	if (port.find_first_not_of("0123456789") != std::string::npos) {
 		std::cerr << RED << "Error: <port> must contain only numbers \"0123456789\"" << RES << std::endl;
@@ -27,12 +27,12 @@ static bool	isInputValid(int ac, char **av) {
 		std::cerr << RED << "Error: <port> must be in range [1024 .. 65535]" << RES << std::endl;
 		return (false);
 	}
-	
+
 	std::string password = av[2];
 	if (password.empty()) {
 		std::cout << YEL << "[WARN]: password not set" << YEL << std::endl;
 	}
-	
+
 	return (true);
 }
 
@@ -51,8 +51,8 @@ int	main(int ac, char **av) {
 		std::cerr << e.what() << std::endl;
 		return (EXIT_FAILURE);
 	}
-	
+
 	std::cout << GRN << "[INFO]: the server was closed" << RES << std::endl;
-	
-	return (EXIT_SUCCESS);    
+
+	return (EXIT_SUCCESS);
 }

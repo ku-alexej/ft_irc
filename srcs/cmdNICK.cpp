@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 17:39:09 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:15:37 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ std::string	toLower(std::string str) {
 
 void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 	Client *c = getClientByFd(fd);
-	
+
 	if (tokens.size() < 2 || tokens[1].empty()) {
 		c->setReplyBuffer(ERR_NONICKNAMEGIVEN(c->getNickname()));
 		return ;
 	}
-	
+
 	if (tokens[1].find_first_not_of("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~[]{}^_") != std::string::npos) {
 		c->setReplyBuffer(ERR_ERRONEUSNICKNAME(c->getNickname(), tokens[1]));
 		return ;
@@ -45,14 +45,14 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 			return ;
 		}
 	}
-	
+
 	std::string oldName = c->getNickname();
 	c->setNickname(tokens[1]);
 
 	// examples of possible replyes when change nickname:
 	// :dan-!d@localhost NICK Mamoped
 	// :WiZ NICK Kilroy					<- the code use this one
-	
+
 	if (!oldName.empty() && !c->getCapOn())
 		c->setReplyBuffer(":" + oldName + " NICK " + tokens[1]);
 	else if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "", !c->getCapOn())
