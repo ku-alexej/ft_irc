@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 16:50:59 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:20:01 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
 # define ERR_NOTOPLEVEL												"413"
 // "414" // PRIVMSG
 # define ERR_WILDTOPLEVEL											"414"
+// "421"
+# define ERR_UNKNOWNCOMMAND(client, command)						"421 " + (client.empty() ? "empty" : client) + " " + command + " :Unknown command"
 // "431" // NICK WHOIS
 # define ERR_NONICKNAMEGIVEN(client)								"431 " + (client.empty() ? "empty" : client) + " :No nickname given"
 // "432" // NICK
@@ -76,11 +78,17 @@
 # define ERR_BADCHANMASK(channelName)								"476 " + channelName + " :Bad Channel Mask"
 // "482" // MODE TOPIC INVITE KICK
 # define ERR_CHANOPRIVSNEEDED(client, channelName)					"482 " + (client.empty() ? "empty" : client) + " " + channelName + " :You're not channel operator"
+// "502"
+# define ERR_USERSDONTMATCH(client)									"502 " + (client.empty() ? "empty" : client) + " :Cant change mode for other users"
+// "501"
+# define ERR_UMODEUNKNOWNFLAG(client)								"501 " + (client.empty() ? "empty" : client) + " :Unknown MODE flag"
 
 
 // --- replyes ---
 // "001" // after correct pass + nick + blallala
 # define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + (client.empty() ? "empty" : client) + " :Welcome to the IRC Network, " + nickName + "!~" + userName + "@" + hostName
+
+# define RPL_UMODEIS(client, userModes)									"221 " + (client.empty() ? "empty" : client) + " " + userModes + ""
 // "276" // WHOIS
 # define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276 " + (client.empty() ? "empty" : client) + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
 // "301" // WHOIS PRIVMSG
