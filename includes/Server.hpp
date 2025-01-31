@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 19:41:22 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:37:31 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ class Server {
 		void	cmdInvite(std::vector<std::string> tokens, int fd);
 		void	cmdKick(std::vector<std::string> tokens, int fd);
 		void	cmdMode(std::vector<std::string> tokens, int fd);
+		void	cmdUserMode(std::vector<std::string> tokens, int fd);
+		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
 
 		Client	*getClientByFd(int fd);
