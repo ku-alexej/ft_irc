@@ -68,7 +68,8 @@ class Server {
 		void	cmdUserMode(std::vector<std::string> tokens, int fd);
 		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
-
+		Channel* getChannel(std::string &chanName);
+		std::vector<Channel>* getChannels();
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);

@@ -11,17 +11,40 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#define RESET   "\033[0m"
+#define RED     "\033[31m"  // Outer vector
+#define GREEN   "\033[32m"  // Subvector
+#define YELLOW  "\033[33m"  // Individual strings
 
+Channel* Server::getChannel(std::string &chanName) {
+    // parse the chan
+}
 
-// Split helper
-std::vector<std::string> split(const std::string& str) {
+bool isValidChannelName(const std::string &channel) {
+    if (channel.empty())
+        return false;
+    char firstChar = channel[0];
+    return (firstChar == '#' || firstChar == '&');
+}
+
+std::vector<std::string> split(const std::string& str, char delimiter) {
     std::vector<std::string> tokens;
-    std::istringstream ss(str);
+    std::stringstream ss(str);
     std::string token;
-    while (ss >> token) {
+    while (std::getline(ss, token, delimiter)) {
         tokens.push_back(token);
     }
     return tokens;
+}
+
+
+void    joinChannel(Client client, std::string &channelName, std::string &key)
+{
+    // get chan
+    // if there -> join
+    // if not
+    // create
+    std::cout << "j" << std::endl;
 }
 
 void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
@@ -37,23 +60,44 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
         return;
     }
     if (tokens.size() > 10) {
-        //too much chans
+        //too much chafns, verify if it's okay 
         c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
         return;
     }
-    std::cout << "print RAW" << std::endl;
-     printBuffer(c -> getRawCmds());
-    // Iterate over all tokens starting from index 1
- 
-    //  std::map<std::string, std::string>::iterator it;
-    // for (it = channelMap.begin(); it != channelMap.end(); ++it) {
-    //     std::string chan = it->first;
-    //     std::string pass = it->second;
-    //     // Handle joining 'chan' with 'pass'
-    //     // Example:
-    //     // joinChannel(c, chan, pass);
+    std::cout << "hello" << std::endl;
+    printStringVector(tokens);
+    std::vector<std::string> channels = split(tokens[1], ',');
+    std::vector<std::string> keys;
+    if (tokens.size() >= 3) {
+        keys = split(tokens[2], ',');
+    }
+    
+    std::map<std::string, std::string> channelMap;
+    for (std::size_t i = 0; i < channels.size(); ++i) {
+        std::string channel = channels[i];
+         if (!isValidChannelName(channel)) {
+            continue;
+        }
+        std::string password = (i < keys.size()) ? keys[i] : "";
+        channelMap[channel] = password;
+    }
+    
+    for (std::map<std::string, std::string>::iterator it = channelMap.begin();
+         it != channelMap.end(); ++it)
+    {
+         std::cout << "[INFO]: Channel: " << it->first
+                   << ", Password: " << (it->second.empty() ? "(none)" : it->second)
+                   << std::endl;
+    }
 
-    //     // Print channel and password
-    //     std::cout << "[INFO]: Channel: " << chan << ", Password: " << pass << std::endl;
-    // }
+    for (std::map<std::string, std::string>::iterator it = channelMap.begin(); it != channelMap.end(); ++it)
+    {
+          // For each channel, perform the join operation.
+        // This function should handle:
+        //   - Checking if the channel exists.
+        //   - Creating the channel if it doesn't exist.
+        //   - Verifying if the client is allowed to join (permissions, ban list, etc.).
+        //   - Adding the client to the channel.
+        //   - Sending the necessary notifications.
+    }
 }

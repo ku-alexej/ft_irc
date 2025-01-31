@@ -19,6 +19,10 @@ Server::Server(const Server &src) {
 	(void) src;
 }
 
+std::vector<Channel> *Server::getChannels() {
+    return &this->_channels;
+}
+
 void	Server::initCmdMap() {
 	this->_cmdMap["CAP"]	= &Server::cmdCap;
 	this->_cmdMap["PASS"]	= &Server::cmdPass;
@@ -136,7 +140,6 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
 	std::vector<std::string> result;
 	std::istringstream iss(cmd);
 	std::string token;
-
 	while (iss >> token) {
 		result.push_back(token);
 		token.clear();
@@ -189,7 +192,10 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 		printStringVector(cmds);
 
 		for (size_t i = 0; i < cmds.size(); i++)
+		{
+			client -> setRawCmds(cmds[i]);
 			exec(cmds[i], fd);
+		}
 		sentReply(fd);
 	}
 }
