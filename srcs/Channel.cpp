@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/28 16:41:28 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:08:58 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,28 @@ Channel & Channel::operator=(const Channel &src) {
 Channel::~Channel() {}
 
 // --- getters ---
-int					Channel::getL()			{return (this->_l);}
-bool				Channel::getI()			{return (this->_i);}
-bool				Channel::getT()			{return (this->_t);}
-std::string			Channel::getK()			{return (this->_k);}
-std::string			Channel::getTopicText()	{return (this->_tText);}
-std::vector<Client>	Channel::getClients()	{return (this->_clients);}
-std::vector<Client>	Channel::getOperators()	{return (this->_operators);}
+int						Channel::getL()			{return (this->_l);}
+bool					Channel::getI()			{return (this->_i);}
+bool					Channel::getT()			{return (this->_t);}
+std::string				Channel::getK()			{return (this->_k);}
+std::string				Channel::getTopicText()	{return (this->_tText);}
+std::vector<Client *>	Channel::getClients()	{return (this->_clients);}
+std::vector<Client *>	Channel::getOperators()	{return (this->_operators);}
 
-Client	Channel::getClientByFd(int fd) {
-	Client client;
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		if (it->getFd() == fd) {
-			client = *it;
-			return (client);
+Client	*Channel::getClientByFd(int fd) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if ((*it)->getFd() == fd) {
+			return (*it);
 		}
-	return (client);
+	return (NULL);
 }
 
-Client	Channel::getOperatorByFd(int fd) {
-	Client op;
-	for (std::vector<Client>::iterator it = _operators.begin(); it != _operators.end(); it++)
-		if (it->getFd() == fd) {
-			op = *it;
-			return (op);
+Client	*Channel::getOperatorByFd(int fd) {
+	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
+		if ((*it)->getFd() == fd) {
+			return (*it);
 		}
-	return (op);
+	return (NULL);
 }
 
 // --- setters ---
@@ -79,16 +75,16 @@ void	Channel::setK(std::string newK)					{this->_k		= newK;}
 void	Channel::setTopicText(std::string newTopicText)	{this->_tText	= newTopicText;}
 
 // --- member functions ---
-void	Channel::addClient(Client newClient) {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-		if (it->getFd() == newClient.getFd())
+void	Channel::addClient(Client *newClient) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if ((*it)->getFd() == newClient->getFd())
 			return ;
 	this->_clients.push_back(newClient);
 }
 
-void	Channel::deleteClient(Client toDelete) {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-		if (it->getFd() == toDelete.getFd()) {
+void	Channel::deleteClient(Client *toDelete) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if ((*it)->getFd() == toDelete->getFd()) {
 			this->_clients.erase(it);
 			return ;
 		}
@@ -98,16 +94,16 @@ void	Channel::clearClients() {
 	this->_clients.clear();
 }
 
-void	Channel::addOperators(Client newOperator) {
-	for (std::vector<Client>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
-		if (it->getFd() == newOperator.getFd())
+void	Channel::addOperators(Client *newOperator) {
+	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
+		if ((*it)->getFd() == newOperator->getFd())
 			return ;
 	this->_operators.push_back(newOperator);
 }
 
-void	Channel::deleteOperator(Client toDelete) {
-	for (std::vector<Client>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
-		if (it->getFd() == toDelete.getFd()) {
+void	Channel::deleteOperator(Client *toDelete) {
+	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
+		if ((*it)->getFd() == toDelete->getFd()) {
 			this->_operators.erase(it);
 			return ;
 		}
