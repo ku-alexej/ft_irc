@@ -16,9 +16,9 @@
 #define GREEN   "\033[32m"  // Subvector
 #define YELLOW  "\033[33m"  // Individual strings
 
-Channel* Server::getChannel(std::string &chanName) {
-    // parse the chan
-}
+// Channel* Server::getChannel(std::string &chanName) {
+//     // parse the chan
+// }
 
 bool isValidChannelName(const std::string &channel) {
     if (channel.empty())
@@ -38,14 +38,14 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 
-void    joinChannel(Client client, std::string &channelName, std::string &key)
-{
-    // get chan
-    // if there -> join
-    // if not
-    // create
-    std::cout << "j" << std::endl;
-}
+// void    joinChannel(Client client, std::string &channelName, std::string &key)
+// {
+//     // get chan
+//     // if there -> join
+//     // if not
+//     // create
+//     std::cout << "j" << std::endl;
+// }
 
 void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
     Client* c = getClientByFd(fd);

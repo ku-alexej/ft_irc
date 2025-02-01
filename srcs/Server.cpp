@@ -192,10 +192,7 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 		printStringVector(cmds);
 
 		for (size_t i = 0; i < cmds.size(); i++)
-		{
-			client -> setRawCmds(cmds[i]);
 			exec(cmds[i], fd);
-		}
 		sentReply(fd);
 	}
 }
