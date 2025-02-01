@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:21:03 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:09:20 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ Server::Server(const Server &src) {
 	(void) src;
 }
 
-std::vector<Channel*>* Server::getChannels() {
-    return &this->_channels;
+std::vector<Channel> Server::getChannels() {
+    return (this->_channels);
 }
 
 void	Server::initCmdMap() {
@@ -269,24 +269,28 @@ void	Server::signalHandler(int signum) {
 
 void Server::addChannel(Channel &newChannel, std::string &name)
 {
-    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+    for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
     {
-        if ((*it)->getName() == name)
+        if (it->getName() == name)
         {
             return;
         }
     }
-    this->_channels.push_back(&newChannel);
+    this->_channels.push_back(newChannel);
 }
 
-Channel* Server::getChannel(std::string &chanName)
+Channel* Server::getChannel(std::string chanName)
 {
-    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> getChannel 0 size=" << this->_channels.size() << std::endl;
+    for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
     {
-        if ((*it)->getName() == chanName)
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> getChannel for name="<< chanName << std::endl;
+        if (it->getName() == chanName)
         {
-            return *it; 
+			std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> getChannel if" << std::endl;
+            return &(*it); 
         }
     }
-    return NULL;  
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> getChannel X" << std::endl;
+    return (NULL);  
 }

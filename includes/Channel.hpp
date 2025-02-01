@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:13:13 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:52:23 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Channel {
 		// --- constructors ---
 		Channel();
 		Channel(const Channel &src);
-		Channel(std::string &name, Client *client, bool firstConnection);
+		Channel(std::string name, Client *client, bool firstConnection);
 
 		// --- operators ---
 		Channel &operator=(const Channel &src);

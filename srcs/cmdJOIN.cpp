@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:06 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:18:40 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:42:46 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,19 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
     return tokens;
 }
 
-
+// use (getChannel(name) == NULL) instead of this function and getChannels()
 bool Server::channelExists( std::string channelName)
 {
-    std::vector<Channel*>* allChannels = this->getChannels();
-    for (std::vector<Channel*>::iterator it = allChannels->begin(); it != allChannels->end(); ++it) {
+    std::vector<Channel> allChannels = this->getChannels();
+    for (std::vector<Channel>::iterator it = allChannels.begin(); it != allChannels.end(); it++) {
         std::cout << "we are here" << std::endl;
-        if ((*it)->getName() == channelName) {
+        if ((it)->getName() == channelName) {
             std::cout << RED << "Channel found, joining channel." << RESET << std::endl;
             return true;
         }
     }
-            std::cout << RED << "Channel NOT found, joining channel." << RESET << std::endl;
-            return false;
+    std::cout << RED << "Channel NOT found, joining channel." << RESET << std::endl;
+    return false;
     
 }
 
@@ -84,11 +84,15 @@ void    Server::joinChannel(Client &client, std::string channelName, std::string
     // create
     (void) key;
     
-    bool ifExists = channelExists(channelName);
-    if (ifExists == true)
+    // bool ifExists = channelExists(channelName);
+    bool isExists = getChannel(channelName) != NULL;
+    std::cout << "CHAN EXISTS=:" << isExists << std::endl;
+    if (isExists == true)
     {
+        std::cout << "CHAN EXISTS == true"  << std::endl;
+
         //ERRORS MANAGEMENT
-        Channel *channel = this -> getChannel(channelName);
+        Channel *channel = this->getChannel(channelName);
         channel->addClient(&client);
         client.addChannel(channelName);
         joinRpl(client,*channel);
@@ -101,16 +105,17 @@ void    Server::joinChannel(Client &client, std::string channelName, std::string
     }
     else
     {
+        std::cout << "CHAN EXISTS != true" << std::endl;
+
         Channel newChannel(channelName, &client, true);
         client.addChannel(channelName);
-        this -> addChannel(newChannel, channelName);
+        this->addChannel(newChannel, channelName);
         newChannel.addClient(&client);
         joinRpl(client,newChannel);
 
     }
 
 
-    std::cout << "CHAN EXISTS:" << ifExists << std::endl;
 }
 
 void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
@@ -124,6 +129,7 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
         c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
         return;
     }
+    // channelNames.size()
     if (tokens.size() > 10) {
         c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
         return;
@@ -158,6 +164,7 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
     for (std::map<std::string, std::string>::iterator it = channelMap.begin(); it != channelMap.end(); ++it)
     {
 
+        // here we must sent pointer (not pointer to pointer)
         joinChannel(*c, it->first, it->second);
           // For each channel, perform the join operation.
         // This function should handle:

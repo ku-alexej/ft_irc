@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:19:26 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:42:40 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,32 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 	// -l [---]
 	// +l [user limit]						>> ERR_CHANNELISFULL (471)
 	
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode -2" << std::endl;
 	Client	*c = getClientByFd(fd);
-	Channel	*ch = getChannelByName(tokens[1]);
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode -1" << std::endl;
+	Channel	*ch = getChannel(tokens[1]);
 
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode 0" << std::endl;
 	if (ch == NULL) {
 		c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), tokens[1]));
 		return ;
 	}
+	
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode 1" << std::endl;
 
 	if (tokens.size() == 2) {
 		c->setReplyBuffer(RPL_CHANNELMODEIS(c->getNickname(), ch->getName(), ch->getModes(), ch->getModesArgs(ch->getClientByFd(fd) != NULL)));
 		return ;
 	}
 
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode 2" << std::endl;
+
 	if (ch->getOperatorByFd(fd) == NULL) {
 		c->setReplyBuffer(ERR_CHANOPRIVSNEEDED(c->getNickname(), tokens[1]));
 		return ;
 	}
+
+	std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode X" << std::endl;
 	
 }
 
@@ -98,12 +107,14 @@ void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
 
 	// MODE for client: we have +i in irssi afer registration
 	if(tokens[1][0] != '#') {
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdUserMode" << std::endl;
 		cmdUserMode(tokens, fd);
 		return ;
 	}
 
 	// MODE for channel: as in subject
 	if(tokens[1][0] == '#') {
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>> cmdChannelMode" << std::endl;
 		cmdChannelMode(tokens, fd);
 		return ;
 	}
