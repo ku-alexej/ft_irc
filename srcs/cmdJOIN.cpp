@@ -38,14 +38,80 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 
-// void    joinChannel(Client client, std::string &channelName, std::string &key)
-// {
-//     // get chan
-//     // if there -> join
-//     // if not
-//     // create
-//     std::cout << "j" << std::endl;
-// }
+bool Server::channelExists( std::string channelName)
+{
+    std::vector<Channel*>* allChannels = this->getChannels();
+    for (std::vector<Channel*>::iterator it = allChannels->begin(); it != allChannels->end(); ++it) {
+        std::cout << "we are here" << std::endl;
+        if ((*it)->getName() == channelName) {
+            std::cout << RED << "Channel found, joining channel." << RESET << std::endl;
+            return true;
+        }
+    }
+            std::cout << RED << "Channel NOT found, joining channel." << RESET << std::endl;
+            return false;
+    
+}
+
+static void    joinRpl(Client &client, Channel &channel)
+{
+    client.setReplyBuffer(client.getUserID() + " JOIN " + channel.getName());
+    if (!channel.getTopicText().empty())
+        client.setReplyBuffer(RPL_TOPIC(client.getNickname(), channel.getName(), channel.getTopicText()));
+    
+
+    
+    // std::stringstream ss;
+    // std::string prefix;
+    // ss << RPL_NAMREPLY(client.getNickname(), "=", channel.getName());
+    // for (std::map<std::string, Client*>::iterator it = channel.getAllMembers().begin(); it != channel.getAllMembers().end(); it++)
+    // {
+    //     prefix = getPrefix(*it->second, channel);
+    //     if (it != channel.getAllMembers().begin())
+    //         ss << " ";
+    //     ss << prefix << it->first;
+    // }fjnvdjs djdnb
+    // ss << CRLF;
+    // client.addToWriteBuffer(ss.str());
+    // client.addToWriteBuffer(RPL_ENDOFNAMES(client.getNickname(), channel.getName()));
+}
+
+void    Server::joinChannel(Client &client, std::string channelName, std::string key)
+{
+    // get chan
+    // if there -> join
+    // if not
+    // create
+    (void) key;
+    
+    bool ifExists = channelExists(channelName);
+    if (ifExists == true)
+    {
+        //ERRORS MANAGEMENT
+        Channel *channel = this -> getChannel(channelName);
+        channel->addClient(&client);
+        client.addChannel(channelName);
+        joinRpl(client,*channel);
+        // channel->addMember(&ctx._client);
+        // ctx._client.addChannel(channelName); // add new channel to clientś list of channels they are currently in
+        // joinRpl(ctx._client, *channel);
+        // channel->sendToAll(ctx._client.getNickname(), ctx._client.getUserID() + " JOIN " + channel->getName() + CRLF);
+        // if (channel->isInvited(ctx._client.getNickname()))
+        //     channel->removeInvitedUser(ctx._client.getNickname());
+    }
+    else
+    {
+        Channel newChannel(channelName, &client, true);
+        client.addChannel(channelName);
+        this -> addChannel(newChannel, channelName);
+        newChannel.addClient(&client);
+        joinRpl(client,newChannel);
+
+    }
+
+
+    std::cout << "CHAN EXISTS:" << ifExists << std::endl;
+}
 
 void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
     Client* c = getClientByFd(fd);
@@ -55,12 +121,10 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
     }
 
     if (tokens.size() < 2) {
-        // Send error: No channel name provided
         c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
         return;
     }
     if (tokens.size() > 10) {
-        //too much chafns, verify if it's okay 
         c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
         return;
     }
@@ -82,6 +146,7 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
         channelMap[channel] = password;
     }
     
+    
     for (std::map<std::string, std::string>::iterator it = channelMap.begin();
          it != channelMap.end(); ++it)
     {
@@ -92,6 +157,8 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
 
     for (std::map<std::string, std::string>::iterator it = channelMap.begin(); it != channelMap.end(); ++it)
     {
+
+        joinChannel(*c, it->first, it->second);
           // For each channel, perform the join operation.
         // This function should handle:
         //   - Checking if the channel exists.

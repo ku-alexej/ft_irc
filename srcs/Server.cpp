@@ -19,7 +19,7 @@ Server::Server(const Server &src) {
 	(void) src;
 }
 
-std::vector<Channel> *Server::getChannels() {
+std::vector<Channel*>* Server::getChannels() {
     return &this->_channels;
 }
 
@@ -265,4 +265,28 @@ bool	Server::_stayTurnedOn = true;
 void	Server::signalHandler(int signum) {
 	std::cout << std::endl << YEL << "[WARN]: signal received: " << signum << RES << std::endl;
 	_stayTurnedOn = false;
+}
+
+void Server::addChannel(Channel &newChannel, std::string &name)
+{
+    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+    {
+        if ((*it)->getName() == name)
+        {
+            return;
+        }
+    }
+    this->_channels.push_back(&newChannel);
+}
+
+Channel* Server::getChannel(std::string &chanName)
+{
+    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+    {
+        if ((*it)->getName() == chanName)
+        {
+            return *it; 
+        }
+    }
+    return NULL;  
 }
