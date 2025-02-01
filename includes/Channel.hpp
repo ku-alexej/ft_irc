@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 16:59:45 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:32:51 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 # include <vector>
+# include <sstream>
 # include "Client.hpp"
 
 class Channel {
@@ -55,6 +56,8 @@ class Channel {
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
 
+		std::string	getModes();
+		std::string	getModesArgs(bool isOnChannel);
 
 	private:
 		int						_l;

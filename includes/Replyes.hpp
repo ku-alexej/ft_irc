@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 15:20:01 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:46:20 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@
 // "320" // WHOIS
 # define RPL_WHOISSPECIAL(client, nickName)								"320 " + (client.empty() ? "empty" : client) + " " + nickName + " :blah blah blah"
 // "324" // MODE
-# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "empty" : client) + " " + channelName + " " + modeString + " " + modeArgs + "..."
+# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "empty" : client) + " " + channelName + " " + modeString + " " + modeArgs + ""
 // "329" // MODE
 # define RPL_CREATIONTIME(client, channelName, creationTime)			"329 " + (client.empty() ? "empty" : client) + " " + channelName + " " + creationTime + ""
 // "330" // WHOIS

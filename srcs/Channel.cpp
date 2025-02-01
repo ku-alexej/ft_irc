@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 17:08:58 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:31:51 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Channel & Channel::operator=(const Channel &src) {
 		this->_l			= src._l;
 		this->_i			= src._i;
 		this->_t			= src._t;
-		this->_k			= src._k;
+		this->_k			= src._k; 
 		this->_tText		= src._tText;
 		this->_clients		= src._clients;
 		this->_operators	= src._operators;
@@ -111,4 +111,29 @@ void	Channel::deleteOperator(Client *toDelete) {
 
 void	Channel::clearOperators() {
 	this->_operators.clear();
+}
+
+std::string	Channel::getModes() {
+	std::string modes = "+";
+	modes += (_t == true  ? "t" : "");
+	modes += (_i == false ? "i" : "");
+	modes += (_l > 0 ? "l" : "");
+	modes += (!(_k.empty()) ? "k" : "");
+	return (modes);
+}
+
+std::string	Channel::getModesArgs(bool isOnChannel) {
+	std::string args = "";
+
+	std::stringstream buff;
+	buff << _l;
+	std::string lString = buff.str();
+
+	if (isOnChannel) {
+		args += (_l > 0 ? lString : "");
+		args += (_l > 0 && !(_k.empty()) ? " " : "");
+		args += (!(_k.empty()) ? _k : "");
+	}
+
+	return (args);
 }

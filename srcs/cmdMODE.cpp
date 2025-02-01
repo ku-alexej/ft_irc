@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 17:47:07 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 15:49:47 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,25 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 
 	// -l [---]
 	// +l [user limit]						>> ERR_CHANNELISFULL (471)
+	
+	Client	*c = getClientByFd(fd);
+	Channel	*ch = getChannelByName(tokens[1]);
 
-	(void) tokens;
-	(void) fd;
+	if (ch == NULL) {
+		c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), tokens[1]));
+		return ;
+	}
+
+	if (tokens.size() == 2) {
+		c->setReplyBuffer(RPL_CHANNELMODEIS(c->getNickname(), ch->getName(), ch->getModes(), ch->getModesArgs(ch->getClientByFd(fd) != NULL)));
+		return ;
+	}
+
+	if (ch->getOperatorByFd(fd) == NULL) {
+		c->setReplyBuffer(ERR_CHANOPRIVSNEEDED(c->getNickname(), tokens[1]));
+		return ;
+	}
+	
 }
 
 void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
