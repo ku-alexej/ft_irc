@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 15:32:51 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:13:13 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ class Channel {
 		// --- constructors ---
 		Channel();
 		Channel(const Channel &src);
+		Channel(std::string &name, Client *client, bool firstConnection);
 
 		// --- operators ---
 		Channel &operator=(const Channel &src);
 
 		// --- destructors ---
 		~Channel();
-
 		// --- getters ---
 		int						getL();
 		bool					getI();
@@ -40,7 +40,7 @@ class Channel {
 		std::vector<Client *>	getOperators();
 		Client					*getClientByFd(int fd);
 		Client					*getOperatorByFd(int fd);
-
+		std::string 			getName();
 		// --- setters ---
 		void	setL(int newL);
 		void	setI(bool isI);
@@ -64,7 +64,9 @@ class Channel {
 		bool					_i;
 		bool					_t;
 		std::string				_k;
+		std::string 			_name;
 		std::string				_tText;
+		std::vector<std::string> 			_all_members;
 		std::vector<Client *>	_clients;
 		std::vector<Client *>	_operators;
 };

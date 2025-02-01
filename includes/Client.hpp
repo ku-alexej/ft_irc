@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 15:52:48 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:14:52 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # include <string>
 # include <vector>
-# include <iostream>		// dell after
+# include <iostream>	
+#include <algorithm>    // std::find
+	// dell after
 # include "Colors.hpp"		// dell
 
 class Client {
@@ -47,6 +49,7 @@ class Client {
 		std::string					getRealname();
 		std::string					getNickname();
 		std::vector<std::string>	getInvites();
+		std::string 				getUserID();
 
 		// --- setters ---
 		void	setFd(int newFd);
@@ -63,7 +66,7 @@ class Client {
 		void	setServername(std::string newServername);
 		void	setRealname(std::string newRealname);
 		void	setNickname(std::string newNickname);
-
+		void    addChannel(std::string &channel);
 		// --- member functions ---
 		void	clearReplyBuffer();
 		void	clearBuffer();
@@ -88,6 +91,7 @@ class Client {
 		std::string					_realname;
 		std::string					_nickname;
 		std::vector<std::string>	_invites;
+		std::vector<std::string> 	_channelNames;
 };
 
 #endif

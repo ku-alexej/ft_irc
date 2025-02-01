@@ -94,6 +94,11 @@ std::string					Client::getRealname()		{return (this->_realname);}
 std::string					Client::getNickname()		{return (this->_nickname);}
 std::vector<std::string>	Client::getInvites()		{return (this->_invites);}
 
+std::string Client::getUserID() 
+{
+    std::string userID = ":" + getNickname() + "!" + getUsername() + "@localhost";
+    return userID;
+}
 // --- setters ---
 void	Client::setFd(int newFd)							{this->_fd			= newFd;}
 void	Client::setCapOn(bool isCapOn)						{this->_capOn		= isCapOn;}
@@ -148,4 +153,14 @@ void	Client::setReplyBuffer(std::string newReply) {
 
 void	Client::trimmReplyBuffer(size_t bytes) {
 	this->_replyBuffer.erase(0, bytes);
+}
+
+
+void    Client::addChannel(std::string & channel)
+{
+    if (std::find(this->_channelNames.begin(), this->_channelNames.end(), channel) != this->_channelNames.end())
+    {
+        return ;
+    }
+    this->_channelNames.push_back(channel);
 }

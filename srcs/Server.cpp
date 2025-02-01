@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 19:41:08 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:21:03 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ Server::Server() {}
 
 Server::Server(const Server &src) {
 	(void) src;
+}
+
+std::vector<Channel*>* Server::getChannels() {
+    return &this->_channels;
 }
 
 void	Server::initCmdMap() {
@@ -136,7 +140,6 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
 	std::vector<std::string> result;
 	std::istringstream iss(cmd);
 	std::string token;
-
 	while (iss >> token) {
 		result.push_back(token);
 		token.clear();
@@ -262,4 +265,28 @@ bool	Server::_stayTurnedOn = true;
 void	Server::signalHandler(int signum) {
 	std::cout << std::endl << YEL << "[WARN]: signal received: " << signum << RES << std::endl;
 	_stayTurnedOn = false;
+}
+
+void Server::addChannel(Channel &newChannel, std::string &name)
+{
+    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+    {
+        if ((*it)->getName() == name)
+        {
+            return;
+        }
+    }
+    this->_channels.push_back(&newChannel);
+}
+
+Channel* Server::getChannel(std::string &chanName)
+{
+    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+    {
+        if ((*it)->getName() == chanName)
+        {
+            return *it; 
+        }
+    }
+    return NULL;  
 }

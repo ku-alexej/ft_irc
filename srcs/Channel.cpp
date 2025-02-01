@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 15:31:51 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:13:51 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,23 @@ Channel::Channel() {
 	this->_tText	= "";
 }
 
+Channel::Channel(std::string &name, Client *client, bool firstConnection) {
+
+	this->_l		= 0;		// 0		= unlimited number of clients
+	this->_i		= false;	// false	= invite mot necessary
+	this->_t		= true;		// true		= possible to change topic
+	this->_k		= "";		// ""		= no password to join channel
+	this->_tText	= "";
+	this -> _name = name;
+	if (firstConnection)
+		this -> _operators.push_back(client);
+	this -> _clients.push_back(client);
+}
+
 Channel::Channel(const Channel &src) {
 	*this			= src;
 }
+
 
 // --- operators ---
 Channel & Channel::operator=(const Channel &src) {
@@ -50,7 +64,7 @@ std::string				Channel::getK()			{return (this->_k);}
 std::string				Channel::getTopicText()	{return (this->_tText);}
 std::vector<Client *>	Channel::getClients()	{return (this->_clients);}
 std::vector<Client *>	Channel::getOperators()	{return (this->_operators);}
-
+std::string 			Channel::getName() 		{return (this -> _name);}
 Client	*Channel::getClientByFd(int fd) {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
 		if ((*it)->getFd() == fd) {
