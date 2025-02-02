@@ -53,11 +53,11 @@ bool Server::channelExists( std::string channelName)
     
 }
 
-static void    joinRpl(Client &client, Channel &channel)
+static void    joinRpl(Client *client, Channel *channel)
 {
-    client.setReplyBuffer(client.getUserID() + " JOIN " + channel.getName());
-    if (!channel.getTopicText().empty())
-        client.setReplyBuffer(RPL_TOPIC(client.getNickname(), channel.getName(), channel.getTopicText()));
+    client -> setReplyBuffer(client -> getUserID() + " JOIN " + channel->getName());
+    if (!channel -> getTopicText().empty())
+        client -> setReplyBuffer(RPL_TOPIC(client -> getNickname(), channel -> getName(), channel -> getTopicText()));
     
 
     
@@ -76,12 +76,9 @@ static void    joinRpl(Client &client, Channel &channel)
     // client.addToWriteBuffer(RPL_ENDOFNAMES(client.getNickname(), channel.getName()));
 }
 
-void    Server::joinChannel(Client &client, std::string channelName, std::string key)
+void    Server::joinChannel(Client *client, std::string channelName, std::string key)
 {
-    // get chan
-    // if there -> join
-    // if not
-    // create
+
     (void) key;
     
     // bool ifExists = channelExists(channelName);
@@ -93,9 +90,9 @@ void    Server::joinChannel(Client &client, std::string channelName, std::string
 
         //ERRORS MANAGEMENT
         Channel *channel = this->getChannel(channelName);
-        channel->addClient(&client);
-        client.addChannel(channelName);
-        joinRpl(client,*channel);
+        channel->addClient(client);
+        client -> addChannel(channelName);
+        joinRpl(client,channel);
         // channel->addMember(&ctx._client);
         // ctx._client.addChannel(channelName); // add new channel to clientś list of channels they are currently in
         // joinRpl(ctx._client, *channel);
@@ -107,12 +104,11 @@ void    Server::joinChannel(Client &client, std::string channelName, std::string
     {
         std::cout << "CHAN EXISTS != true" << std::endl;
 
-        Channel newChannel(channelName, &client, true);
-        client.addChannel(channelName);
-        this->addChannel(newChannel, channelName);
-        newChannel.addClient(&client);
-        joinRpl(client,newChannel);
-
+        Channel newChannel(channelName, client, true);
+        client -> addChannel(channelName);
+        this->addChannel(&newChannel, channelName);
+        newChannel.addClient(client);
+        joinRpl(client,&newChannel);
     }
 
 
@@ -165,7 +161,7 @@ void Server::cmdJoin(std::vector<std::string> tokens, int fd) {
     {
 
         // here we must sent pointer (not pointer to pointer)
-        joinChannel(*c, it->first, it->second);
+        joinChannel(c, it->first, it->second);
           // For each channel, perform the join operation.
         // This function should handle:
         //   - Checking if the channel exists.
