@@ -128,7 +128,8 @@
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN
-# define RPL_NAMREPLY(client, symbol, channelName, nickName)			"353 " + (client.empty() ? "empty" : client) + " " + symbol + " " + channelName + " :[prefix]" + nickName + "{ [prefix]" + nickName + "}"
+#define RPL_NAMREPLY(client, symbol, channelName, nickList) \
+    (std::string("353 ") + ((client).empty() ? "empty" : (client)) + " " + (symbol) + " " + (channelName) + " :" + (nickList))
 // "366" // JOIN
 # define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of /NAMES list"
 // "378" // WHOIS

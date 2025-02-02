@@ -12,6 +12,15 @@
 
 #include "Channel.hpp"
 
+void Channel::broadcastJoinMessage(Client *joiningClient) {
+    std::string joinMsg = ":" + joiningClient->getUserID() + " JOIN " + this->getName() + "\r\n";
+    
+    std::vector<Client *> clients = this->getClients();
+    for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        (*it)->setReplyBuffer(joinMsg);
+    }
+}
+
 // --- constructors ---
 Channel::Channel() {
 	this->_l		= 0;		// 0		= unlimited number of clients
@@ -28,6 +37,7 @@ Channel::Channel(std::string name, Client *client, bool firstConnection) {
 	this->_t		= true;		// true		= possible to change topic
 	this->_k		= "";		// ""		= no password to join channel
 	this->_tText	= "";
+	this -> _password = "";
 	this -> _name = name;
 	if (firstConnection)
 		this -> _operators.push_back(client);
@@ -65,6 +75,8 @@ std::string				Channel::getTopicText()	{return (this->_tText);}
 std::vector<Client *>	Channel::getClients()	{return (this->_clients);}
 std::vector<Client *>	Channel::getOperators()	{return (this->_operators);}
 std::string 			Channel::getName() 		{return (this->_name);}
+
+
 Client	*Channel::getClientByFd(int fd) {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
 		if ((*it)->getFd() == fd) {

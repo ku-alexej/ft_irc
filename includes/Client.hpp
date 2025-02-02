@@ -49,6 +49,7 @@ class Client {
 		std::string					getRealname();
 		std::string					getNickname();
 		std::vector<std::string>	getInvites();
+		std::vector<std::string>	getChannelNames();
 		std::string 				getUserID();
 
 		// --- setters ---
@@ -66,7 +67,7 @@ class Client {
 		void	setServername(std::string newServername);
 		void	setRealname(std::string newRealname);
 		void	setNickname(std::string newNickname);
-		void    addChannel(std::string &channel);
+		void    addChannel(std::string channel);
 		// --- member functions ---
 		void	clearReplyBuffer();
 		void	clearBuffer();

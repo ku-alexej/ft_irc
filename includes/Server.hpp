@@ -70,15 +70,15 @@ class Server {
 		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
 		Channel* getChannel(std::string chanName);
-		void   addChannel(Channel *newChannel, std::string &name);
-		std::vector<Channel> getChannels();
+		void   	addChannel(Channel *newChannel, std::string name);
+		std::vector<Channel*> getChannels();
 		bool 	channelExists( std::string channelName);
 		void 	joinChannel(Client *client, std::string channelName, std::string key);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
-
+		void 	printChannels();
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
@@ -97,7 +97,7 @@ class Server {
 		struct sockaddr_in			_serverAddress;
 		struct pollfd				_clientIn;
 		std::vector<Client>			_clients;
-		std::vector<Channel>		_channels;
+		std::vector<Channel*>		_channels;
 		std::vector<struct pollfd>	_fds;
 		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };

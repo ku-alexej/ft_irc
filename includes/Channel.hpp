@@ -35,6 +35,7 @@ class Channel {
 		bool					getI();
 		bool					getT();
 		std::string				getK();
+		std::string				getPass();
 		std::string				getTopicText();
 		std::vector<Client *>	getClients();
 		std::vector<Client *>	getOperators();
@@ -55,6 +56,7 @@ class Channel {
 		void	addOperators(Client *newOperator);
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
+		void 	broadcastJoinMessage(Client *joiningClient) ;
 
 		std::string	getModes();
 		std::string	getModesArgs(bool isOnChannel);
@@ -66,7 +68,8 @@ class Channel {
 		std::string				_k;
 		std::string 			_name;
 		std::string				_tText;
-		std::vector<std::string> 			_all_members;
+		std::string 			_password;
+		std::vector<std::string> _all_members;
 		std::vector<Client *>	_clients;
 		std::vector<Client *>	_operators;
 };
