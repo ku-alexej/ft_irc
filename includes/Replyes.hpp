@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 12:31:28 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:06:10 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # define SERVER_NAME	"DarkForest"
 
 // client = nickname of user
+
+// Mode was changed (only if changed)
+# define MODE_SET(channelName, mode)								":" + SERVER_NAME + " MODE " + channelName + " " + mode + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
@@ -68,6 +71,9 @@
 # define ERR_PASSWDMISMATCH(client)									"464 " + (client.empty() ? "empty" : client) + " :Password incorrect"
 // "471" // JOIN
 # define ERR_CHANNELISFULL(client, channelName)						"471 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+l)"
+
+# define ERR_UNKNOWNMODE(client, modechar)							"472 " + (client.empty() ? "empty" : client) + " " + modechar + " :is unknown mode char to me"
+
 // "473" // JOIN
 # define ERR_INVITEONLYCHAN(client, channelName)					"473 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+i)"
 // "474" // JOIN

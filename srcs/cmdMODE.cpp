@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 12:51:06 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:23:12 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,137 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 
 	c->setReplyBuffer(ERR_UMODEUNKNOWNFLAG(c->getNickname()));
 }
+
+bool	isUsableMode(std::string mode) {
+	if (mode[1] == 't' || mode[1] == 'i' || mode[1] == 'l' || mode[1] == 'k' || mode[1] == 'o')
+		return (true);
+	return (false);
+}
+
+bool	isValueNeeded(const char c, const char sign) {
+	if (sign == '+')
+		if (c == 'l' || c == 'k' || c == 'o')
+			return (true);
+	if (sign == '-')
+		if (c == 'k' || c == 'o')
+			return (true);
+	return (false);
+}
+
+void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	(void) fd;
+	(void) mode;
+	(void) variable;
+}
+
+void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	(void) fd;
+	(void) mode;
+	(void) variable;
+}
+
+void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	(void) fd;
+	(void) mode;
+	(void) variable;
+}
+
+void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	(void) fd;
+	(void) mode;
+	(void) variable;
+}
+
+void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	(void) fd;
+	(void) mode;
+	(void) variable;
+}
+
+
+void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+	(void) tokens;
+	// Client *c = getClientByFd(fd);
+
+	std::cout << "try to set [" + mode + "]=[" + variable + "]";
+
+	if (isValueNeeded(mode[1], mode[0]) && variable.empty()) {					// ignore mode
+		std::cout << " FAIL: no variable" << std::endl;
+		return ;
+	}
+
+	switch (mode[1]) {															// set mode
+		case 't':
+			setModeT(tokens, fd, mode, variable);
+			std::cout << " TRY" << std::endl;
+			break;
+		case 'i':
+			setModeI(tokens, fd, mode, variable);
+			std::cout << " TRY" << std::endl;
+			break;
+		case 'l':
+			setModeL(tokens, fd, mode, variable);
+			std::cout << " TRY" << std::endl;
+			break;
+		case 'k':
+			setModeK(tokens, fd, mode, variable);
+			std::cout << " TRY" << std::endl;
+			break;
+		case 'o':
+			setModeO(tokens, fd, mode, variable);
+			std::cout << " TRY" << std::endl;
+			break;
+	}
+
+}
+
+	// std::map<std::string, std::string> modesToUse = getModes(tokens),;
+	// runModes(modesToUse);
+void	Server::runModes(std::vector<std::string> tokens, int fd) {
+	std::vector<std::pair<std::string, std::string> > modesToUse;
+	std::string sign = "+";
+	Client *c = getClientByFd(fd);
+
+	std::string modestring = tokens[2];
+	size_t variableIndex = 3;
+	for (size_t i = 0; i < modestring.size(); i++) {
+		if (modestring[i] == '+') {
+			sign = "+";
+			continue;
+		} else if (modestring[i] == '-') {
+			sign = "-";
+			continue;
+		}
+		if (isValueNeeded(modestring[i], sign[0])) {
+			std::string mode = sign + modestring[i];
+			std::string variable = (variableIndex < tokens.size()) ? tokens[variableIndex] : "";
+			modesToUse.push_back(std::make_pair(mode, variable));
+			variableIndex++;
+		} else {
+			std::string mode = sign + modestring[i];
+			modesToUse.push_back(std::make_pair(mode, ""));
+		}
+	}
+
+	std::cout << "[MODE]=[variable]" << std::endl;
+	for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {
+		std::cout << "[" + it->first + "]=[" + it->second + "]" << std::endl;
+	}
+
+	//here we try to set each mode
+	for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {
+		if (isUsableMode(it->first))
+			setMode(tokens, fd, it->first, it->second);
+		else
+			c->setReplyBuffer(ERR_UNKNOWNMODE(c->getNickname(), it->first));
+	}
+}
+
 
 void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 	// ERR_NOSUCHCHANNEL (403)
@@ -96,9 +227,8 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 	}
 
 	// use MODE
-
-	
-
+	runModes(tokens, fd);
+	// runModes(modesToUse);
 }
 
 void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
