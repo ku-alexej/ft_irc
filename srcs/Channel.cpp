@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:52:06 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:00:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ Channel & Channel::operator=(const Channel &src) {
 		this->_l			= src._l;
 		this->_i			= src._i;
 		this->_t			= src._t;
-		this->_k			= src._k; 
+		this->_k			= src._k;
 		this->_tText		= src._tText;
 		this->_clients		= src._clients;
 		this->_operators	= src._operators;
@@ -120,7 +120,7 @@ void	Channel::clearClients() {
 	this->_clients.clear();
 }
 
-void	Channel::addOperators(Client *newOperator) {
+void	Channel::addOperator(Client *newOperator) {
 	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
 		if ((*it)->getFd() == newOperator->getFd())
 			return ;
@@ -141,10 +141,10 @@ void	Channel::clearOperators() {
 
 std::string	Channel::getModes() {
 	std::string modes = "+";
-	modes += (_t == true  ? "t" : "");
-	modes += (_i == false ? "i" : "");
-	modes += (_l > 0 ? "l" : "");
-	modes += (!(_k.empty()) ? "k" : "");
+	modes += (_t == true  ? "" : "t");
+	modes += (_i == false ? "" : "i");
+	modes += (_l == 0 ? "" : "l");
+	modes += (_k.empty() ? "" : "k");
 	return (modes);
 }
 
@@ -156,10 +156,26 @@ std::string	Channel::getModesArgs(bool isOnChannel) {
 	std::string lString = buff.str();
 
 	if (isOnChannel) {
-		args += (_l > 0 ? lString : "");
-		args += (_l > 0 && !(_k.empty()) ? " " : "");
-		args += (!(_k.empty()) ? _k : "");
+		args += (_l != 0 ? lString : "");
+		args += (_l != 0 && !(_k.empty()) ? " " : "");
+		args += (_k.empty() ? "" : _k);
+	}
+	return (args);
+}
+
+bool isValidChannelName(const std::string &channel) {
+	if (channel.empty())
+		return false;
+
+	char firstChar = channel[0];
+	if (firstChar != '#')
+		return false;
+
+	for (std::size_t i = 0; i < channel.size(); ++i) {
+		char c = channel[i];
+		if (c == ' ' || c == '\a' || c == ',')
+			return false;
 	}
 
-	return (args);
+	return true;
 }

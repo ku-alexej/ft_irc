@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 17:07:08 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:59:57 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ class Server {
 		void	cmdUserMode(std::vector<std::string> tokens, int fd);
 		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
+		void	cmdWho(std::vector<std::string> tokens, int fd);
+
 		Channel* getChannel(std::string chanName);
 		void   	addChannel(Channel *newChannel, std::string name);
 		std::vector<Channel*> getChannels();

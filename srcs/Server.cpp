@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 17:09:20 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:02:14 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ Server::Server(const Server &src) {
 	(void) src;
 }
 
-std::vector<Channel*> Server::getChannels() {
-    return this->_channels;
-}
+// std::vector<Channel> Server::getChannels() {
+//     return this->_channels;
+// }
 
 
 void	Server::initCmdMap() {
@@ -38,6 +38,7 @@ void	Server::initCmdMap() {
 	this->_cmdMap["KICK"]	= &Server::cmdKick;
 	this->_cmdMap["MODE"]	= &Server::cmdMode;
 	this->_cmdMap["QUIT"]	= &Server::cmdQuit;
+	this->_cmdMap["WHO"]	= &Server::cmdWho;
 }
 
 Server::Server(int port, std::string password, std::string serverName) {
@@ -282,7 +283,7 @@ void Server::addChannel(Channel *newChannel, std::string name)
         if ((*it)->getName() == name)
         {
             std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
-            return;
+            return ;
         }
     }
     this->_channels.push_back(newChannel);
@@ -295,8 +296,8 @@ Channel* Server::getChannel(std::string chanName)
     {
         if ((*it)->getName() == chanName)
         {
-            return *it;
+            return (*it);
         }
     }
-    return NULL;
+    return (NULL);
 }

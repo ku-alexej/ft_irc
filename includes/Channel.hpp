@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:52:23 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:28:54 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class Channel {
 		void	addClient(Client *newClient);
 		void	deleteClient(Client *toDelete);
 		void	clearClients();
-		void	addOperators(Client *newOperator);
+		void	addOperator(Client *newOperator);
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
 		void 	broadcastJoinMessage(Client *joiningClient) ;
@@ -73,5 +73,7 @@ class Channel {
 		std::vector<Client *>	_clients;
 		std::vector<Client *>	_operators;
 };
+
+bool isValidChannelName(const std::string &channel);
 
 #endif

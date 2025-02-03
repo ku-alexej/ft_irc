@@ -6,30 +6,30 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:06 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 17:42:46 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:04:25 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool isValidChannelName(const std::string &channel)
-{
-    if (channel.empty())
-        return false;
+// bool isValidChannelName(const std::string &channel)              // mowed to Channel class as nonmember function
+// {
+//     if (channel.empty())
+//         return false;
 
-    char firstChar = channel[0];
-    if (firstChar != '#')
-        return false;
+//     char firstChar = channel[0];
+//     if (firstChar != '#')
+//         return false;
 
-    for (std::size_t i = 0; i < channel.size(); ++i)
-    {
-        char c = channel[i];
-        if (c == ' ' || c == '\a' || c == ',')
-            return false;
-    }
+//     for (std::size_t i = 0; i < channel.size(); ++i)
+//     {
+//         char c = channel[i];
+//         if (c == ' ' || c == '\a' || c == ',')
+//             return false;
+//     }
 
-    return true;
-}
+//     return true;
+// }
 
 std::vector<std::string> split(const std::string &str, char delimiter)
 {
@@ -43,12 +43,12 @@ std::vector<std::string> split(const std::string &str, char delimiter)
     return tokens;
 }
 
-bool Server::channelExists(std::string channelName)
-{
-    if ((getChannel(channelName) == NULL))
-        return false;
-    return true;
-}
+// bool Server::channelExists(std::string channelName)
+// {
+//     if ((getChannel(channelName) == NULL))
+//         return false;
+//     return true;
+// }
 
 std::string getPrefix(Client *client, Channel *channel)
 {
@@ -106,9 +106,9 @@ void Server::joinChannel(Client *client, std::string channelName, std::string ke
 {
 
     std::vector<std::string> clientChannels = client->getChannelNames();
-    bool isExists = getChannel(channelName) != NULL;
+    // bool isExists = getChannel(channelName) != NULL;
     (void) key;
-    if (isExists == true)
+    if (getChannel(channelName) != NULL)
     {
         // ERRORS MANAGEMENT
         Channel *channel = this->getChannel(channelName);
@@ -130,10 +130,11 @@ void Server::joinChannel(Client *client, std::string channelName, std::string ke
     else
     {
 
-        Channel *newChannel = new Channel(channelName, client, true);
+        Channel *newChannel = new Channel(channelName, client, true); // key-word 'new' allocates memory, welcome to the memory-leaks party ^.^
         client->addChannel(channelName);
         this->addChannel(newChannel, channelName);
         newChannel->addClient(client);
+        newChannel->addOperator(client);                            // it is new channel so we should add the client to _clients and to _operators
         joinRpl(client, newChannel);
     }
 }
