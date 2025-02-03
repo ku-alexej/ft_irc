@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 15:20:01 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:31:28 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@
 # define RPL_WHOISSERVER(client, nickName, serverName, serverInfo)		"312 " + (client.empty() ? "empty" : client) + " " + nickName + " " + serverName + " :" + serverInfo + ""
 // "313" // WHOIS
 # define RPL_WHOISOPERATOR(client, nickName)							"313 " + (client.empty() ? "empty" : client) + " " + nickName + " :is an IRC operator"
+// "315" // WHO <channel>
+# define RPL_ENDOFWHO(client, mask)										"315 " + (client.empty() ? "empty" : client) + " " + mask + " :End of WHO list"
 // "317" // WHOIS
 # define RPL_WHOISIDLE(client, nickName, secs, signon)					"317 " + (client.empty() ? "empty" : client) + " " + nickName + " " + secs + " " + signon + " :seconds idle, signon time"
 // "318" // WHOIS
@@ -110,7 +112,7 @@
 // "320" // WHOIS
 # define RPL_WHOISSPECIAL(client, nickName)								"320 " + (client.empty() ? "empty" : client) + " " + nickName + " :blah blah blah"
 // "324" // MODE
-# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "empty" : client) + " " + channelName + " " + modeString + " " + modeArgs + "..."
+# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "empty" : client) + " " + channelName + " " + modeString + " " + modeArgs + ""
 // "329" // MODE
 # define RPL_CREATIONTIME(client, channelName, creationTime)			"329 " + (client.empty() ? "empty" : client) + " " + channelName + " " + creationTime + ""
 // "330" // WHOIS
@@ -128,9 +130,12 @@
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN
-# define RPL_NAMREPLY(client, symbol, channelName, nickName)			"353 " + (client.empty() ? "empty" : client) + " " + symbol + " " + channelName + " :[prefix]" + nickName + "{ [prefix]" + nickName + "}"
+#define RPL_NAMREPLY(client, symbol, channelName, nickList) \
+    (std::string("353 ") + ((client).empty() ? "empty" : (client)) + " " + (symbol) + " " + (channelName) + " :" + (nickList))
 // "366" // JOIN
 # define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of /NAMES list"
+// "368" MODE
+# define RPL_ENDOFBANLIST(client, channelName)							"368 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of channel ban list"
 // "378" // WHOIS
 # define RPL_WHOISHOST(client, nickName)								"378 " + (client.empty() ? "empty" : client) + " " + nickName + " :is connecting from *@localhost 127.0.0.1"
 // "379" // WHOIS

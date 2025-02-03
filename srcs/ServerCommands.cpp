@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:52:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 14:13:38 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:01:31 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ void	Server::exec(std::string cmd, int fd) {
 
 	// here should be a reply
 	Client *c = getClientByFd(fd);
-	c->setReplyBuffer(ERR_UNKNOWNCOMMAND(c->getUsername(), tokens[0] + "_for_CLIENT"));
+	c->setReplyBuffer(ERR_UNKNOWNCOMMAND(c->getUsername(), tokens[0]));
 	std::cout << "[ERROR]: fd=" << fd << " unknown command \"" << tokens[0] << "\"" << std::endl;
 }

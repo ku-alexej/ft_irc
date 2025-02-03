@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 17:47:07 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:51:06 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,38 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 	// -l [---]
 	// +l [user limit]						>> ERR_CHANNELISFULL (471)
 
-	(void) tokens;
-	(void) fd;
+	Client	*c = getClientByFd(fd);
+	Channel	*ch = getChannel(tokens[1]);
+
+	// if (!isValidChannelName(tokens[1])) {
+	// 	c->setReplyBuffer(ERR_BADCHANMASK(tokens[1]));
+	// 	return;
+	// }
+
+	if (ch == NULL) {
+		c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), tokens[1]));
+		return ;
+	}
+
+	if (tokens.size() == 2) {
+		c->setReplyBuffer(RPL_CHANNELMODEIS(c->getNickname(), ch->getName(), ch->getModes(), ch->getModesArgs(ch->getClientByFd(fd) != NULL)));
+		return ;
+	}
+
+	if (tokens.size() == 3 && tokens[2] == "b") {
+		c->setReplyBuffer(RPL_ENDOFBANLIST(c->getNickname(), ch->getName()));
+		return ;
+	}
+
+	if (ch->getOperatorByFd(fd) == NULL) {
+		c->setReplyBuffer(ERR_CHANOPRIVSNEEDED(c->getNickname(), tokens[1]));
+		return ;
+	}
+
+	// use MODE
+
+	
+
 }
 
 void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
@@ -81,6 +111,12 @@ void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
 	}
 
 	// MODE for client: we have +i in irssi afer registration
+
+	if(tokens[1][0] != '#') {
+		cmdUserMode(tokens, fd);
+		return ;
+	}
+
 	if(tokens[1][0] != '#') {
 		cmdUserMode(tokens, fd);
 		return ;

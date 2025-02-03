@@ -6,11 +6,20 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 17:08:58 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:00:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+
+void Channel::broadcastJoinMessage(Client *joiningClient) {
+    std::string joinMsg = ":" + joiningClient->getUserID() + " JOIN " + this->getName() + "\r\n";
+    
+    std::vector<Client *> clients = this->getClients();
+    for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        (*it)->setReplyBuffer(joinMsg);
+    }
+}
 
 // --- constructors ---
 Channel::Channel() {
@@ -21,9 +30,24 @@ Channel::Channel() {
 	this->_tText	= "";
 }
 
+Channel::Channel(std::string name, Client *client, bool firstConnection) {
+
+	this->_l		= 0;		// 0		= unlimited number of clients
+	this->_i		= false;	// false	= invite mot necessary
+	this->_t		= true;		// true		= possible to change topic
+	this->_k		= "";		// ""		= no password to join channel
+	this->_tText	= "";
+	this -> _password = "";
+	this -> _name = name;
+	if (firstConnection)
+		this -> _operators.push_back(client);
+	this -> _clients.push_back(client);
+}
+
 Channel::Channel(const Channel &src) {
 	*this			= src;
 }
+
 
 // --- operators ---
 Channel & Channel::operator=(const Channel &src) {
@@ -50,6 +74,8 @@ std::string				Channel::getK()			{return (this->_k);}
 std::string				Channel::getTopicText()	{return (this->_tText);}
 std::vector<Client *>	Channel::getClients()	{return (this->_clients);}
 std::vector<Client *>	Channel::getOperators()	{return (this->_operators);}
+std::string 			Channel::getName() 		{return (this->_name);}
+
 
 Client	*Channel::getClientByFd(int fd) {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
@@ -94,7 +120,7 @@ void	Channel::clearClients() {
 	this->_clients.clear();
 }
 
-void	Channel::addOperators(Client *newOperator) {
+void	Channel::addOperator(Client *newOperator) {
 	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
 		if ((*it)->getFd() == newOperator->getFd())
 			return ;
@@ -111,4 +137,45 @@ void	Channel::deleteOperator(Client *toDelete) {
 
 void	Channel::clearOperators() {
 	this->_operators.clear();
+}
+
+std::string	Channel::getModes() {
+	std::string modes = "+";
+	modes += (_t == true  ? "" : "t");
+	modes += (_i == false ? "" : "i");
+	modes += (_l == 0 ? "" : "l");
+	modes += (_k.empty() ? "" : "k");
+	return (modes);
+}
+
+std::string	Channel::getModesArgs(bool isOnChannel) {
+	std::string args = "";
+
+	std::stringstream buff;
+	buff << _l;
+	std::string lString = buff.str();
+
+	if (isOnChannel) {
+		args += (_l != 0 ? lString : "");
+		args += (_l != 0 && !(_k.empty()) ? " " : "");
+		args += (_k.empty() ? "" : _k);
+	}
+	return (args);
+}
+
+bool isValidChannelName(const std::string &channel) {
+	if (channel.empty())
+		return false;
+
+	char firstChar = channel[0];
+	if (firstChar != '#')
+		return false;
+
+	for (std::size_t i = 0; i < channel.size(); ++i) {
+		char c = channel[i];
+		if (c == ' ' || c == '\a' || c == ',')
+			return false;
+	}
+
+	return true;
 }
