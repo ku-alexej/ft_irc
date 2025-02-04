@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 13:59:57 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:56 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <poll.h>
 # include <fcntl.h>
 # include <arpa/inet.h>
-#include <sstream>
-#include <algorithm>    // std::find
+# include <sstream>
+# include <algorithm>    // std::find
 
 // # include <sstream>
 // # include <sys/socket.h>
@@ -68,14 +68,21 @@ class Server {
 		void	cmdMode(std::vector<std::string> tokens, int fd);
 		void	cmdUserMode(std::vector<std::string> tokens, int fd);
 		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
+		void	runModes(std::vector<std::string> tokens, int fd);
+		void	setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void	setModeT(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void	setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void	setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void	setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void	setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
 		void	cmdWho(std::vector<std::string> tokens, int fd);
 
 		Channel* getChannel(std::string chanName);
-		void   	addChannel(Channel *newChannel, std::string name);
+		void	addChannel(Channel *newChannel, std::string name);
 		std::vector<Channel*> getChannels();
-		bool 	channelExists( std::string channelName);
-		void 	joinChannel(Client *client, std::string channelName, std::string key);
+		bool	channelExists( std::string channelName);
+		void	joinChannel(Client *client, std::string channelName, std::string key);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
@@ -89,6 +96,7 @@ class Server {
 		void	printStringVector(std::vector<std::string> v);
 		void	printBuffer(std::string str);
 		void	printClientBuffer(Client client);
+		void	printServer();
 
 	private:
 		int							_fd;

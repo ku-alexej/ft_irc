@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 12:31:28 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:18:57 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # define SERVER_NAME	"DarkForest"
 
 // client = nickname of user
+
+// Mode was changed (only if changed)
+# define MODE_SET(client, channelName, mode, variable)				std::string(":") + (client.empty() ? "empty" : client) + " MODE " + channelName + " " + mode + " " + variable + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
@@ -62,12 +65,16 @@
 # define ERR_USERONCHANNEL(client, nickName, channelName)			"443 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :is already on channel"
 // "461" // PASS USER PING JOIN PART TOPIC INVITE KICK
 # define ERR_NEEDMOREPARAMS(client, command)						"461 " + (client.empty() ? "empty" : client) + " " + command + " :Not enough parameters"
+# define ERR_INCORRECMODEPARAMS(client, command, mode)				"461 " + (client.empty() ? "empty" : client) + " " + command + " :Incorrct params for " + mode + ""
 // "462" // PASS USER
 # define ERR_ALREADYREGISTERED(client)								"462 " + (client.empty() ? "empty" : client) + " :You may not reregister"
 // "464" // PASS
 # define ERR_PASSWDMISMATCH(client)									"464 " + (client.empty() ? "empty" : client) + " :Password incorrect"
 // "471" // JOIN
 # define ERR_CHANNELISFULL(client, channelName)						"471 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+l)"
+
+# define ERR_UNKNOWNMODE(client, modechar)							"472 " + (client.empty() ? "empty" : client) + " " + modechar + " :is unknown mode char to me"
+
 // "473" // JOIN
 # define ERR_INVITEONLYCHAN(client, channelName)					"473 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+i)"
 // "474" // JOIN

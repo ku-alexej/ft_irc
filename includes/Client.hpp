@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/01 16:14:52 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:12:07 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <string>
 # include <vector>
 # include <iostream>	
-#include <algorithm>    // std::find
+# include <algorithm>    // std::find
 	// dell after
 # include "Colors.hpp"		// dell
 

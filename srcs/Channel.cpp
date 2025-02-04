@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 14:00:33 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:25:09 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,13 @@ std::string	Channel::getModesArgs(bool isOnChannel) {
 	return (args);
 }
 
+void	Channel::setReplyBufferForAllChannelClients(std::string msg) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		std::cout << "setReplyBufferForAllChannelClients _clients.size()=" << this->_clients.size() << std::endl;
+		(*it)->setReplyBuffer(msg);
+	}
+}
+
 bool isValidChannelName(const std::string &channel) {
 	if (channel.empty())
 		return false;
@@ -179,3 +186,5 @@ bool isValidChannelName(const std::string &channel) {
 
 	return true;
 }
+
+
