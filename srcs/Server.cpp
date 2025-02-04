@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 14:02:14 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:57:00 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,11 @@ void	Server::connectNewClient() {
 
 
 // --- handle new input ---
-std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd)
-{
+std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd) {
 	std::vector<std::string> result;
 	std::istringstream iss(cmd);
 	std::string token;
+
 	while (iss >> token) {
 		result.push_back(token);
 		token.clear();
@@ -241,6 +241,9 @@ void	Server::turnOn() {
 	while (Server::_stayTurnedOn) {
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_stayTurnedOn)
 			throw (std::runtime_error("Error: poll()"));
+
+		this->printServer();
+
 		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN)
 				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd, i);
@@ -269,35 +272,22 @@ void	Server::signalHandler(int signum) {
 	_stayTurnedOn = false;
 }
 
-// void Server::printChannels()  {
-//     std::cout << "Channels in Server (" << _channels.size() << "):" << std::endl;
-//     for (std::vector<Channel>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
-//         std::cout << " - Channel Name: " << it->getName() << std::endl;
-//     }
-// }
-
-void Server::addChannel(Channel *newChannel, std::string name)
-{
-    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
-    {
-        if ((*it)->getName() == name)
-        {
-            std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
-            return ;
-        }
-    }
-    this->_channels.push_back(newChannel);
+void Server::addChannel(Channel *newChannel, std::string name) {
+	for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+		if ((*it)->getName() == name) {
+			std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
+			return ;
+		}
+	}
+	this->_channels.push_back(newChannel);
 }
 
+Channel* Server::getChannel(std::string chanName) {
+	for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+		if ((*it)->getName() == chanName) {
+			return (*it);
+		}
+	}
 
-Channel* Server::getChannel(std::string chanName)
-{
-    for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
-    {
-        if ((*it)->getName() == chanName)
-        {
-            return (*it);
-        }
-    }
-    return (NULL);
+	return (NULL);
 }

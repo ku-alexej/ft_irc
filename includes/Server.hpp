@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 19:15:59 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:56 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ class Server {
 		void	printStringVector(std::vector<std::string> v);
 		void	printBuffer(std::string str);
 		void	printClientBuffer(Client client);
+		void	printServer();
 
 	private:
 		int							_fd;

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 19:23:12 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:03:38 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,17 @@ bool	isUsableMode(std::string mode) {
 	return (false);
 }
 
-bool	isValueNeeded(const char c, const char sign) {
+// according the Protocol [+behklovIO] [-behkovIO] use variables =(
+// so we have to collect variables but then can use only  commands from subject: [+tilk] [-tilk]
+bool	isVariableNeeded(char c, char sign) {
+	std::string mode;
+	mode += c;
+
 	if (sign == '+')
-		if (c == 'l' || c == 'k' || c == 'o')
+		if (mode.find_first_not_of("behklovIO") == std::string::npos)
 			return (true);
 	if (sign == '-')
-		if (c == 'k' || c == 'o')
+		if (mode.find_first_not_of("behkovIO") == std::string::npos)
 			return (true);
 	return (false);
 }
@@ -64,11 +69,41 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 	(void) variable;
 }
 
+int	getNewLimitForChannel(std::string variable) {
+	if (variable.find_first_not_of("+0123456789") != std::string::npos) {
+		throw (std::invalid_argument("Invalid argument: /mode #channel +l argument"));
+	}
+	return (atoi(variable.c_str()));
+}
+
 void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
-	(void) tokens;
-	(void) fd;
-	(void) mode;
-	(void) variable;
+	Channel	*ch = getChannel(tokens[1]);
+	Client	*c = getClientByFd(fd);
+
+	switch (mode[0]) {															// set mode
+		case '+':
+			std::cout << " TRY +l" << std::endl;
+			try {
+				int l = getNewLimitForChannel(variable);
+				if (ch->getL() == l)	// if nothing to change
+					return ;
+				ch->setL(l);
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+			} catch (const std::exception &e) {
+				// sent to client: bad argument
+				c->setReplyBuffer(ERR_INCORRECMODEPARAMS(c->getNickname(), "MODE", "+l " + variable));
+				std::cout << " TRY +l: wrong argument!!!" << std::endl;
+				return ;
+			}
+			break;
+		case '-':
+			std::cout << " TRY -l" << std::endl;
+			if (ch->getL() != 0) {
+				ch->setL(0);
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			}
+			break;
+	}
 }
 
 void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
@@ -90,33 +125,33 @@ void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, 
 	(void) tokens;
 	// Client *c = getClientByFd(fd);
 
-	std::cout << "try to set [" + mode + "]=[" + variable + "]";
+	std::cout << "try to set [" + mode + "]=[" + variable + "]" << std::endl;
 
-	if (isValueNeeded(mode[1], mode[0]) && variable.empty()) {					// ignore mode
+	if (isVariableNeeded(mode[1], mode[0]) && variable.empty()) {					// ignore mode
 		std::cout << " FAIL: no variable" << std::endl;
 		return ;
 	}
 
 	switch (mode[1]) {															// set mode
 		case 't':
+			std::cout << " TRY t" << std::endl;
 			setModeT(tokens, fd, mode, variable);
-			std::cout << " TRY" << std::endl;
 			break;
 		case 'i':
+			std::cout << " TRY i" << std::endl;
 			setModeI(tokens, fd, mode, variable);
-			std::cout << " TRY" << std::endl;
 			break;
 		case 'l':
+			std::cout << " TRY l" << std::endl;
 			setModeL(tokens, fd, mode, variable);
-			std::cout << " TRY" << std::endl;
 			break;
 		case 'k':
+			std::cout << " TRY k" << std::endl;
 			setModeK(tokens, fd, mode, variable);
-			std::cout << " TRY" << std::endl;
 			break;
 		case 'o':
+			std::cout << " TRY o" << std::endl;
 			setModeO(tokens, fd, mode, variable);
-			std::cout << " TRY" << std::endl;
 			break;
 	}
 
@@ -124,29 +159,43 @@ void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, 
 
 	// std::map<std::string, std::string> modesToUse = getModes(tokens),;
 	// runModes(modesToUse);
+
+void	setIndexes(std::string &modestring, std::vector<std::string> tokens, size_t &i, size_t &variableIndex) {
+	if (i + 1 >= modestring.size() && variableIndex < tokens.size()) {
+		modestring = tokens[variableIndex];
+		i = 0;
+		variableIndex++;
+	}
+}
+
 void	Server::runModes(std::vector<std::string> tokens, int fd) {
 	std::vector<std::pair<std::string, std::string> > modesToUse;
 	std::string sign = "+";
 	Client *c = getClientByFd(fd);
 
+	// here we parse modes and theit variables
 	std::string modestring = tokens[2];
 	size_t variableIndex = 3;
 	for (size_t i = 0; i < modestring.size(); i++) {
 		if (modestring[i] == '+') {
 			sign = "+";
+			setIndexes(modestring, tokens, i, variableIndex);
 			continue;
 		} else if (modestring[i] == '-') {
 			sign = "-";
+			setIndexes(modestring, tokens, i, variableIndex);
 			continue;
 		}
-		if (isValueNeeded(modestring[i], sign[0])) {
+		if (isVariableNeeded(modestring[i], sign[0])) {
 			std::string mode = sign + modestring[i];
 			std::string variable = (variableIndex < tokens.size()) ? tokens[variableIndex] : "";
 			modesToUse.push_back(std::make_pair(mode, variable));
 			variableIndex++;
+			setIndexes(modestring, tokens, i, variableIndex);
 		} else {
 			std::string mode = sign + modestring[i];
 			modesToUse.push_back(std::make_pair(mode, ""));
+			setIndexes(modestring, tokens, i, variableIndex);
 		}
 	}
 
@@ -166,37 +215,6 @@ void	Server::runModes(std::vector<std::string> tokens, int fd) {
 
 
 void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
-	// ERR_NOSUCHCHANNEL (403)
-	// RPL_CREATIONTIME (329)		-- optional, can skip it
-	// RPL_CHANNELMODEIS (324)
-	// ERR_CHANOPRIVSNEEDED (482)
-
-	// When the server is done processing the modes,
-	// a MODE command is sent to all members of the channel containing the mode changes.
-
-	// -i [---]
-	// +i [---]								>> ERR_INVITEONLYCHAN (473)
-
-	// -t [---]
-	// +t [---]								>> ERR_NEEDMOREPARAMS (461)
-	//										>> ERR_NOSUCHCHANNEL (403)
-	//										>> ERR_NOTONCHANNEL (442)
-	//										>> ERR_CHANOPRIVSNEEDED (482)
-	//										>> RPL_NOTOPIC (331)
-	//										>> RPL_TOPIC (332) + RPL_TOPICWHOTIME (333)
-
-	// -k [current password]
-	// +k [password to set]					>> ERR_INVALIDMODEPARAM ()
-	//										>> ERR_INVALIDKEY ()
-	//										>> ERR_BADCHANNELKEY (475)
-
-	// -o [nickneme to remove op rights]
-	// +o [nickname to give op rights]		>> This mode is standard. The prefix and mode letter used for it, respectively, are "@" and "+o".
-	//										>> Users with this mode may perform channel moderation tasks such as kicking users, applying channel modes,
-	//										>> and set other users to operator (or lower) status.
-
-	// -l [---]
-	// +l [user limit]						>> ERR_CHANNELISFULL (471)
 
 	Client	*c = getClientByFd(fd);
 	Channel	*ch = getChannel(tokens[1]);
@@ -226,9 +244,7 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 		return ;
 	}
 
-	// use MODE
 	runModes(tokens, fd);
-	// runModes(modesToUse);
 }
 
 void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
@@ -241,12 +257,6 @@ void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
 	}
 
 	// MODE for client: we have +i in irssi afer registration
-
-	if(tokens[1][0] != '#') {
-		cmdUserMode(tokens, fd);
-		return ;
-	}
-
 	if(tokens[1][0] != '#') {
 		cmdUserMode(tokens, fd);
 		return ;

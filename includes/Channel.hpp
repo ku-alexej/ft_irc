@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 13:28:54 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:13:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ class Channel {
 		void	addOperator(Client *newOperator);
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
-		void 	broadcastJoinMessage(Client *joiningClient) ;
+		void	broadcastJoinMessage(Client *joiningClient);
+		void	setReplyBufferForAllChannelClients(std::string msg);
 
 		std::string	getModes();
 		std::string	getModesArgs(bool isOnChannel);

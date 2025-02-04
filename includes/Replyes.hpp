@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/03 19:06:10 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:18:57 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // client = nickname of user
 
 // Mode was changed (only if changed)
-# define MODE_SET(channelName, mode)								":" + SERVER_NAME + " MODE " + channelName + " " + mode + ""
+# define MODE_SET(client, channelName, mode, variable)				std::string(":") + (client.empty() ? "empty" : client) + " MODE " + channelName + " " + mode + " " + variable + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
@@ -65,6 +65,7 @@
 # define ERR_USERONCHANNEL(client, nickName, channelName)			"443 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :is already on channel"
 // "461" // PASS USER PING JOIN PART TOPIC INVITE KICK
 # define ERR_NEEDMOREPARAMS(client, command)						"461 " + (client.empty() ? "empty" : client) + " " + command + " :Not enough parameters"
+# define ERR_INCORRECMODEPARAMS(client, command, mode)				"461 " + (client.empty() ? "empty" : client) + " " + command + " :Incorrct params for " + mode + ""
 // "462" // PASS USER
 # define ERR_ALREADYREGISTERED(client)								"462 " + (client.empty() ? "empty" : client) + " :You may not reregister"
 // "464" // PASS
