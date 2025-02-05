@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/02/03 12:33:30 by akurochk         ###   ########.fr        #
+#    Updated: 2025/02/05 14:35:29 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,9 +67,10 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm ./*/.DS_*
 	rm -rf $(NAME)
 	@rm -rf .vscode
+	@rm -rf ./*/.DS_*
+	@rm -rf .DS_*
 
 re: fclean all
 

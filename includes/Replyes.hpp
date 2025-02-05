@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 17:18:57 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:26:34 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define CRLF			"\r\n"
 # define CMD_LEN		512
 # define SERVER_NAME	"DarkForest"
+# define CHANNEL_LIMIT	3
 
 // client = nickname of user
 

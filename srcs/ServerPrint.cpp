@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 18:57:12 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:35:55 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	Server::printServer() {
 		std::cout << "     _channels=[" << &_channels << "]" << std::endl;
 		std::cout << "                size   ->[" << _channels.size() << "]" << std::endl;
 		for (size_t i = 0; i < _channels.size(); i++) {
-			std::cout << "                channel->[" << &_channels[i] << "] name=[" << _channels[i]->getName() << "] Op=[" << _channels[i]->getOperators().size() << "] Cl=[" << _channels[i]->getClients().size() << "]" << std::endl;
+			std::cout << "                channel->[" << &_channels[i] << "] name=[" << _channels[i].getName() << "] Op=[" << _channels[i].getOperators().size() << "] Cl=[" << _channels[i].getClients().size() << "]" << std::endl;
 		}
 
 		// std::vector<struct pollfd>	_fds;

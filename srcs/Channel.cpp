@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 16:25:09 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:24:36 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Channel::Channel() {
 	this->_t		= true;		// true		= possible to change topic
 	this->_k		= "";		// ""		= no password to join channel
 	this->_tText	= "";
+	this->_name		= "";
 }
 
 Channel::Channel(std::string name, Client *client, bool firstConnection) {
@@ -37,7 +38,7 @@ Channel::Channel(std::string name, Client *client, bool firstConnection) {
 	this->_t		= true;		// true		= possible to change topic
 	this->_k		= "";		// ""		= no password to join channel
 	this->_tText	= "";
-	this -> _password = "";
+	// this -> _password = "";
 	this -> _name = name;
 	if (firstConnection)
 		this -> _operators.push_back(client);
@@ -56,6 +57,7 @@ Channel & Channel::operator=(const Channel &src) {
 		this->_i			= src._i;
 		this->_t			= src._t;
 		this->_k			= src._k;
+		this->_name			= src._name;
 		this->_tText		= src._tText;
 		this->_clients		= src._clients;
 		this->_operators	= src._operators;

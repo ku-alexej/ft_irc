@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/29 18:58:46 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:37:36 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ std::string					Client::getServername()		{return (this->_servername);}
 std::string					Client::getRealname()		{return (this->_realname);}
 std::string					Client::getNickname()		{return (this->_nickname);}
 std::vector<std::string>	Client::getInvites()		{return (this->_invites);}
-std::vector<std::string>	Client::getChannelNames()		{return (this->_channelNames);}
+std::vector<std::string>	Client::getChannelNames()	{return (this->_channelNames);}
 std::string Client::getUserID() 
 {
     std::string userID = ":" + getNickname() + "!" + getUsername() + "@localhost";
@@ -156,12 +156,15 @@ void	Client::trimmReplyBuffer(size_t bytes) {
 }
 
 
-void    Client::addChannel(std::string channel)
-{
-    if (std::find(this->_channelNames.begin(), this->_channelNames.end(), channel) != this->_channelNames.end())
-    {
-		std::cout << "are we here or not" << std::endl;
-        return ;
+void    Client::addChannel(std::string channelName) {
+	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
+        if (*it == channelName) { 
+			return ;
+		}
     }
-    this->_channelNames.push_back(channel);
+    this->_channelNames.push_back(channelName);
+}
+
+bool	Client::isInvitedToChannel(std::string channelName) {
+	    return (std::find(_channelNames.begin(), _channelNames.end(), channelName) != _channelNames.end());
 }

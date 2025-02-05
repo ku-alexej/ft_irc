@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 18:57:00 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:52:35 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,9 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 void	Server::sentReply(int fd) {
 	Client *client = getClientByFd(fd);
 
+	if (client == NULL || client->getReplyBuffer().empty())
+		return ;
+
 	std::cout << CYN << "[INFO]: reply to client fd=" << client->getFd() << RES << std::endl;
 	printBuffer(client->getReplyBuffer());
 
@@ -247,7 +250,10 @@ void	Server::turnOn() {
 		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN)
 				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd, i);
+			if (_fds[i].fd != _fd)
+				sentReply(_fds[i].fd);
 		}
+		
 	}
 
 	turnOff();
@@ -273,19 +279,19 @@ void	Server::signalHandler(int signum) {
 }
 
 void Server::addChannel(Channel *newChannel, std::string name) {
-	for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
-		if ((*it)->getName() == name) {
+	for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+		if (it->getName() == name) {
 			std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
 			return ;
 		}
 	}
-	this->_channels.push_back(newChannel);
+	this->_channels.push_back(*newChannel);
 }
 
 Channel* Server::getChannel(std::string chanName) {
-	for (std::vector<Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
-		if ((*it)->getName() == chanName) {
-			return (*it);
+	for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+		if (it->getName() == chanName) {
+			return &(*it);
 		}
 	}
 

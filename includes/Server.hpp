@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 17:44:56 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:08:18 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ class Server {
 
 
 		void	cmdJoin(std::vector<std::string> tokens, int fd);
-		std::vector<std::pair<std::string, std::string> >   getChannelsToJoin(std::vector<std::string> tokens);
-		bool	createChannel(Client *c, Channel *ch, std::string channelName);
-		void	joinChannel(Client *c, std::string channelName, std::string key);
+		// std::vector<std::pair<std::string, std::string> >	getChannelsToJoin(std::vector<std::string> tokens);
+		void	createChannel(Client *c, std::string channelName);
+		void	joinChannel(Client *c, Channel *ch, std::string key);
 		void	welcomeChannelReply(Client *c, Channel *ch);
+		void	clientJoinChannelReply(Client *c, Channel *ch);
 
 
 
@@ -118,7 +119,7 @@ class Server {
 		struct sockaddr_in			_serverAddress;
 		struct pollfd				_clientIn;
 		std::vector<Client>			_clients;
-		std::vector<Channel*>		_channels;
+		std::vector<Channel>		_channels;
 		std::vector<struct pollfd>	_fds;
 		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };
