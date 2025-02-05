@@ -22,6 +22,8 @@
 // Mode was changed (only if changed)
 # define MODE_SET(client, channelName, mode, variable)				std::string(":") + (client.empty() ? "empty" : client) + " MODE " + channelName + " " + mode + " " + variable + ""
 
+# define JOIN_OK(client, userName, hostName, channelName)			std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN :" + channelName + ""
+
 // --- errors ---
 // "401" // WHOIS PRIVMSG
 # define ERR_NOSUCHNICK(client, nickOrChannel)						"401 " + (client.empty() ? "empty" : client) + " " + nickOrChannel + " :No such nick/channel"
@@ -137,8 +139,7 @@
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN
-#define RPL_NAMREPLY(client, symbol, channelName, nickList) \
-    (std::string("353 ") + ((client).empty() ? "empty" : (client)) + " " + (symbol) + " " + (channelName) + " :" + (nickList))
+#define RPL_NAMREPLY(client, symbol, channelName, nickList)				"353 " + (client.empty() ? "empty" : client) + " " + symbol + " " + channelName + " :" + nickList + ""
 // "366" // JOIN
 # define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of /NAMES list"
 // "368" MODE

@@ -67,6 +67,7 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
+	rm ./*/.DS_*
 	rm -rf $(NAME)
 	@rm -rf .vscode
 

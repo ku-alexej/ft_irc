@@ -99,6 +99,7 @@ void	Channel::setI(bool isI)							{this->_i		= isI;}
 void	Channel::setT(bool isT)							{this->_t		= isT;}
 void	Channel::setK(std::string newK)					{this->_k		= newK;}
 void	Channel::setTopicText(std::string newTopicText)	{this->_tText	= newTopicText;}
+void	Channel::setName(std::string newName)			{this->_name	= newName;}
 
 // --- member functions ---
 void	Channel::addClient(Client *newClient) {

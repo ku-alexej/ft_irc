@@ -25,6 +25,7 @@
 # include <arpa/inet.h>
 # include <sstream>
 # include <algorithm>    // std::find
+# include <unistd.h>
 
 // # include <sstream>
 // # include <sys/socket.h>
@@ -60,7 +61,17 @@ class Server {
 		void	cmdUser(std::vector<std::string> tokens, int fd);
 		void	cmdPing(std::vector<std::string> tokens, int fd);
 		void	cmdWhois(std::vector<std::string> tokens, int fd);
+
+
 		void	cmdJoin(std::vector<std::string> tokens, int fd);
+		std::vector<std::pair<std::string, std::string> >   getChannelsToJoin(std::vector<std::string> tokens);
+		bool	createChannel(Client *c, Channel *ch, std::string channelName);
+		void	joinChannel(Client *c, std::string channelName, std::string key);
+		void	welcomeChannelReply(Client *c, Channel *ch);
+
+
+
+
 		void	cmdPart(std::vector<std::string> tokens, int fd);
 		void	cmdTopic(std::vector<std::string> tokens, int fd);
 		void	cmdInvite(std::vector<std::string> tokens, int fd);
@@ -80,14 +91,14 @@ class Server {
 
 		Channel* getChannel(std::string chanName);
 		void	addChannel(Channel *newChannel, std::string name);
-		std::vector<Channel*> getChannels();
-		bool	channelExists( std::string channelName);
-		void	joinChannel(Client *client, std::string channelName, std::string key);
+		// std::vector<Channel*> getChannels();
+		// bool	channelExists( std::string channelName);
+		// void	joinChannel(Client *client, std::string channelName, std::string key);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
-		void 	printChannels();
+		// void 	printChannels();
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
