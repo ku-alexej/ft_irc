@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 15:24:36 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:17:54 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ bool isValidChannelName(const std::string &channel) {
 		return false;
 
 	char firstChar = channel[0];
-	if (firstChar != '#')
+	if (firstChar != '#')								// after connection sent reply according Protocol: "CHANTYPES Parameter"
 		return false;
 
 	for (std::size_t i = 0; i < channel.size(); ++i) {

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 17:08:18 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:22:53 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <cstring>
 # include <vector>
 # include <map>
+# include <list>
 # include <netinet/in.h>
 # include <poll.h>
 # include <fcntl.h>
@@ -62,49 +63,45 @@ class Server {
 		void	cmdPing(std::vector<std::string> tokens, int fd);
 		void	cmdWhois(std::vector<std::string> tokens, int fd);
 
-
+		//		functions JOIN
 		void	cmdJoin(std::vector<std::string> tokens, int fd);
-		// std::vector<std::pair<std::string, std::string> >	getChannelsToJoin(std::vector<std::string> tokens);
-		void	createChannel(Client *c, std::string channelName);
-		void	joinChannel(Client *c, Channel *ch, std::string key);
-		void	welcomeChannelReply(Client *c, Channel *ch);
-		void	clientJoinChannelReply(Client *c, Channel *ch);
-
-
-
+		void		createChannel(Client *c, std::string channelName);
+		void		joinChannel(Client *c, Channel *ch, std::string key);
+		void		welcomeChannelReply(Client *c, Channel *ch);
+		void		clientJoinChannelReply(Client *c, Channel *ch);
 
 		void	cmdPart(std::vector<std::string> tokens, int fd);
 		void	cmdTopic(std::vector<std::string> tokens, int fd);
 		void	cmdInvite(std::vector<std::string> tokens, int fd);
 		void	cmdKick(std::vector<std::string> tokens, int fd);
+		
+		//		functions MODE
 		void	cmdMode(std::vector<std::string> tokens, int fd);
-		void	cmdUserMode(std::vector<std::string> tokens, int fd);
-		void	cmdChannelMode(std::vector<std::string> tokens, int fd);
-		void	runModes(std::vector<std::string> tokens, int fd);
-		void	setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
-		void	setModeT(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
-		void	setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
-		void	setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
-		void	setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
-		void	setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		cmdUserMode(std::vector<std::string> tokens, int fd);
+		void		cmdChannelMode(std::vector<std::string> tokens, int fd);
+		void		runModes(std::vector<std::string> tokens, int fd);
+		void		setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		setModeT(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		void		setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable);
+		
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
 		void	cmdWho(std::vector<std::string> tokens, int fd);
 
 		Channel* getChannel(std::string chanName);
 		void	addChannel(Channel *newChannel, std::string name);
-		// std::vector<Channel*> getChannels();
-		// bool	channelExists( std::string channelName);
-		// void	joinChannel(Client *client, std::string channelName, std::string key);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
-		// void 	printChannels();
 		void	startListening();
 		void	turnOn();
 		void	turnOff();
 		static void	signalHandler(int signum);
 
+		//		functions for debug
 		void	printStringVector(std::vector<std::string> v);
 		void	printBuffer(std::string str);
 		void	printClientBuffer(Client client);
@@ -118,8 +115,8 @@ class Server {
 		std::string					_serverName;
 		struct sockaddr_in			_serverAddress;
 		struct pollfd				_clientIn;
-		std::vector<Client>			_clients;
-		std::vector<Channel>		_channels;
+		std::list<Client>			_clients;
+		std::list<Channel>			_channels;
 		std::vector<struct pollfd>	_fds;
 		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };

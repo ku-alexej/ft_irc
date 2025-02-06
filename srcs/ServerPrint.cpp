@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 14:35:55 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:13:59 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::printClientBuffer(Client client) {
 	std::cout << "]" << RES << std::endl;
 }
 
-
+// print info in Server class member functions for debug
 void	Server::printServer() {
 		std::cout << std::endl << "SERVER INFO" << std::endl;
 
@@ -65,18 +65,24 @@ void	Server::printServer() {
 		// struct pollfd				_clientIn;
 		std::cout << "     _clientIn=[" << &_clientIn << "]" << std::endl;
 
-		// std::vector<Client>			_clients;
+		// std::list<Client>			_clients;
 		std::cout << "      _clients=[" << &_clients << "]" << std::endl;
 		std::cout << "                size  ->[" << _clients.size() << "]" << std::endl;
-		for (size_t i = 0; i < _clients.size(); i++) {
-			std::cout << "                client->[" << &_clients[i]  << "] fd=[" << _clients[i].getFd()<< "]" << std::endl;
+		for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+			std::cout << "                client->[" << &(*it)
+					<< "] fd=[" << it->getFd()
+					<< "]" << std::endl;
 		}
 
-		// std::vector<Channel*>		_channels;
+		// std::list<Channel*>		_channels;
 		std::cout << "     _channels=[" << &_channels << "]" << std::endl;
 		std::cout << "                size   ->[" << _channels.size() << "]" << std::endl;
-		for (size_t i = 0; i < _channels.size(); i++) {
-			std::cout << "                channel->[" << &_channels[i] << "] name=[" << _channels[i].getName() << "] Op=[" << _channels[i].getOperators().size() << "] Cl=[" << _channels[i].getClients().size() << "]" << std::endl;
+		for (std::list<Channel>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+			std::cout << "                channel->[" << &(*it)
+					<< "] name=[" << it->getName()
+					<< "] Op=[" << it->getOperators().size()
+					<< "] Cl=[" << it->getClients().size()
+					<< "]" << std::endl;
 		}
 
 		// std::vector<struct pollfd>	_fds;

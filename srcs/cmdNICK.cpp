@@ -6,13 +6,13 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 12:40:15 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:16:39 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-std::string	toLower(std::string str) {
+std::string	toLower(std::string str) {						// after connection sent reply according Protocol: "CASEMAPPING Parameter"
 	for (size_t i = 0; i < str.size(); i++) {
 		if (str[i] >= 'A' && str[i] <= 'Z')
 			str[i] = std::tolower(str[i]);
@@ -39,7 +39,7 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 		return ;
 	}
 
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (toLower(tokens[1]) == toLower(it->getNickname())) {
 			c->setReplyBuffer(ERR_NICKNAMEINUSE(c->getNickname(), tokens[1]));
 			return ;
@@ -53,8 +53,9 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 	// :dan-!d@localhost NICK Mamoped
 	// :WiZ NICK Kilroy					<- the code use this one
 
-	if (!oldName.empty() && !c->getCapOn())
+	if (!oldName.empty() && !c->getCapOn()) {
 		c->setReplyBuffer(":" + oldName + " NICK " + tokens[1]);
-	else if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn())
+	} else if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn()) {
 		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
+	}
 }

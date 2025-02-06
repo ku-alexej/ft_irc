@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 17:52:35 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:13:48 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ Server::Server() {}
 Server::Server(const Server &src) {
 	(void) src;
 }
-
-// std::vector<Channel> Server::getChannels() {
-//     return this->_channels;
-// }
-
 
 void	Server::initCmdMap() {
 	this->_cmdMap["CAP"]	= &Server::cmdCap;
@@ -66,7 +61,7 @@ Server::~Server() {}
 // --- setters ---
 
 void	Server::deleteClient(Client toDelete) {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+	for (std::list<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
 		if (it->getFd() == toDelete.getFd()) {
 			this->_clients.erase(it);
 			std::cout << "[INFO]: client fd=" << toDelete.getFd() << " was deleted" << std::endl;
@@ -75,7 +70,7 @@ void	Server::deleteClient(Client toDelete) {
 }
 
 Client* Server::getClientByFd(int fd) {
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (it->getFd() == fd) {
 			return &(*it);
 		}
@@ -84,7 +79,7 @@ Client* Server::getClientByFd(int fd) {
 }
 
 Client* Server::getClientByNick(std::string nick) {
-	for (std::vector<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (it->getNickname() == nick) {
 			return &(*it);
 		}
@@ -253,7 +248,7 @@ void	Server::turnOn() {
 			if (_fds[i].fd != _fd)
 				sentReply(_fds[i].fd);
 		}
-		
+
 	}
 
 	turnOff();
@@ -261,10 +256,12 @@ void	Server::turnOn() {
 
 void	Server::turnOff() {
 	std::cout << GRN << "[INFO]: turning off the server" << RES << std::endl;
-	for (size_t i = 0; i < _clients.size(); i++) {
-		close(_clients[i].getFd());
-		std::cout << "[INFO]: client fd=" << _clients[i].getFd() << " disconnected" << std::endl;
+	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		// sent reply to client: SERVER OFF - or something same
+		close(it->getFd());
+		std::cout << "[INFO]: client fd=" << it->getFd() << " disconnected" << std::endl;
 	}
+
 	if (_fd != -1) {
 		close(_fd);
 		std::cout << GRN << "[INFO]: the server fd=" << _fd << " was turned off" << RES << std::endl;
@@ -279,7 +276,7 @@ void	Server::signalHandler(int signum) {
 }
 
 void Server::addChannel(Channel *newChannel, std::string name) {
-	for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (it->getName() == name) {
 			std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
 			return ;
@@ -289,7 +286,7 @@ void Server::addChannel(Channel *newChannel, std::string name) {
 }
 
 Channel* Server::getChannel(std::string chanName) {
-	for (std::vector<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (it->getName() == chanName) {
 			return &(*it);
 		}
