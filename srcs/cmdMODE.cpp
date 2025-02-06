@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 16:05:11 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:14:22 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 	(void) fd;
 	(void) mode;
 	(void) variable;
+
+
+	// TODO:
 }
 
 void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
