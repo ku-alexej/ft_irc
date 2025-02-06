@@ -31,7 +31,7 @@
 // "402" // WHOIS PRIVMSG
 # define ERR_NOSUCHSERVER(client, serverName)						"402 " + (client.empty() ? "empty" : client) + " " + serverName + " :No such server"
 // "403:" // JOIN PART MODE TOPIC INVITE KICK
-# define ERR_NOSUCHCHANNEL(client, channelName)						"403 " + (client.empty() ? "empty" : client) + " " + channelName + " :No such channel"
+# define ERR_NOSUCHCHANNEL(client, channelName)						": 403 " + (client.empty() ? "empty" : client) + " " + channelName + " :No such channel"
 // "404" // PRIVMSG
 # define ERR_CANNOTSENDTOCHAN(client, channelName)					"404 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot send to channel"
 // "405" // JOIN
