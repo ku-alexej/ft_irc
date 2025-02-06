@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 17:18:57 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:26:34 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@
 # define CRLF			"\r\n"
 # define CMD_LEN		512
 # define SERVER_NAME	"DarkForest"
+# define CHANNEL_LIMIT	3
 
 // client = nickname of user
 
 // Mode was changed (only if changed)
 # define MODE_SET(client, channelName, mode, variable)				std::string(":") + (client.empty() ? "empty" : client) + " MODE " + channelName + " " + mode + " " + variable + ""
+
+# define JOIN_OK(client, userName, hostName, channelName)			std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN :" + channelName + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
@@ -137,8 +140,7 @@
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN
-#define RPL_NAMREPLY(client, symbol, channelName, nickList) \
-    (std::string("353 ") + ((client).empty() ? "empty" : (client)) + " " + (symbol) + " " + (channelName) + " :" + (nickList))
+#define RPL_NAMREPLY(client, symbol, channelName, nickList)				"353 " + (client.empty() ? "empty" : client) + " " + symbol + " " + channelName + " :" + nickList + ""
 // "366" // JOIN
 # define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of /NAMES list"
 // "368" MODE

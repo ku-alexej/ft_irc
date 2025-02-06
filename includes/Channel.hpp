@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 16:13:33 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:50:11 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class Channel {
 		bool					getI();
 		bool					getT();
 		std::string				getK();
-		std::string				getPass();
+		// std::string				getPass();
 		std::string				getTopicText();
 		std::vector<Client *>	getClients();
 		std::vector<Client *>	getOperators();
@@ -48,6 +48,7 @@ class Channel {
 		void	setT(bool isT);
 		void	setK(std::string newK);
 		void	setTopicText(std::string newTopicText);
+		void	setName(std::string newName);
 
 		// --- member functions ---
 		void	addClient(Client *newClient);
@@ -69,8 +70,8 @@ class Channel {
 		std::string				_k;
 		std::string 			_name;
 		std::string				_tText;
-		std::string 			_password;
-		std::vector<std::string> _all_members;
+		// std::string 			_password;
+		// std::vector<std::string> _all_members;
 		std::vector<Client *>	_clients;
 		std::vector<Client *>	_operators;
 };

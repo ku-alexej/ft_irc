@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 16:12:07 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:04:36 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ class Client {
 		void	deleteInvite(std::string toDelete);
 		void	clearInvites();
 		void	trimmReplyBuffer(size_t bytes);
+		bool	isInvitedToChannel(std::string channelName);
 
 	private:
 		int							_fd;
