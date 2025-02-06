@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 16:26:34 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:05:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@
 # define ERR_USERONCHANNEL(client, nickName, channelName)			"443 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :is already on channel"
 // "461" // PASS USER PING JOIN PART TOPIC INVITE KICK
 # define ERR_NEEDMOREPARAMS(client, command)						"461 " + (client.empty() ? "empty" : client) + " " + command + " :Not enough parameters"
-# define ERR_INCORRECMODEPARAMS(client, command, mode)				"461 " + (client.empty() ? "empty" : client) + " " + command + " :Incorrct params for " + mode + ""
 // "462" // PASS USER
 # define ERR_ALREADYREGISTERED(client)								"462 " + (client.empty() ? "empty" : client) + " :You may not reregister"
 // "464" // PASS
@@ -92,7 +91,8 @@
 # define ERR_USERSDONTMATCH(client)									"502 " + (client.empty() ? "empty" : client) + " :Cant change mode for other users"
 // "501"
 # define ERR_UMODEUNKNOWNFLAG(client)								"501 " + (client.empty() ? "empty" : client) + " :Unknown MODE flag"
-
+// "696"
+# define ERR_INVALIDMODEPARAM(client, target, mode, param, msg)		"696 " + (client.empty() ? "empty" : client) + " " + target + " " + mode + " " + param + " :" + msg + ""
 
 // --- replyes ---
 // "001" // after correct pass + nick + blallala
