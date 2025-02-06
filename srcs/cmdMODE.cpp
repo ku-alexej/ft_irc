@@ -63,6 +63,26 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 
 
 	// TODO:
+	Channel	*ch = getChannel(tokens[1]);
+	Client	*c = getClientByFd(fd);
+
+	switch (mode[0]) {
+		case '+':
+			std::cout << " TRY +t" << std::endl;
+			if (ch->getT() == true)
+				return ;
+			ch->setT(true);
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			break;
+		case '-':
+			std::cout << " TRY -t" << std::endl;
+			if (ch->getI() == false)
+				return ;
+			ch->setI(false);
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			break;
+	}
+
 }
 
 void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
