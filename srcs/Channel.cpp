@@ -25,7 +25,7 @@ void Channel::broadcastJoinMessage(Client *joiningClient) {
 Channel::Channel() {
 	this->_l		= 0;		// 0		= unlimited number of clients
 	this->_i		= false;	// false	= invite mot necessary
-	this->_t		= true;		// true		= possible to change topic
+	this->_t		= false;	// false	= possible to change topic
 	this->_k		= "";		// ""		= no password to join channel
 	this->_tText	= "";
 	this->_name		= "";
@@ -35,7 +35,7 @@ Channel::Channel(std::string name, Client *client, bool firstConnection) {
 
 	this->_l		= 0;		// 0		= unlimited number of clients
 	this->_i		= false;	// false	= invite mot necessary
-	this->_t		= true;		// true		= possible to change topic
+	this->_t		= false;	// false	= possible to change topic
 	this->_k		= "";		// ""		= no password to join channel
 	this->_tText	= "";
 	// this -> _password = "";
@@ -144,7 +144,7 @@ void	Channel::clearOperators() {
 
 std::string	Channel::getModes() {
 	std::string modes = "+";
-	modes += (_t == true  ? "" : "t");
+	modes += (_t == false ? "" : "t");
 	modes += (_i == false ? "" : "i");
 	modes += (_l == 0 ? "" : "l");
 	modes += (_k.empty() ? "" : "k");
