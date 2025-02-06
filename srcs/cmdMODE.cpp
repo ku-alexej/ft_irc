@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 13:54:04 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:05:11 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 
 	switch (mode[0]) {
 		case '+':
+			std::cout << " TRY +i" << std::endl;
 			if (ch->getI() == true)
 				return ;
 			ch->setI(true);
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 		case '-':
+			std::cout << " TRY -i" << std::endl;
 			if (ch->getI() == false)
 				return ;
 			ch->setI(false);
@@ -106,7 +108,7 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
 			} catch (const std::exception &e) {
 				// sent to client: bad argument
-				c->setReplyBuffer(ERR_INCORRECMODEPARAMS(c->getNickname(), "MODE", "+l " + variable));
+				c->setReplyBuffer(ERR_INVALIDMODEPARAM(c->getNickname(), ch->getName(), mode, variable, "use integer value"));
 				std::cout << " TRY +l: wrong argument!!!" << std::endl;
 				return ;
 			}
@@ -122,10 +124,32 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 }
 
 void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
-	(void) tokens;
-	(void) fd;
-	(void) mode;
-	(void) variable;
+	Channel	*ch = getChannel(tokens[1]);
+	Client	*c = getClientByFd(fd);
+
+	switch (mode[0]) {															// set mode
+		case '+':
+			std::cout << " TRY +k" << std::endl;
+			if (variable.empty() == true) {
+				return ;
+			}
+			ch->setK(variable);
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+			break;
+		case '-':
+			std::cout << " TRY -k" << std::endl;
+			if (ch->getK().empty() == true || variable.empty() == true)	{	// if nothing to change
+				return ;
+			}
+			if (ch->getK() != variable) {
+				c->setReplyBuffer(ERR_INVALIDMODEPARAM(c->getNickname(), ch->getName(), mode, variable, "use -k <current key> to remove key mode"));
+				return ;
+			}
+
+			ch->setK("");
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			break;
+	}
 }
 
 void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
