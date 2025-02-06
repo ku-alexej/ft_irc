@@ -13,6 +13,7 @@
 #include "Server.hpp"
 
 std::vector<std::string>	split(const std::string str, char delimiter) {
+
 	std::vector<std::string>	v;
 	std::stringstream			ss(str);
 	std::string					element;
@@ -25,6 +26,7 @@ std::vector<std::string>	split(const std::string str, char delimiter) {
 }
 
 std::vector<std::pair<std::string, std::string> >	getChannelsToJoin(std::vector<std::string> tokens) {
+
 	std::vector<std::pair<std::string, std::string> >	channelsToJoin;
 	std::vector<std::string>							channelsNames;
 	std::vector<std::string>							channelsKeys;
@@ -72,6 +74,7 @@ void	Server::welcomeChannelReply(Client *c, Channel *ch) {
 }
 
 void	Server::clientJoinChannelReply(Client *c, Channel *ch) {
+
 	std::vector<Client *>	listClients = ch->getClients();
 
 	for (size_t i = 0; i < listClients.size(); i++) {
@@ -83,6 +86,7 @@ void	Server::clientJoinChannelReply(Client *c, Channel *ch) {
 }
 
 void	Server::createChannel(Client *c, std::string channelName) {
+
 	Channel	newChannel;
 
 	newChannel.setName(channelName);
@@ -95,6 +99,7 @@ void	Server::createChannel(Client *c, std::string channelName) {
 }
 
 void	Server::joinChannel(Client *c, Channel *ch, std::string key) {
+
 	//already on channel - ignore JOIN
 	if (ch->getClientByFd(c->getFd()) != NULL) {
 		return ;
@@ -125,10 +130,10 @@ void	Server::joinChannel(Client *c, Channel *ch, std::string key) {
 
 	welcomeChannelReply(c, ch);
 	clientJoinChannelReply(c, ch);
-
 }
 
 void	Server::cmdJoin(std::vector<std::string> tokens, int fd) {
+
 	Client	*c = getClientByFd(fd);
 	Channel	newChannel;
 
@@ -144,19 +149,18 @@ void	Server::cmdJoin(std::vector<std::string> tokens, int fd) {
 
 	std::vector<std::pair<std::string, std::string> > channelsToJoin = getChannelsToJoin(tokens);
 
-
 	for (size_t i = 0; i < channelsToJoin.size(); i++) {
 		std::string channelName = channelsToJoin[i].first;
 		Channel *ch = getChannel(channelName);
-																							// after connection sent reply according Protocol: "CHANLIMIT Parameter"
-		if (c->getChannelNames().size() >= CHANNEL_LIMIT) {                                 // now CHANNEL_LIMIT=3 for debug
+																					// after connection sent reply according Protocol: "CHANLIMIT Parameter"
+		if (c->getChannelNames().size() >= CHANNEL_LIMIT) {							// now CHANNEL_LIMIT=3 for debug
 			c->setReplyBuffer(ERR_TOOMANYCHANNELS(c->getNickname(), channelName));
-			continue ;
+			continue;
 		}
 
 		if (isValidChannelName(channelName) != true) {
 			c->setReplyBuffer(ERR_BADCHANMASK(channelName));
-			continue ;
+			continue;
 		}
 
 		if (ch == NULL) {

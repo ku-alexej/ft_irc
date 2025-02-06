@@ -13,6 +13,7 @@
 #include "Server.hpp"
 
 void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
+
 	Client *c = getClientByFd(fd);
 	Client *t = getClientByNick(tokens[1]);
 
@@ -35,57 +36,65 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 }
 
 static bool	isUsableMode(std::string mode) {
-	if (mode[1] == 't' || mode[1] == 'i' || mode[1] == 'l' || mode[1] == 'k' || mode[1] == 'o')
+
+	if (mode[1] == 't' || mode[1] == 'i' || mode[1] == 'l' || mode[1] == 'k' || mode[1] == 'o') {
 		return (true);
+	}
+
 	return (false);
 }
 
 // according the Protocol [+behklovIO] [-behkovIO] use variables =(
 // so we have to collect variables but then can use only  commands from subject: [+tilk] [-tilk]
 static bool	isVariableNeeded(char c, char sign) {
+
 	std::string mode;
 	mode += c;
 
-	if (sign == '+')
-		if (mode.find_first_not_of("behklovIO") == std::string::npos)
+	if (sign == '+') {
+		if (mode.find_first_not_of("behklovIO") == std::string::npos) {
 			return (true);
-	if (sign == '-')
-		if (mode.find_first_not_of("behkovIO") == std::string::npos)
+		}
+	}
+
+	if (sign == '-') {
+		if (mode.find_first_not_of("behkovIO") == std::string::npos) {
 			return (true);
+		}
+	}
+
 	return (false);
 }
 
 void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
-	(void) tokens;
-	(void) fd;
-	(void) mode;
+
 	(void) variable;
 
-
-	// TODO:
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
 
 	switch (mode[0]) {
 		case '+':
 			std::cout << " TRY +t" << std::endl;
-			if (ch->getT() == true)
+			if (ch->getT() == true) {
 				return ;
+			}
 			ch->setT(true);
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 		case '-':
 			std::cout << " TRY -t" << std::endl;
-			if (ch->getI() == false)
+			if (ch->getI() == false) {
 				return ;
+			}
 			ch->setI(false);
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 	}
-
 }
 
 void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+
 	(void) variable;
 
 	Channel	*ch = getChannel(tokens[1]);
@@ -94,15 +103,17 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 	switch (mode[0]) {
 		case '+':
 			std::cout << " TRY +i" << std::endl;
-			if (ch->getI() == true)
+			if (ch->getI() == true) {
 				return ;
+			}
 			ch->setI(true);
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 		case '-':
 			std::cout << " TRY -i" << std::endl;
-			if (ch->getI() == false)
+			if (ch->getI() == false) {
 				return ;
+			}
 			ch->setI(false);
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
@@ -110,13 +121,16 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 }
 
 static int	getNewLimitForChannel(std::string variable) {
+
 	if (variable.find_first_not_of("+0123456789") != std::string::npos) {
 		throw (std::invalid_argument("Invalid argument: /mode #channel +l argument"));
 	}
+
 	return (atoi(variable.c_str()));
 }
 
 void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
 
@@ -125,8 +139,9 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 			std::cout << " TRY +l" << std::endl;
 			try {
 				int l = getNewLimitForChannel(variable);
-				if (ch->getL() == l)	// if nothing to change
+				if (ch->getL() == l) {	// if nothing to change
 					return ;
+				}
 				ch->setL(l);
 				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
 			} catch (const std::exception &e) {
@@ -147,6 +162,7 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 }
 
 void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
 
@@ -176,14 +192,53 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 }
 
 void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
-	(void) tokens;
-	(void) fd;
-	(void) mode;
+
+	// (void) tokens;
+	// (void) fd;
+	// (void) mode;
 	(void) variable;
+
+	// TODO: MODE +o client[,client] -o client[,client]
+
+	// ignore if no args
+	// if target client ERR_NOTONCHANNEL
+
+	// +-o: what if no target client on channel?
+	//  +o: what if target client is operator?
+	// +-o: several targets.. is it possible?
+
+	// reply for OK?
+
+	Channel	*ch = getChannel(tokens[1]);
+	Client	*c = getClientByFd(fd);
+
+	(void) ch;
+	(void) c;
+
+	switch (mode[0]) {															// set mode
+		case '+':
+			// code for +o
+			// is on channel?
+			// is operator?
+			// add in ch->_operators
+			// reply to client
+			// reply to new operator "here your crown"
+			// reply to rest client on channel? "attention he/she/they got a crown"
+			break;
+		case '-':
+			// code for -o
+			// is on channel?
+			// is operator?
+			// delete from ch->_operators
+			// reply to client
+			// reply to ex operator? "hah looser" =|
+			// reply to rest clients on the channel? "haha he/she/they is/are looser" =|
+			break;
+	}
 }
 
-
 void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
+
 	(void) tokens;
 	// Client *c = getClientByFd(fd);
 
@@ -216,13 +271,13 @@ void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, 
 			setModeO(tokens, fd, mode, variable);
 			break;
 	}
-
 }
 
 	// std::map<std::string, std::string> modesToUse = getModes(tokens),;
 	// runModes(modesToUse);
 
 static void	setIndexes(std::string &modestring, std::vector<std::string> tokens, size_t &i, size_t &variableIndex) {
+
 	if (i + 1 >= modestring.size() && variableIndex < tokens.size()) {
 		modestring = tokens[variableIndex];
 		i = 0;
@@ -231,6 +286,7 @@ static void	setIndexes(std::string &modestring, std::vector<std::string> tokens,
 }
 
 void	Server::runModes(std::vector<std::string> tokens, int fd) {
+
 	std::vector<std::pair<std::string, std::string> > modesToUse;
 	std::string sign = "+";
 	Client *c = getClientByFd(fd);
@@ -268,10 +324,11 @@ void	Server::runModes(std::vector<std::string> tokens, int fd) {
 
 	//here we try to set each mode
 	for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {
-		if (isUsableMode(it->first))
+		if (isUsableMode(it->first)) {
 			setMode(tokens, fd, it->first, it->second);
-		else
+		} else {
 			c->setReplyBuffer(ERR_UNKNOWNMODE(c->getNickname(), it->first));
+		}
 	}
 }
 
@@ -313,19 +370,19 @@ void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
 
 	Client *c = getClientByFd(fd);
 
-	if(tokens.size() < 2 || tokens[1].empty()) {
+	if (tokens.size() < 2 || tokens[1].empty()) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getUsername(), tokens[0]));
 		return ;
 	}
 
 	// MODE for client: we have +i in irssi afer registration
-	if(tokens[1][0] != '#') {
+	if (tokens[1][0] != '#') {
 		cmdUserMode(tokens, fd);
 		return ;
 	}
 
 	// MODE for channel: as in subject
-	if(tokens[1][0] == '#') {
+	if (tokens[1][0] == '#') {
 		cmdChannelMode(tokens, fd);
 		return ;
 	}

@@ -30,18 +30,19 @@ class Channel {
 
 		// --- destructors ---
 		~Channel();
+
 		// --- getters ---
 		int						getL();
 		bool					getI();
 		bool					getT();
 		std::string				getK();
-		// std::string				getPass();
 		std::string				getTopicText();
 		std::vector<Client *>	getClients();
 		std::vector<Client *>	getOperators();
 		Client					*getClientByFd(int fd);
 		Client					*getOperatorByFd(int fd);
 		std::string 			getName();
+
 		// --- setters ---
 		void	setL(int newL);
 		void	setI(bool isI);
@@ -57,7 +58,6 @@ class Channel {
 		void	addOperator(Client *newOperator);
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
-		void	broadcastJoinMessage(Client *joiningClient);
 		void	setReplyBufferForAllChannelClients(std::string msg);
 
 		std::string	getModes();
@@ -70,8 +70,6 @@ class Channel {
 		std::string				_k;
 		std::string 			_name;
 		std::string				_tText;
-		// std::string 			_password;
-		// std::vector<std::string> _all_members;
 		std::vector<Client *>	_clients;
 		std::vector<Client *>	_operators;
 };
