@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/04 19:03:38 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:54:04 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 	c->setReplyBuffer(ERR_UMODEUNKNOWNFLAG(c->getNickname()));
 }
 
-bool	isUsableMode(std::string mode) {
+static bool	isUsableMode(std::string mode) {
 	if (mode[1] == 't' || mode[1] == 'i' || mode[1] == 'l' || mode[1] == 'k' || mode[1] == 'o')
 		return (true);
 	return (false);
@@ -42,7 +42,7 @@ bool	isUsableMode(std::string mode) {
 
 // according the Protocol [+behklovIO] [-behkovIO] use variables =(
 // so we have to collect variables but then can use only  commands from subject: [+tilk] [-tilk]
-bool	isVariableNeeded(char c, char sign) {
+static bool	isVariableNeeded(char c, char sign) {
 	std::string mode;
 	mode += c;
 
@@ -63,13 +63,28 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 }
 
 void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
-	(void) tokens;
-	(void) fd;
-	(void) mode;
 	(void) variable;
+
+	Channel	*ch = getChannel(tokens[1]);
+	Client	*c = getClientByFd(fd);
+
+	switch (mode[0]) {
+		case '+':
+			if (ch->getI() == true)
+				return ;
+			ch->setI(true);
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			break;
+		case '-':
+			if (ch->getI() == false)
+				return ;
+			ch->setI(false);
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			break;
+	}
 }
 
-int	getNewLimitForChannel(std::string variable) {
+static int	getNewLimitForChannel(std::string variable) {
 	if (variable.find_first_not_of("+0123456789") != std::string::npos) {
 		throw (std::invalid_argument("Invalid argument: /mode #channel +l argument"));
 	}
@@ -160,7 +175,7 @@ void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, 
 	// std::map<std::string, std::string> modesToUse = getModes(tokens),;
 	// runModes(modesToUse);
 
-void	setIndexes(std::string &modestring, std::vector<std::string> tokens, size_t &i, size_t &variableIndex) {
+static void	setIndexes(std::string &modestring, std::vector<std::string> tokens, size_t &i, size_t &variableIndex) {
 	if (i + 1 >= modestring.size() && variableIndex < tokens.size()) {
 		modestring = tokens[variableIndex];
 		i = 0;
