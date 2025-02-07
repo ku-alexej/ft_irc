@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/07 13:26:44 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:43:04 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,6 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 
 		for (size_t i = 0; i < cmds.size(); i++)
 			exec(cmds[i], fd);
-		sentReply(fd);
 	}
 }
 
