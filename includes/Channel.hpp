@@ -60,6 +60,8 @@ class Channel {
 		void	clearOperators();
 		void	setReplyBufferForAllChannelClients(std::string msg);
 		bool 	isEmpty();
+		bool 	isMember(std::string nick);
+		bool 	isOperator(std::string nick);
 		std::string	getModes();
 		std::string	getModesArgs(bool isOnChannel);
 

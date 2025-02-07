@@ -186,3 +186,23 @@ bool	Channel::isEmpty()
 {
 	return (!_clients.size());
 }
+
+bool Channel::isMember(std::string name)
+{
+    for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        if ((*it)->getNickname() == name)
+            return true;
+    }
+    return false;
+}
+
+bool 	Channel::isOperator(std::string nick)
+{
+	for (std::vector<Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
+    {
+        if ((*it)->getNickname() == nick)
+            return true;
+    }
+    return false;
+}

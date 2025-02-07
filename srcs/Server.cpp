@@ -299,3 +299,16 @@ Channel* Server::getChannel(std::string chanName) {
 
 	return (NULL);
 }
+
+void	Server::removeChannel(std::string chanName){
+	
+	 for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ) {
+        if (it->getName() == chanName) {
+            it = this->_channels.erase(it);
+            break; 
+        } else {
+            ++it;
+        }
+    }
+	
+}

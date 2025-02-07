@@ -94,6 +94,7 @@ class Server {
 		void	addChannel(Channel *newChannel, std::string name);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
+		void	removeChannel(std::string chanName);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
 		void	startListening();
@@ -120,5 +121,5 @@ class Server {
 		std::vector<struct pollfd>	_fds;
 		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };
-
+std::vector<std::string>	split(const std::string str, char delimiter);
 #endif
