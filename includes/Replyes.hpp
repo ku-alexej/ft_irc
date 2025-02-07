@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 16:05:33 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:35:11 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # define ERR_NICKNAMEINUSE(client, nickName)						"433 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname is already in use"
 // "436" // NICK
 // # define ERR_NICKCOLLISION(client, nickName, userName, hostName)	"436 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname collision KILL from ~" + userName + "@" + hostName + ""
+
 // "441" // KICK
 # define ERR_USERNOTINCHANNEL(client, nickName, channelName)		"441 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :They aren't on that channel"
 // "442" // PART TOPIC INVITE KICK

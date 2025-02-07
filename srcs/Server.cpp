@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 12:13:48 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:26:44 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,10 +243,14 @@ void	Server::turnOn() {
 		this->printServer();
 
 		for (size_t i = 0; i < _fds.size(); i++) {
-			if (_fds[i].revents & POLLIN)
+			if (_fds[i].revents & POLLIN) {
 				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd, i);
-			if (_fds[i].fd != _fd)
-				sentReply(_fds[i].fd);
+			}
+			for (size_t j = 0; j < _fds.size(); j++) {
+				if (_fds[j].fd != _fd) {
+					sentReply(_fds[j].fd);
+				}
+			}
 		}
 
 	}
@@ -282,6 +286,7 @@ void Server::addChannel(Channel *newChannel, std::string name) {
 			return ;
 		}
 	}
+
 	this->_channels.push_back(*newChannel);
 }
 

@@ -12,15 +12,6 @@
 
 #include "Channel.hpp"
 
-void Channel::broadcastJoinMessage(Client *joiningClient) {
-    std::string joinMsg = ":" + joiningClient->getUserID() + " JOIN " + this->getName() + "\r\n";
-    
-    std::vector<Client *> clients = this->getClients();
-    for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); ++it) {
-        (*it)->setReplyBuffer(joinMsg);
-    }
-}
-
 // --- constructors ---
 Channel::Channel() {
 	this->_l		= 0;		// 0		= unlimited number of clients
