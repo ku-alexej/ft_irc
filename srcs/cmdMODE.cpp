@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 16:14:22 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:19:43 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static bool	isUsableMode(std::string mode) {
 }
 
 // according the Protocol [+behklovIO] [-behkovIO] use variables =(
-// so we have to collect variables but then can use only  commands from subject: [+tilk] [-tilk]
+// so we have to collect variables but then can use only commands from subject: [+tilk] [-tilk]
 static bool	isVariableNeeded(char c, char sign) {
 
 	std::string mode;
@@ -75,7 +75,6 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 
 	switch (mode[0]) {
 		case '+':
-			std::cout << " TRY +t" << std::endl;
 			if (ch->getT() == true) {
 				return ;
 			}
@@ -83,7 +82,6 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 		case '-':
-			std::cout << " TRY -t" << std::endl;
 			if (ch->getI() == false) {
 				return ;
 			}
@@ -102,7 +100,6 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 
 	switch (mode[0]) {
 		case '+':
-			std::cout << " TRY +i" << std::endl;
 			if (ch->getI() == true) {
 				return ;
 			}
@@ -110,7 +107,6 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
 			break;
 		case '-':
-			std::cout << " TRY -i" << std::endl;
 			if (ch->getI() == false) {
 				return ;
 			}
@@ -134,25 +130,23 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
 
-	switch (mode[0]) {															// set mode
+	switch (mode[0]) {
 		case '+':
 			std::cout << " TRY +l" << std::endl;
 			try {
 				int l = getNewLimitForChannel(variable);
-				if (ch->getL() == l) {	// if nothing to change
+				if (ch->getL() == l) {
 					return ;
 				}
 				ch->setL(l);
 				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
 			} catch (const std::exception &e) {
-				// sent to client: bad argument
 				c->setReplyBuffer(ERR_INVALIDMODEPARAM(c->getNickname(), ch->getName(), mode, variable, "use integer value"));
 				std::cout << " TRY +l: wrong argument!!!" << std::endl;
 				return ;
 			}
 			break;
 		case '-':
-			std::cout << " TRY -l" << std::endl;
 			if (ch->getL() != 0) {
 				ch->setL(0);
 				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
@@ -166,9 +160,8 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
 
-	switch (mode[0]) {															// set mode
+	switch (mode[0]) {
 		case '+':
-			std::cout << " TRY +k" << std::endl;
 			if (variable.empty() == true) {
 				return ;
 			}
@@ -176,7 +169,6 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
 			break;
 		case '-':
-			std::cout << " TRY -k" << std::endl;
 			if (ch->getK().empty() == true || variable.empty() == true)	{	// if nothing to change
 				return ;
 			}
@@ -193,46 +185,37 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 
 void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
 
-	// (void) tokens;
-	// (void) fd;
-	// (void) mode;
-	(void) variable;
-
-	// TODO: MODE +o client[,client] -o client[,client]
-
-	// ignore if no args
-	// if target client ERR_NOTONCHANNEL
-
-	// +-o: what if no target client on channel?
-	//  +o: what if target client is operator?
-	// +-o: several targets.. is it possible?
-
-	// reply for OK?
-
 	Channel	*ch = getChannel(tokens[1]);
 	Client	*c = getClientByFd(fd);
+	Client	*t;
 
-	(void) ch;
-	(void) c;
+	if (variable.empty() == true) {
+		return ;
+	}
+
+	t = getClientByNick(variable);
+	if (t == NULL) {
+		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), variable));
+		return ;
+	}
+
+	if (ch->getClientByFd(t->getFd()) == NULL) {
+		c->setReplyBuffer(ERR_USERNOTINCHANNEL(c->getNickname(), t->getNickname(), ch->getName()));
+		return ;
+	}
 
 	switch (mode[0]) {															// set mode
 		case '+':
-			// code for +o
-			// is on channel?
-			// is operator?
-			// add in ch->_operators
-			// reply to client
-			// reply to new operator "here your crown"
-			// reply to rest client on channel? "attention he/she/they got a crown"
+			if (ch->getOperatorByFd(t->getFd()) == NULL) {
+				ch->addOperator(t);
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+			}
 			break;
 		case '-':
-			// code for -o
-			// is on channel?
-			// is operator?
-			// delete from ch->_operators
-			// reply to client
-			// reply to ex operator? "hah looser" =|
-			// reply to rest clients on the channel? "haha he/she/they is/are looser" =|
+			if (ch->getOperatorByFd(t->getFd()) != NULL) {
+				ch->deleteOperator(t);
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+			}
 			break;
 	}
 }
@@ -355,6 +338,11 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 
 	if (tokens.size() == 3 && tokens[2] == "b") {
 		c->setReplyBuffer(RPL_ENDOFBANLIST(c->getNickname(), ch->getName()));
+		return ;
+	}
+
+	if (ch->getClientByFd(fd) == NULL) {
+		c->setReplyBuffer(ERR_NOTONCHANNEL(c->getNickname(), tokens[1]));
 		return ;
 	}
 
