@@ -140,6 +140,21 @@ void	Client::deleteInvite(std::string toDelete) {
 	}
 }
 
+void Client::deleteChannel(std::string &channelName)
+{
+    std::vector<std::string>::iterator it = std::find(
+        this->_channelNames.begin(), 
+        this->_channelNames.end(), 
+        channelName
+    );
+
+    if (it != this->_channelNames.end()) {
+        std::cout << "CHAN NAME: " << channelName << std::endl;
+        std::cout << "IS IT OK ARE WE DELETING IT?" << std::endl;
+        this->_channelNames.erase(it);
+    }
+}
+
 void	Client::clearInvites() {
 	this->_invites.clear();
 }

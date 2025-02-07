@@ -48,8 +48,12 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 			c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(),channelsNames[i]));
 			return ;
 		}
-		msg << ctx._client.getUserID() << " PART " << channels[i] << " :" << keys[i] << CRLF;
-	 }
+			msg << c  -> getUserID() << " PART " << channelsNames[i];
+			c -> deleteChannel(channelsNames[i]);
+			channel -> deleteClient(c);
+			channel -> setReplyBufferForAllChannelClients(msg.str());
+			c -> setReplyBuffer(msg.str());
+		}
 	
 	
 }
