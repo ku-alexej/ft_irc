@@ -59,7 +59,7 @@ class Channel {
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
 		void	setReplyBufferForAllChannelClients(std::string msg);
-
+		bool 	isEmpty();
 		std::string	getModes();
 		std::string	getModesArgs(bool isOnChannel);
 

@@ -35,8 +35,7 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 	printStringVector(tokens);
 	if (tokens.size() > 2) {
 		channelsKeys = split_part(tokens[2], ',');
-		
-		//printStringVector(channelsKeys);
+				
 	}
 	std::cout << RED << "CHANS TO LEAVE:" << std::endl;
 	printStringVector(channelsNames);
@@ -45,7 +44,7 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 		channel = getChannel(channelsNames[i]);
 		if (!channel)
 		{	
-			c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(),channelsNames[i]));
+			c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(),"token"));
 			return ;
 		}
 			msg << c  -> getUserID() << " PART " << channelsNames[i];
@@ -54,6 +53,9 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 			channel -> setReplyBufferForAllChannelClients(msg.str());
 			c -> setReplyBuffer(msg.str());
 		}
-	
+		if (channel->isEmpty())
+		{
+
+		}
 	
 }

@@ -182,3 +182,7 @@ bool isValidChannelName(const std::string &channel) {
 }
 
 
+bool	Channel::isEmpty()
+{
+	return (!_clients.size());
+}
