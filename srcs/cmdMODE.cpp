@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/07 13:19:43 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:22:37 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ void	Server::setModeT(std::vector<std::string> tokens, int fd, std::string mode,
 				return ;
 			}
 			ch->setT(true);
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			break;
 		case '-':
 			if (ch->getI() == false) {
 				return ;
 			}
 			ch->setI(false);
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			break;
 	}
 }
@@ -104,14 +104,14 @@ void	Server::setModeI(std::vector<std::string> tokens, int fd, std::string mode,
 				return ;
 			}
 			ch->setI(true);
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			break;
 		case '-':
 			if (ch->getI() == false) {
 				return ;
 			}
 			ch->setI(false);
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			break;
 	}
 }
@@ -139,7 +139,7 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 					return ;
 				}
 				ch->setL(l);
-				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, variable));
 			} catch (const std::exception &e) {
 				c->setReplyBuffer(ERR_INVALIDMODEPARAM(c->getNickname(), ch->getName(), mode, variable, "use integer value"));
 				std::cout << " TRY +l: wrong argument!!!" << std::endl;
@@ -149,7 +149,7 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 		case '-':
 			if (ch->getL() != 0) {
 				ch->setL(0);
-				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			}
 			break;
 	}
@@ -166,7 +166,7 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 				return ;
 			}
 			ch->setK(variable);
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, variable));
 			break;
 		case '-':
 			if (ch->getK().empty() == true || variable.empty() == true)	{	// if nothing to change
@@ -178,7 +178,7 @@ void	Server::setModeK(std::vector<std::string> tokens, int fd, std::string mode,
 			}
 
 			ch->setK("");
-			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, ""));
+			ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, ""));
 			break;
 	}
 }
@@ -208,13 +208,13 @@ void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode,
 		case '+':
 			if (ch->getOperatorByFd(t->getFd()) == NULL) {
 				ch->addOperator(t);
-				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, variable));
 			}
 			break;
 		case '-':
 			if (ch->getOperatorByFd(t->getFd()) != NULL) {
 				ch->deleteOperator(t);
-				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), ch->getName(), mode, variable));
+				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, variable));
 			}
 			break;
 	}
