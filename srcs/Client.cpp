@@ -138,6 +138,7 @@ void	Client::deleteInvite(std::string toDelete) {
 	for (std::vector<std::string>::iterator it = this->_invites.begin(); it != this->_invites.end(); it++) {
 		if (*it == toDelete) {
 			this->_invites.erase(it);
+			return ;
 		}
 	}
 }
@@ -174,5 +175,5 @@ void	Client::addChannel(std::string channelName) {
 }
 
 bool	Client::isInvitedToChannel(std::string channelName) {
-		return (std::find(_channelNames.begin(), _channelNames.end(), channelName) != _channelNames.end());
+	    return (std::find(_invites.begin(), _invites.end(), channelName) != _invites.end());
 }
