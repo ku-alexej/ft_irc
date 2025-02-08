@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 13:52:05 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:10:32 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,38 @@ std::vector<std::string>	Server::parsCommands(std::string buffer) {
 	return (commands);
 }
 
-void	Server::handleNewInput(int fd, int fdsIndex) {
+void	Server::disconnectClient(int fd, std::string reason) {
+	
+	Client		*c = getClientByFd(fd);
+
+	std::cout << "It is a reason for disconnectClient =[" << reason << "]" << std::endl;
+
+	c->clearReplyBuffer();
+	std::vector<std::string> channelsNames = c->getChannelNames();
+	for (std::vector<std::string>::iterator it = channelsNames.begin(); it != channelsNames.end(); it++) {
+		Channel *ch = getChannel(*it);
+		ch->deleteOperator(c);
+		ch->deleteClient(c);
+		ch->setReplyBufferForAllChannelClients(QUIT_CHANNEL(c->getNickname(), c->getUsername(), c->getHostname(), reason));
+		if (ch->getClients().size() == 0) {
+			deleteChannel(ch->getName());
+		}
+	}
+
+	c->setReplyBuffer(QUIT_SERVER(c->getNickname(), reason));
+	sentReply(fd);
+
+	close(fd);
+	deleteClient(*c);
+	for (size_t i = 0; i < _fds.size(); i++) {
+		if (_fds[i].fd == fd) {
+			deleteFromFds(i);
+			return ;
+		}
+	}
+}
+
+void	Server::handleNewInput(int fd) {
 	char buff[1024];
 	memset(buff, 0, sizeof(buff));
 	Client *client = getClientByFd(fd);
@@ -169,35 +200,30 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 
 	if (bytes < 0) {
 		std::cout << RED << "[INFO]: client fd=" << client->getFd() << " can't read data" << RES << std::endl;
-		// define cleaning
-		close(fd);
-		deleteClient(*client);
-		deleteFromFds(fdsIndex);
+		disconnectClient(fd, "server can't read client data");
 	} else if (bytes == 0) {
 		std::cout << RED << "[INFO]: client fd=" << client->getFd() << " sent nothing" << RES << std::endl;
-		// kick from the server if the client sent nothing several times
-		close(fd);
-		deleteClient(*client);
-		deleteFromFds(fdsIndex);
-	} else {						//-> print the received data
+		return ;
+	} else {
 		client->setBuffer(buff);
 		printClientBuffer(*client);
-		//todo verify buffer is not empty
 		std::vector<std::string> cmds = parsCommands(client->getBuffer());
 
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
 
-		for (size_t i = 0; i < cmds.size(); i++)
+		for (size_t i = 0; i < cmds.size(); i++) {
 			exec(cmds[i], fd);
+		}
 	}
 }
 
 void	Server::sentReply(int fd) {
 	Client *client = getClientByFd(fd);
 
-	if (client == NULL || client->getReplyBuffer().empty())
+	if (client == NULL || client->getReplyBuffer().empty()) {
 		return ;
+	}
 
 	std::cout << CYN << "[INFO]: reply to client fd=" << client->getFd() << RES << std::endl;
 	printBuffer(client->getReplyBuffer());
@@ -239,11 +265,9 @@ void	Server::turnOn() {
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_stayTurnedOn)
 			throw (std::runtime_error("Error: poll()"));
 
-		this->printServer();
-
 		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN) {
-				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd, i);
+				(_fds[i].fd == _fd) ? connectNewClient() : handleNewInput(_fds[i].fd);
 			}
 			for (size_t j = 0; j < _fds.size(); j++) {
 				if (_fds[j].fd != _fd) {
@@ -251,6 +275,8 @@ void	Server::turnOn() {
 				}
 			}
 		}
+		
+		this->printServer();
 
 	}
 
@@ -258,11 +284,10 @@ void	Server::turnOn() {
 }
 
 void	Server::turnOff() {
-	std::cout << GRN << "[INFO]: turning off the server" << RES << std::endl;
-	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		// sent reply to client: SERVER OFF - or something same
-		close(it->getFd());
-		std::cout << "[INFO]: client fd=" << it->getFd() << " disconnected" << std::endl;
+
+	for (size_t i = _fds.size() - 1; i > 0; i--) {
+		std::cout << "[INFO]: disconnecting client fd=" << _fds[i].fd << "" << std::endl;
+		disconnectClient(_fds[i].fd, "Server shutting down");
 	}
 
 	if (_fd != -1) {

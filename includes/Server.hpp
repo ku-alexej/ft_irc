@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 13:12:16 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:11:00 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ class Server {
 		~Server();
 
 		void	connectNewClient();
-		void	handleNewInput(int fd, int fdsIndex);
+		void	disconnectClient(int fd, std::string reason);
+		void	handleNewInput(int fd);
 		void	sentReply(int fd);
 
 		std::vector<std::string>	parsCommands(std::string buffer);

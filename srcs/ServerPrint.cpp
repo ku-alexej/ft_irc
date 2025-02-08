@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 12:13:59 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:20:29 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ void	Server::printClientBuffer(Client client) {
 void	Server::printServer() {
 		std::cout << std::endl << "SERVER INFO" << std::endl;
 
-		std::cout << "           _fd=[" << _fd << "]" << std::endl;
-		std::cout << "         _port=[" << _port << "]" << std::endl;
-		std::cout << " _stayTurnedOn=[" << _stayTurnedOn << "]" << std::endl;
-		std::cout << "     _password=[" << _password << "]" << std::endl;
-		std::cout << "   _serverName=[" << _serverName << "]" << std::endl;
+		// std::cout << "           _fd=[" << _fd << "]" << std::endl;
+		// std::cout << "         _port=[" << _port << "]" << std::endl;
+		// std::cout << " _stayTurnedOn=[" << _stayTurnedOn << "]" << std::endl;
+		// std::cout << "     _password=[" << _password << "]" << std::endl;
+		// std::cout << "   _serverName=[" << _serverName << "]" << std::endl;
 
-		// struct sockaddr_in			_serverAddress;
-		std::cout << "_serverAddress=[" << &_serverAddress << "]" << std::endl;
+		// // struct sockaddr_in			_serverAddress;
+		// std::cout << "_serverAddress=[" << &_serverAddress << "]" << std::endl;
 
-		// struct pollfd				_clientIn;
-		std::cout << "     _clientIn=[" << &_clientIn << "]" << std::endl;
+		// // struct pollfd				_clientIn;
+		// std::cout << "     _clientIn=[" << &_clientIn << "]" << std::endl;
 
 		// std::list<Client>			_clients;
 		std::cout << "      _clients=[" << &_clients << "]" << std::endl;
@@ -85,8 +85,8 @@ void	Server::printServer() {
 					<< "]" << std::endl;
 		}
 
-		// std::vector<struct pollfd>	_fds;
-		std::cout << "          _fds=[" << &_fds << "]" << std::endl;
+		// // std::vector<struct pollfd>	_fds;
+		// std::cout << "          _fds=[" << &_fds << "]" << std::endl;
 
 		std::cout << std::endl;
 }
