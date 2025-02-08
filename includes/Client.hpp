@@ -72,6 +72,7 @@ class Client {
 		void	clearReplyBuffer();
 		void	clearBuffer();
 		void	addInvite(std::string newInvite);
+		void 	deleteChannel(std::string &channelName);
 		void	deleteInvite(std::string toDelete);
 		void	clearInvites();
 		void	trimmReplyBuffer(size_t bytes);

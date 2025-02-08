@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 12:17:54 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:51:26 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,5 +180,3 @@ bool isValidChannelName(const std::string &channel) {
 
 	return true;
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:07 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 14:50:11 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:50:41 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ class Channel {
 		void	deleteOperator(Client *toDelete);
 		void	clearOperators();
 		void	setReplyBufferForAllChannelClients(std::string msg);
-
 		std::string	getModes();
 		std::string	getModesArgs(bool isOnChannel);
 
