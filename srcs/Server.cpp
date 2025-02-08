@@ -190,7 +190,6 @@ void	Server::handleNewInput(int fd, int fdsIndex) {
 
 		for (size_t i = 0; i < cmds.size(); i++)
 			exec(cmds[i], fd);
-		sentReply(fd);
 	}
 }
 

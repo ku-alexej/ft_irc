@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:06 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 13:57:03 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:20:48 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,11 +152,6 @@ void	Server::cmdJoin(std::vector<std::string> tokens, int fd) {
 	for (size_t i = 0; i < channelsToJoin.size(); i++) {
 		std::string channelName = channelsToJoin[i].first;
 		Channel *ch = getChannel(channelName);
-																					// after connection sent reply according Protocol: "CHANLIMIT Parameter"
-		if (c->getChannelNames().size() >= CHANNEL_LIMIT) {							// now CHANNEL_LIMIT=3 for debug
-			c->setReplyBuffer(ERR_TOOMANYCHANNELS(c->getNickname(), channelName));
-			continue;
-		}
 
 		if (isValidChannelName(channelName) != true) {
 			c->setReplyBuffer(ERR_BADCHANMASK(channelName));
