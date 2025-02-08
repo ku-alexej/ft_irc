@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/06 12:22:53 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:12:16 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ class Server {
 		void	addChannel(Channel *newChannel, std::string name);
 		Client	*getClientByFd(int fd);
 		Client	*getClientByNick(std::string nick);
-		void	removeChannel(std::string chanName);
+		void	deleteChannel(std::string toDelete);
+		void	deleteEmptyChannel(Channel *ch);
 		void	deleteClient(Client toDelete);
 		void	deleteFromFds(int fdsIndex);
 		void	startListening();

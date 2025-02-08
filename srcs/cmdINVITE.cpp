@@ -6,12 +6,11 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:03 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 18:30:23 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:21:08 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-/*
 /*
 INVITE message
      Command: INVITE
@@ -48,7 +47,7 @@ See also:
 IRCv3 invite-notify Extension
 Invite list
 Servers MAY allow the INVITE with no parameter, and reply with a list of channels the sender is invited to as RPL_INVITELIST (336) numerics, ending with a RPL_ENDOFINVITELIST (337) numeric.
-*/*/
+*/
 void	Server::cmdInvite(std::vector<std::string> tokens, int fd) {
 	(void) tokens;
 	(void) fd;

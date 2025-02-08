@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/07 13:26:44 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:52:05 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,15 +300,12 @@ Channel* Server::getChannel(std::string chanName) {
 	return (NULL);
 }
 
-void	Server::removeChannel(std::string chanName){
-	
-	 for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ) {
-        if (it->getName() == chanName) {
-            it = this->_channels.erase(it);
-            break; 
-        } else {
-            ++it;
-        }
-    }
-	
+void	Server::deleteChannel(std::string toDelete) {
+	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
+		if (it->getName() == toDelete) {
+			this->_channels.erase(it);
+			std::cout << "[INFO]: channel name=" << toDelete << " was deleted" << std::endl;
+			break;
+		}
+	}
 }
