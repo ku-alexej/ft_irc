@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 15:24:36 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:19:04 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 // client = nickname of user
 
 // Mode was changed (only if changed)
-# define MODE_SET(client, channelName, mode, variable)				std::string(":") + (client.empty() ? "empty" : client) + " MODE " + channelName + " " + mode + " " + variable + ""
-# define JOIN_OK(client, userName, hostName, channelName)			std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN :" + channelName + ""
-# define QUIT_CHANNEL(client, userName, hostName, msg)				std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
-# define QUIT_SERVER(client, msg)									"ERROR :Closing Link: " + (client.empty() ? "empty" : client) + " " + msg + ""
+# define MODE_SET(client, userName, hostName, channelName, mode, variable)	std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " MODE " + channelName + " " + mode + " " + variable + ""
+# define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN :" + channelName + ""
+# define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
+# define QUIT_SERVER(client, msg)											"ERROR :Closing Link: " + (client.empty() ? "empty" : client) + " " + msg + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
