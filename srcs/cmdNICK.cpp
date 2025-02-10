@@ -6,22 +6,17 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:00:55 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:49:13 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-std::string	toLower(std::string str) {						// after connection sent reply according Protocol: "CASEMAPPING Parameter"
+std::string	toLower(std::string str) {
 	for (size_t i = 0; i < str.size(); i++) {
-		if (str[i] >= 'A' && str[i] <= 'Z')
+		if (str[i] >= 'A' && str[i] <= 'Z') {
 			str[i] = std::tolower(str[i]);
-		else if (str[i] == '[')
-			str[i] = '{';
-		else if (str[i] == ']')
-			str[i] = '}';
-		else if (str[i] == '~')
-			str[i] = '^';
+		}
 	}
 	return (str);
 }
@@ -53,14 +48,11 @@ void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 	std::string oldName = c->getNickname();
 	c->setNickname(tokens[1]);
 
-	// examples of possible replyes when change nickname:
-	// :dan-!d@localhost NICK Mamoped
-	// :WiZ NICK Kilroy					<- the code use this one
-
 	if (!oldName.empty() && !c->getCapOn()) {
 		c->setReplyBuffer(":" + oldName + " NICK " + tokens[1]);
 	} else if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn()) {
 		c->setRegistred(true);
+		c->setReplyBuffer(RPL_ISSUPPORT(c->getNickname()));
 		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
 	}
 }
