@@ -77,6 +77,10 @@ void Server::cmdInvite(std::vector<std::string> tokens, int fd)
     c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), userName));
     return;
   }
+  if (invitedUser->getRegistred() == false) {
+		invitedUser->setReplyBuffer(ERR_NOTREGISTERED(invitedUser->getNickname()));
+		return ;
+	}
   if (channel->getClientByFd(c->getFd()) == NULL)
   {
     c->setReplyBuffer(ERR_NOTONCHANNEL(c->getNickname(), channelName));
