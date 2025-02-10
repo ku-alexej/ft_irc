@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 18:22:37 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:22:54 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 	Client *c = getClientByFd(fd);
 	Client *t = getClientByNick(tokens[1]);
 
-	if (t == NULL) {
+	if (t == NULL || t->getRegistred() == false) {
 		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), tokens[1]));
 		return ;
 	}
@@ -194,7 +194,7 @@ void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode,
 	}
 
 	t = getClientByNick(variable);
-	if (t == NULL) {
+	if (t == NULL || t->getRegistred() == false) {
 		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), variable));
 		return ;
 	}
@@ -357,6 +357,11 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 void	Server::cmdMode(std::vector<std::string> tokens, int fd) {
 
 	Client *c = getClientByFd(fd);
+
+	if (c->getRegistred() == false) {
+		c->setReplyBuffer(ERR_NOTREGISTERED(c->getNickname()));
+		return ;
+	}
 
 	if (tokens.size() < 2 || tokens[1].empty()) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getUsername(), tokens[0]));

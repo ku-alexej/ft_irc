@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 16:37:36 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:14:20 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ Client::Client() {
 	this->_ip			= "";
 	this->_username		= "";
 	this->_hostname		= "";
-	this->_servername	= "";
 	this->_realname		= "";
 	this->_nickname		= "";
 }
@@ -47,7 +46,6 @@ Client::Client(int fd, std::string username, std::string nickname) {
 	this->_ip			= "";
 	this->_username		= username;
 	this->_hostname		= "";
-	this->_servername	= "";
 	this->_realname		= "";
 	this->_nickname		= nickname;
 }
@@ -66,7 +64,6 @@ Client	&Client::operator=(const Client &src) {
 		this->_ip			= src._ip;
 		this->_username		= src._username;
 		this->_hostname		= src._hostname;
-		this->_servername	= src._servername;
 		this->_realname		= src._realname;
 		this->_nickname		= src._nickname;
 		this->_invites		= src._invites;
@@ -89,16 +86,16 @@ std::string					Client::getBuffer()			{return (this->_buffer);}
 std::string					Client::getIp()				{return (this->_ip);}
 std::string					Client::getUsername()		{return (this->_username);}
 std::string					Client::getHostname()		{return (this->_hostname);}
-std::string					Client::getServername()		{return (this->_servername);}
 std::string					Client::getRealname()		{return (this->_realname);}
 std::string					Client::getNickname()		{return (this->_nickname);}
 std::vector<std::string>	Client::getInvites()		{return (this->_invites);}
 std::vector<std::string>	Client::getChannelNames()	{return (this->_channelNames);}
-std::string Client::getUserID() 
-{
-    std::string userID = ":" + getNickname() + "!" + getUsername() + "@localhost";
-    return userID;
+
+std::string	Client::getUserID() {
+	std::string userID = ":" + getNickname() + "!" + getUsername() + "@localhost";
+	return userID;
 }
+
 // --- setters ---
 void	Client::setFd(int newFd)							{this->_fd			= newFd;}
 void	Client::setCapOn(bool isCapOn)						{this->_capOn		= isCapOn;}
@@ -106,14 +103,19 @@ void	Client::setOnline(bool isOnline)					{this->_online		= isOnline;}
 void	Client::setOperator(bool isOperator)				{this->_operator	= isOperator;}
 void	Client::setPassOk(bool isPassOk)					{this->_passOk		= isPassOk;}
 void	Client::setRegistred(bool isRegistred)				{this->_registred	= isRegistred;}
-// void	Client::setReplyBuffer(std::string newReply)		{this->_replyBuffer	= newReply;}
 void	Client::setBuffer(std::string newBuffer)			{this->_buffer		= newBuffer;}
 void	Client::setIp(std::string newIp)					{this->_ip			= newIp;}
 void	Client::setUsername(std::string newUsername)		{this->_username	= newUsername;}
 void	Client::setHostname(std::string newHostname)		{this->_hostname	= newHostname;}
-void	Client::setServername(std::string newServername)	{this->_servername	= newServername;}
 void	Client::setRealname(std::string newRealname)		{this->_realname	= newRealname;}
 void	Client::setNickname(std::string newNickname)		{this->_nickname	= newNickname;}
+
+void	Client::setReplyBuffer(std::string newReply) {
+	if(newReply.size() > CMD_LEN - 2) {
+		newReply.resize(CMD_LEN - 2);
+	}
+	this->_replyBuffer += (newReply + CRLF);
+}
 
 // --- member functions ---
 void	Client::clearReplyBuffer() {
@@ -142,28 +144,19 @@ void	Client::deleteInvite(std::string toDelete) {
 
 void Client::deleteChannel(std::string &channelName)
 {
-    std::vector<std::string>::iterator it = std::find(
-        this->_channelNames.begin(), 
-        this->_channelNames.end(), 
-        channelName
-    );
+	std::vector<std::string>::iterator it = std::find(
+		this->_channelNames.begin(),
+		this->_channelNames.end(),
+		channelName
+	);
 
-    if (it != this->_channelNames.end()) {
-        std::cout << "CHAN NAME: " << channelName << std::endl;
-        std::cout << "IS IT OK ARE WE DELETING IT?" << std::endl;
-        this->_channelNames.erase(it);
-    }
+	if (it != this->_channelNames.end()) {
+		this->_channelNames.erase(it);
+	}
 }
 
 void	Client::clearInvites() {
 	this->_invites.clear();
-}
-
-void	Client::setReplyBuffer(std::string newReply) {
-	if(newReply.size() > CMD_LEN - 2)
-    	newReply.resize(CMD_LEN - 2);
-  	this->_replyBuffer += (newReply + CRLF);
-	// std::cout << "set: " << YEL << _replyBuffer << RES << std::endl;
 }
 
 void	Client::trimmReplyBuffer(size_t bytes) {
@@ -171,15 +164,15 @@ void	Client::trimmReplyBuffer(size_t bytes) {
 }
 
 
-void    Client::addChannel(std::string channelName) {
+void	Client::addChannel(std::string channelName) {
 	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
-        if (*it == channelName) { 
+		if (*it == channelName) {
 			return ;
 		}
-    }
-    this->_channelNames.push_back(channelName);
+	}
+	this->_channelNames.push_back(channelName);
 }
 
 bool	Client::isInvitedToChannel(std::string channelName) {
-	    return (std::find(_channelNames.begin(), _channelNames.end(), channelName) != _channelNames.end());
+		return (std::find(_channelNames.begin(), _channelNames.end(), channelName) != _channelNames.end());
 }

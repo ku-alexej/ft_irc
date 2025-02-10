@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:06 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/07 18:20:48 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:52:42 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	Server::clientJoinChannelReply(Client *c, Channel *ch) {
 	for (size_t i = 0; i < listClients.size(); i++) {
 		Client *toClient = listClients[i];
 		if (toClient->getFd() != c->getFd()) {
-			toClient->setReplyBuffer(JOIN_OK(c->getNickname(), c->getUserID(), c->getHostname(), ch->getName()));
+			toClient->setReplyBuffer(JOIN_OK(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName()));
 		}
 	}
 }
@@ -137,14 +137,21 @@ void	Server::cmdJoin(std::vector<std::string> tokens, int fd) {
 	Client	*c = getClientByFd(fd);
 	Channel	newChannel;
 
+	if (c->getRegistred() == false) {
+		c->setReplyBuffer(ERR_NOTREGISTERED(c->getNickname()));
+		return ;
+	}
+
 	// not enough params
 	if (tokens.size() < 2) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getUsername(), tokens[0]));
+		return ;
 	}
 
 	// too much params
 	if (tokens.size() > 3) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getUsername(), tokens[0]));
+		return ;
 	}
 
 	std::vector<std::pair<std::string, std::string> > channelsToJoin = getChannelsToJoin(tokens);

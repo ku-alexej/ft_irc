@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:28 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/31 12:40:15 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:00:22 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ void	Server::cmdPass(std::vector<std::string> tokens, int fd) {
 
 	if(tokens[i] != _password) {
 		c->setReplyBuffer(ERR_PASSWDMISMATCH(c->getNickname()));					// WE MUST KICK IT
+		disconnectClient(fd, "Wrong password");
 		return ;
 	}
 
 	c->setPassOk(true);
 
-	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn())
+	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn()) {
+		c->setRegistred(true);
 		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
+	}
 }

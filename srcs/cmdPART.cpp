@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 13:50:01 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:08:29 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 	Channel						*channel;
 	std::string					reason;
 	std::vector<std::string>	channelsNames;
+
+	if (c->getRegistred() == false) {
+		c->setReplyBuffer(ERR_NOTREGISTERED(c->getNickname()));
+		return ;
+	}
 
 	if (tokens.size() < 2) {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getUsername(), tokens[0]));

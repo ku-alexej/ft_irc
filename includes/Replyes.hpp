@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 18:19:04 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:51:23 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 // Mode was changed (only if changed)
 # define MODE_SET(client, userName, hostName, channelName, mode, variable)	std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " MODE " + channelName + " " + mode + " " + variable + ""
-# define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN :" + channelName + ""
+# define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN " + channelName + ""
 # define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
-# define QUIT_SERVER(client, msg)											"ERROR :Closing Link: " + (client.empty() ? "empty" : client) + " " + msg + ""
+# define QUIT_SERVER(msg)													"ERROR :" + msg + ""
 
 // --- errors ---
 // "401" // WHOIS PRIVMSG
@@ -58,15 +58,14 @@
 # define ERR_ERRONEUSNICKNAME(client, nickName)						"432 " + (client.empty() ? "empty" : client) + " " + nickName + " :Erroneus nickname"
 // "433" // NICK
 # define ERR_NICKNAMEINUSE(client, nickName)						"433 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname is already in use"
-// "436" // NICK
-// # define ERR_NICKCOLLISION(client, nickName, userName, hostName)	"436 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname collision KILL from ~" + userName + "@" + hostName + ""
-
 // "441" // KICK
 # define ERR_USERNOTINCHANNEL(client, nickName, channelName)		"441 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :They aren't on that channel"
 // "442" // PART TOPIC INVITE KICK
 # define ERR_NOTONCHANNEL(client, channelName)						"442 " + (client.empty() ? "empty" : client) + " " + channelName + " :You're not on that channel"
 // "443" // INVITE
 # define ERR_USERONCHANNEL(client, nickName, channelName)			"443 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :is already on channel"
+// "451" 
+# define ERR_NOTREGISTERED(client)									"451 " + (client.empty() ? "empty" : client) + ":You have not registered"
 // "461" // PASS USER PING JOIN PART TOPIC INVITE KICK
 # define ERR_NEEDMOREPARAMS(client, command)						"461 " + (client.empty() ? "empty" : client) + " " + command + " :Not enough parameters"
 // "462" // PASS USER
@@ -136,8 +135,6 @@
 # define RPL_TOPICWHOTIME(client, channelName, nickName, setat)			"333 " + (client.empty() ? "empty" : client) + " " + channelName + " " + nickName + " " + setat + ""
 // "338" // WHOIS
 # define RPL_WHOISACTUALLY(client, nickName)							"338 " + (client.empty() ? "empty" : client) + " " + nickName + " :is actually ..."
-																	// "" + (client.empty() ? "empty" : client) + " " + nickName + " <host|ip> :Is actually using host"
-																	// "" + (client.empty() ? "empty" : client) + " " + nickName + " ~" + userName + "@<hostname> <ip> :Is actually using host"
 // "341" // INVITE
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
 // "353" // JOIN
