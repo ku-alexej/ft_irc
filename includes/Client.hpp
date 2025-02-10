@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/05 17:04:36 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:11:46 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ class Client {
 		std::string					getIp();
 		std::string					getUsername();
 		std::string					getHostname();
-		std::string					getServername();
 		std::string					getRealname();
 		std::string					getNickname();
 		std::vector<std::string>	getInvites();
@@ -64,7 +63,6 @@ class Client {
 		void	setIp(std::string newIp);
 		void	setUsername(std::string newUsername);
 		void	setHostname(std::string newHostname);
-		void	setServername(std::string newServername);
 		void	setRealname(std::string newRealname);
 		void	setNickname(std::string newNickname);
 		void    addChannel(std::string channel);
@@ -90,7 +88,6 @@ class Client {
 		std::string					_ip;
 		std::string					_username;
 		std::string					_hostname;
-		std::string					_servername;
 		std::string					_realname;
 		std::string					_nickname;
 		std::vector<std::string>	_invites;

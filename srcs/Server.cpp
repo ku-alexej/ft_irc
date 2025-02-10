@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 17:10:32 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:40:30 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void	Server::disconnectClient(int fd, std::string reason) {
 		}
 	}
 
-	c->setReplyBuffer(QUIT_SERVER(c->getNickname(), reason));
+	c->setReplyBuffer(QUIT_SERVER(reason));
 	sentReply(fd);
 
 	close(fd);
