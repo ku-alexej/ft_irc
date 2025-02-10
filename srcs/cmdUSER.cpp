@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:31 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:11:37 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:30:23 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void 	Server::cmdUser(std::vector<std::string> tokens, int fd) {
 
 	if(c->getPassOk() && c->getNickname() != "" && c->getUsername() != "" && !c->getCapOn()) {
 		c->setRegistred(true);
+		c->setReplyBuffer(RPL_ISSUPPORT(c->getNickname()));
 		c->setReplyBuffer(RPL_WELCOME(c->getNickname(), c->getNickname(), c->getUsername(), c->getHostname()));
 	}
 }

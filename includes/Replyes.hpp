@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:51:23 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:43:00 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,141 +19,79 @@
 
 // client = nickname of user
 
-// Mode was changed (only if changed)
-# define MODE_SET(client, userName, hostName, channelName, mode, variable)	std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " MODE " + channelName + " " + mode + " " + variable + ""
-# define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " JOIN " + channelName + ""
-# define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "empty" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
+# define MODE_SET(client, userName, hostName, channelName, mode, variable)	std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " MODE " + channelName + " " + mode + " " + variable + ""
+# define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " JOIN " + channelName + ""
+# define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
 # define QUIT_SERVER(msg)													"ERROR :" + msg + ""
 
 // --- errors ---
-// "401" // WHOIS PRIVMSG
-# define ERR_NOSUCHNICK(client, nickOrChannel)						"401 " + (client.empty() ? "empty" : client) + " " + nickOrChannel + " :No such nick/channel"
-// "402" // WHOIS PRIVMSG
-# define ERR_NOSUCHSERVER(client, serverName)						"402 " + (client.empty() ? "empty" : client) + " " + serverName + " :No such server"
-// "403:" // JOIN PART MODE TOPIC INVITE KICK
-# define ERR_NOSUCHCHANNEL(client, channelName)						": 403 " + (client.empty() ? "empty" : client) + " " + channelName + " :No such channel"
-// "404" // PRIVMSG
-# define ERR_CANNOTSENDTOCHAN(client, channelName)					"404 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot send to channel"
-// "405" // JOIN
-# define ERR_TOOMANYCHANNELS(client, channelName)					"405 " + (client.empty() ? "empty" : client) + " " + channelName + " :You have joined too many channels"
-// "407" // PRIVMSG
-# define ERR_TOOMANYTARGETS											"407"
-// "409" // PING
-# define ERR_NOORIGIN(client)										"409 " + (client.empty() ? "empty" : client) + " :No origin specified"
-// "410" // CAP
-# define ERR_INVALIDCAPCMD											"410"
-// "411" // PRIVMSG
-# define ERR_NORECIPIENT(client, command)							"411 " + (client.empty() ? "empty" : client) + " :No recipient given (" + command + ")"
-// "412" // PRIVMSG
-# define ERR_NOTEXTTOSEND(client)									"412 " + (client.empty() ? "empty" : client) + " :No text to send"
-// "413" // PRIVMSG
-# define ERR_NOTOPLEVEL												"413"
-// "414" // PRIVMSG
-# define ERR_WILDTOPLEVEL											"414"
-// "421"
-# define ERR_UNKNOWNCOMMAND(client, command)						"421 " + (client.empty() ? "empty" : client) + " " + command + " :Unknown command"
-// "431" // NICK WHOIS
-# define ERR_NONICKNAMEGIVEN(client)								"431 " + (client.empty() ? "empty" : client) + " :No nickname given"
-// "432" // NICK
-# define ERR_ERRONEUSNICKNAME(client, nickName)						"432 " + (client.empty() ? "empty" : client) + " " + nickName + " :Erroneus nickname"
-// "433" // NICK
-# define ERR_NICKNAMEINUSE(client, nickName)						"433 " + (client.empty() ? "empty" : client) + " " + nickName + " :Nickname is already in use"
-// "441" // KICK
-# define ERR_USERNOTINCHANNEL(client, nickName, channelName)		"441 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :They aren't on that channel"
-// "442" // PART TOPIC INVITE KICK
-# define ERR_NOTONCHANNEL(client, channelName)						"442 " + (client.empty() ? "empty" : client) + " " + channelName + " :You're not on that channel"
-// "443" // INVITE
-# define ERR_USERONCHANNEL(client, nickName, channelName)			"443 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + " :is already on channel"
-// "451" 
-# define ERR_NOTREGISTERED(client)									"451 " + (client.empty() ? "empty" : client) + ":You have not registered"
-// "461" // PASS USER PING JOIN PART TOPIC INVITE KICK
-# define ERR_NEEDMOREPARAMS(client, command)						"461 " + (client.empty() ? "empty" : client) + " " + command + " :Not enough parameters"
-// "462" // PASS USER
-# define ERR_ALREADYREGISTERED(client)								"462 " + (client.empty() ? "empty" : client) + " :You may not reregister"
-// "464" // PASS
-# define ERR_PASSWDMISMATCH(client)									"464 " + (client.empty() ? "empty" : client) + " :Password incorrect"
-// "471" // JOIN
-# define ERR_CHANNELISFULL(client, channelName)						"471 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+l)"
-
-# define ERR_UNKNOWNMODE(client, modechar)							"472 " + (client.empty() ? "empty" : client) + " " + modechar + " :is unknown mode char to me"
-
-// "473" // JOIN
-# define ERR_INVITEONLYCHAN(client, channelName)					"473 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+i)"
-// "474" // JOIN
-# define ERR_BANNEDFROMCHAN(client, channelName)					"474 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+b)"
-// "475" // JOIN
-# define ERR_BADCHANNELKEY(client, channelName)						"475 " + (client.empty() ? "empty" : client) + " " + channelName + " :Cannot join channel (+k)"
-// "476" // JOIN
-# define ERR_BADCHANMASK(channelName)								"476 " + channelName + " :Bad Channel Mask"
-// "482" // MODE TOPIC INVITE KICK
-# define ERR_CHANOPRIVSNEEDED(client, channelName)					"482 " + (client.empty() ? "empty" : client) + " " + channelName + " :You're not channel operator"
-// "502"
-# define ERR_USERSDONTMATCH(client)									"502 " + (client.empty() ? "empty" : client) + " :Cant change mode for other users"
-// "501"
-# define ERR_UMODEUNKNOWNFLAG(client)								"501 " + (client.empty() ? "empty" : client) + " :Unknown MODE flag"
-// "696"
-# define ERR_INVALIDMODEPARAM(client, target, mode, param, msg)		"696 " + (client.empty() ? "empty" : client) + " " + target + " " + mode + " " + param + " :" + msg + ""
+# define ERR_NOSUCHNICK(client, nickOrChannel)							"401 " + (client.empty() ? "*" : client) + " " + nickOrChannel + " :No such nick/channel"
+# define ERR_NOSUCHSERVER(client, serverName)							"402 " + (client.empty() ? "*" : client) + " " + serverName + " :No such server"
+# define ERR_NOSUCHCHANNEL(client, channelName)							": 403 " + (client.empty() ? "*" : client) + " " + channelName + " :No such channel"
+# define ERR_CANNOTSENDTOCHAN(client, channelName)						"404 " + (client.empty() ? "*" : client) + " " + channelName + " :Cannot send to channel"
+# define ERR_TOOMANYCHANNELS(client, channelName)						"405 " + (client.empty() ? "*" : client) + " " + channelName + " :You have joined too many channels"
+# define ERR_TOOMANYTARGETS												"407"
+# define ERR_NOORIGIN(client)											"409 " + (client.empty() ? "*" : client) + " :No origin specified"
+# define ERR_INVALIDCAPCMD												"410"
+# define ERR_NORECIPIENT(client, command)								"411 " + (client.empty() ? "*" : client) + " :No recipient given (" + command + ")"
+# define ERR_NOTEXTTOSEND(client)										"412 " + (client.empty() ? "*" : client) + " :No text to send"
+# define ERR_NOTOPLEVEL													"413"
+# define ERR_WILDTOPLEVEL												"414"
+# define ERR_UNKNOWNCOMMAND(client, command)							"421 " + (client.empty() ? "*" : client) + " " + command + " :Unknown command"
+# define ERR_NONICKNAMEGIVEN(client)									"431 " + (client.empty() ? "*" : client) + " :No nickname given"
+# define ERR_ERRONEUSNICKNAME(client, nickName)							"432 " + (client.empty() ? "*" : client) + " " + nickName + " :Erroneus nickname"
+# define ERR_NICKNAMEINUSE(client, nickName)							"433 " + (client.empty() ? "*" : client) + " " + nickName + " :Nickname is already in use"
+# define ERR_USERNOTINCHANNEL(client, nickName, channelName)			"441 " + (client.empty() ? "*" : client) + " " + nickName + " " + channelName + " :They aren't on that channel"
+# define ERR_NOTONCHANNEL(client, channelName)							"442 " + (client.empty() ? "*" : client) + " " + channelName + " :You're not on that channel"
+# define ERR_USERONCHANNEL(client, nickName, channelName)				"443 " + (client.empty() ? "*" : client) + " " + nickName + " " + channelName + " :is already on channel"
+# define ERR_NOTREGISTERED(client)										"451 " + (client.empty() ? "*" : client) + ":You have not registered"
+# define ERR_NEEDMOREPARAMS(client, command)							"461 " + (client.empty() ? "*" : client) + " " + command + " :Not enough parameters"
+# define ERR_ALREADYREGISTERED(client)									"462 " + (client.empty() ? "*" : client) + " :You may not reregister"
+# define ERR_PASSWDMISMATCH(client)										"464 " + (client.empty() ? "*" : client) + " :Password incorrect"
+# define ERR_CHANNELISFULL(client, channelName)							"471 " + (client.empty() ? "*" : client) + " " + channelName + " :Cannot join channel (+l)"
+# define ERR_UNKNOWNMODE(client, modechar)								"472 " + (client.empty() ? "*" : client) + " " + modechar + " :is unknown mode char to me"
+# define ERR_INVITEONLYCHAN(client, channelName)						"473 " + (client.empty() ? "*" : client) + " " + channelName + " :Cannot join channel (+i)"
+# define ERR_BANNEDFROMCHAN(client, channelName)						"474 " + (client.empty() ? "*" : client) + " " + channelName + " :Cannot join channel (+b)"
+# define ERR_BADCHANNELKEY(client, channelName)							"475 " + (client.empty() ? "*" : client) + " " + channelName + " :Cannot join channel (+k)"
+# define ERR_BADCHANMASK(channelName)									"476 " + channelName + " :Bad Channel Mask"
+# define ERR_CHANOPRIVSNEEDED(client, channelName)						"482 " + (client.empty() ? "*" : client) + " " + channelName + " :You're not channel operator"
+# define ERR_USERSDONTMATCH(client)										"502 " + (client.empty() ? "*" : client) + " :Cant change mode for other users"
+# define ERR_UMODEUNKNOWNFLAG(client, flag)								"501 " + (client.empty() ? "*" : client) + " :Unknown user MODE flag " + flag + ""
+# define ERR_INVALIDMODEPARAM(client, target, mode, param, msg)			"696 " + (client.empty() ? "*" : client) + " " + target + " " + mode + " " + param + " :" + msg + ""
 
 // --- replyes ---
-// "001" // after correct pass + nick + blallala
-# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + (client.empty() ? "empty" : client) + " :Welcome to the IRC Network, " + nickName + "!~" + userName + "@" + hostName
-
-# define RPL_UMODEIS(client, userModes)									"221 " + (client.empty() ? "empty" : client) + " " + userModes + ""
-// "276" // WHOIS
-# define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276 " + (client.empty() ? "empty" : client) + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
-// "301" // WHOIS PRIVMSG
-# define RPL_AWAY(client, nickName, msg)								"301 " + (client.empty() ? "empty" : client) + " " + nickName + " :" + msg + ""
-// "307" // WHOIS
-# define RPL_WHOISREGNICK(client, nickName)								"307 " + (client.empty() ? "empty" : client) + " " + nickName + " :has identified for this nick"
-// "311" // WHOIS
-# define RPL_WHOISUSER(client, nickName, userName, hostname, realName)	"311 " + (client.empty() ? "empty" : client) + " " + nickName + " ~" + userName + " " + hostname + " * :" + realName + ""
-// "312" // WHOIS
-# define RPL_WHOISSERVER(client, nickName, serverName, serverInfo)		"312 " + (client.empty() ? "empty" : client) + " " + nickName + " " + serverName + " :" + serverInfo + ""
-// "313" // WHOIS
-# define RPL_WHOISOPERATOR(client, nickName)							"313 " + (client.empty() ? "empty" : client) + " " + nickName + " :is an IRC operator"
-// "315" // WHO <channel>
-# define RPL_ENDOFWHO(client, mask)										"315 " + (client.empty() ? "empty" : client) + " " + mask + " :End of WHO list"
-// "317" // WHOIS
-# define RPL_WHOISIDLE(client, nickName, secs, signon)					"317 " + (client.empty() ? "empty" : client) + " " + nickName + " " + secs + " " + signon + " :seconds idle, signon time"
-// "318" // WHOIS
-# define RPL_ENDOFWHOIS(client, nickName)								"318 " + (client.empty() ? "empty" : client) + " " + nickName + " :End of /WHOIS list"
-// "319" // WHOIS
-# define RPL_WHOISCHANNELS(client, nickName, channelName)				"319 " + (client.empty() ? "empty" : client) + " " + nickName + " :[prefix]" + channelName + "{ [prefix]" + channelName + "}"
-// "320" // WHOIS
-# define RPL_WHOISSPECIAL(client, nickName)								"320 " + (client.empty() ? "empty" : client) + " " + nickName + " :blah blah blah"
-// "324" // MODE
-# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "empty" : client) + " " + channelName + " " + modeString + " " + modeArgs + ""
-// "329" // MODE
-# define RPL_CREATIONTIME(client, channelName, creationTime)			"329 " + (client.empty() ? "empty" : client) + " " + channelName + " " + creationTime + ""
-// "330" // WHOIS
-# define RPL_WHOISACCOUNT(client, nickName, account)					"330 " + (client.empty() ? "empty" : client) + " " + nickName + " " + account + " :is logged in as"
-// "331" // TOPIC
-# define RPL_NOTOPIC(client, channelName)								"331 " + (client.empty() ? "empty" : client) + " " + channelName + " :No topic is set"
-// "332" // JOIN TOPIC(client, nickName)
-# define RPL_TOPIC(client, channelName, topic)							"332 " + (client.empty() ? "empty" : client) + " " + channelName + " :" + topic + ""
-// "333" // JOIN TOPIC
-# define RPL_TOPICWHOTIME(client, channelName, nickName, setat)			"333 " + (client.empty() ? "empty" : client) + " " + channelName + " " + nickName + " " + setat + ""
-// "338" // WHOIS
-# define RPL_WHOISACTUALLY(client, nickName)							"338 " + (client.empty() ? "empty" : client) + " " + nickName + " :is actually ..."
-// "341" // INVITE
-# define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "empty" : client) + " " + nickName + " " + channelName + ""
-// "353" // JOIN
-#define RPL_NAMREPLY(client, symbol, channelName, nickList)				"353 " + (client.empty() ? "empty" : client) + " " + symbol + " " + channelName + " :" + nickList + ""
-// "366" // JOIN
-# define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of /NAMES list"
-// "368" MODE
-# define RPL_ENDOFBANLIST(client, channelName)							"368 " + (client.empty() ? "empty" : client) + " " + channelName + " :End of channel ban list"
-// "378" // WHOIS
-# define RPL_WHOISHOST(client, nickName)								"378 " + (client.empty() ? "empty" : client) + " " + nickName + " :is connecting from *@localhost 127.0.0.1"
-// "379" // WHOIS
-# define RPL_WHOISMODES(client, nickName)								"379 " + (client.empty() ? "empty" : client) + " " + nickName + " :is using modes +ailosw"
-// "671" // WHOIS
-# define RPL_WHOISSECURE(client, nickName)								"671 " + (client.empty() ? "empty" : client) + " " + nickName + " :is using a secure connection"
-
-// --- QUIT
-// nothing
-
-// --- NOTICE
-// newer sent reply / error back
+# define RPL_WELCOME(client, nickName, userName, hostName)				"001 " + (client.empty() ? "*" : client) + " :Welcome to the IRC Network, " + nickName + "!~" + userName + "@" + hostName
+# define RPL_ISSUPPORT(client)											"005 " + (client.empty() ? "*" : client) + \
+																		" CHANMODES=,o,lk,ti" + \
+																		" CASEMAPPING=ascii" + \
+																		" CHANTYPES=#" + \
+																		" PREFIX=(o)@" + \
+																		" :are supported by this server"
+# define RPL_UMODEIS(client, userModes)									"221 " + (client.empty() ? "*" : client) + " " + userModes + ""
+# define RPL_WHOISCERTFP(client, nickName, fingerprint)					"276 " + (client.empty() ? "*" : client) + " " + nickName + " :has client certificate fingerprint " + fingerprint + ""
+# define RPL_AWAY(client, nickName, msg)								"301 " + (client.empty() ? "*" : client) + " " + nickName + " :" + msg + ""
+# define RPL_WHOISREGNICK(client, nickName)								"307 " + (client.empty() ? "*" : client) + " " + nickName + " :has identified for this nick"
+# define RPL_WHOISUSER(client, nickName, userName, hostname, realName)	"311 " + (client.empty() ? "*" : client) + " " + nickName + " ~" + userName + " " + hostname + " * :" + realName + ""
+# define RPL_WHOISSERVER(client, nickName, serverName, serverInfo)		"312 " + (client.empty() ? "*" : client) + " " + nickName + " " + serverName + " :" + serverInfo + ""
+# define RPL_WHOISOPERATOR(client, nickName)							"313 " + (client.empty() ? "*" : client) + " " + nickName + " :is an IRC operator"
+# define RPL_ENDOFWHO(client, mask)										"315 " + (client.empty() ? "*" : client) + " " + mask + " :End of WHO list"
+# define RPL_WHOISIDLE(client, nickName, secs, signon)					"317 " + (client.empty() ? "*" : client) + " " + nickName + " " + secs + " " + signon + " :seconds idle, signon time"
+# define RPL_ENDOFWHOIS(client, nickName)								"318 " + (client.empty() ? "*" : client) + " " + nickName + " :End of /WHOIS list"
+# define RPL_WHOISCHANNELS(client, nickName, channelName)				"319 " + (client.empty() ? "*" : client) + " " + nickName + " :[prefix]" + channelName + "{ [prefix]" + channelName + "}"
+# define RPL_WHOISSPECIAL(client, nickName)								"320 " + (client.empty() ? "*" : client) + " " + nickName + " :blah blah blah"
+# define RPL_CHANNELMODEIS(client, channelName, modeString, modeArgs)	"324 " + (client.empty() ? "*" : client) + " " + channelName + " " + modeString + " " + modeArgs + ""
+# define RPL_CREATIONTIME(client, channelName, creationTime)			"329 " + (client.empty() ? "*" : client) + " " + channelName + " " + creationTime + ""
+# define RPL_WHOISACCOUNT(client, nickName, account)					"330 " + (client.empty() ? "*" : client) + " " + nickName + " " + account + " :is logged in as"
+# define RPL_NOTOPIC(client, channelName)								"331 " + (client.empty() ? "*" : client) + " " + channelName + " :No topic is set"
+# define RPL_TOPIC(client, channelName, topic)							"332 " + (client.empty() ? "*" : client) + " " + channelName + " :" + topic + ""
+# define RPL_TOPICWHOTIME(client, channelName, nickName, setat)			"333 " + (client.empty() ? "*" : client) + " " + channelName + " " + nickName + " " + setat + ""
+# define RPL_WHOISACTUALLY(client, nickName)							"338 " + (client.empty() ? "*" : client) + " " + nickName + " :is actually ..."
+# define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "*" : client) + " " + nickName + " " + channelName + ""
+# define RPL_NAMREPLY(client, symbol, channelName, nickList)			"353 " + (client.empty() ? "*" : client) + " " + symbol + " " + channelName + " :" + nickList + ""
+# define RPL_ENDOFNAMES(client, channelName)							"366 " + (client.empty() ? "*" : client) + " " + channelName + " :End of /NAMES list"
+# define RPL_ENDOFBANLIST(client, channelName)							"368 " + (client.empty() ? "*" : client) + " " + channelName + " :End of channel ban list"
+# define RPL_WHOISHOST(client, nickName)								"378 " + (client.empty() ? "*" : client) + " " + nickName + " :is connecting from *@localhost 127.0.0.1"
+# define RPL_WHOISMODES(client, nickName)								"379 " + (client.empty() ? "*" : client) + " " + nickName + " :is using modes +ailosw"
+# define RPL_WHOISSECURE(client, nickName)								"671 " + (client.empty() ? "*" : client) + " " + nickName + " :is using a secure connection"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:22:54 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:45:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 		return ;
 	}
 
-	c->setReplyBuffer(ERR_UMODEUNKNOWNFLAG(c->getNickname()));
+	c->setReplyBuffer(ERR_UMODEUNKNOWNFLAG(c->getNickname(), tokens[2]));
 }
 
 static bool	isUsableMode(std::string mode) {
@@ -320,11 +320,6 @@ void	Server::cmdChannelMode(std::vector<std::string> tokens, int fd) {
 
 	Client	*c = getClientByFd(fd);
 	Channel	*ch = getChannel(tokens[1]);
-
-	// if (!isValidChannelName(tokens[1])) {
-	// 	c->setReplyBuffer(ERR_BADCHANMASK(tokens[1]));
-	// 	return;
-	// }
 
 	if (ch == NULL) {
 		c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), tokens[1]));
