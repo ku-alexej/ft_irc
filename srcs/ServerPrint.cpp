@@ -6,13 +6,16 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 16:20:29 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:06:16 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 void	Server::printStringVector(std::vector<std::string> v) {
+	if(v.size() == 0) {
+		return ;
+	}
 	for (size_t i = 0; i < v.size(); i++) {
 		std::cout << "[" << v[i] << "]";
 		if (i + 1 < v.size())

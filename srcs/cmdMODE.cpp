@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:45:33 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:54:46 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	Server::cmdUserMode(std::vector<std::string> tokens, int fd) {
 		return ;
 	}
 
-	if (c->getNickname() != tokens[1]) {
+	if (toLower(c->getNickname()) != toLower(tokens[1])) {
 		c->setReplyBuffer(ERR_USERSDONTMATCH(c->getNickname()));
 		return ;
 	}
@@ -204,7 +204,7 @@ void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode,
 		return ;
 	}
 
-	switch (mode[0]) {															// set mode
+	switch (mode[0]) {
 		case '+':
 			if (ch->getOperatorByFd(t->getFd()) == NULL) {
 				ch->addOperator(t);

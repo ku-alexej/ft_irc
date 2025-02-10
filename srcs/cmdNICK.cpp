@@ -6,20 +6,11 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:49:13 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:49:27 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
-std::string	toLower(std::string str) {
-	for (size_t i = 0; i < str.size(); i++) {
-		if (str[i] >= 'A' && str[i] <= 'Z') {
-			str[i] = std::tolower(str[i]);
-		}
-	}
-	return (str);
-}
 
 void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
 	Client *c = getClientByFd(fd);

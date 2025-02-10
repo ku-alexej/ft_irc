@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:40:30 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:08:37 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ Client* Server::getClientByFd(int fd) {
 
 Client* Server::getClientByNick(std::string nick) {
 	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
-		if (it->getNickname() == nick) {
+		if (toLower(it->getNickname()) == toLower(nick)) {
 			return &(*it);
 		}
 	}
@@ -152,11 +152,12 @@ std::vector<std::string>	Server::parsCommands(std::string buffer) {
 
 	while (std::getline(stm, line)) {
 		size_t find = line.find_first_of("\r\n");
-		if(find != std::string::npos)
+		if(find != std::string::npos) {
 			line = line.substr(0,find);
+		}
 		commands.push_back(line);
 	}
-
+	
 	return (commands);
 }
 
@@ -192,10 +193,11 @@ void	Server::disconnectClient(int fd, std::string reason) {
 }
 
 void	Server::handleNewInput(int fd) {
-	char buff[1024];
+	char		buff[512];
 	memset(buff, 0, sizeof(buff));
 	Client *client = getClientByFd(fd);
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
+	std::string str(buff);
 	std::cout << YEL << "[INFO]: recived data from client fd=" << fd << RES << std::endl;
 
 	if (bytes < 0) {
@@ -203,16 +205,20 @@ void	Server::handleNewInput(int fd) {
 		disconnectClient(fd, "server can't read client data");
 	} else if (bytes == 0) {
 		std::cout << RED << "[INFO]: client fd=" << client->getFd() << " sent nothing" << RES << std::endl;
-		return ;
+		disconnectClient(fd, "client sends nothing");
 	} else {
 		client->setBuffer(buff);
 		printClientBuffer(*client);
 		std::vector<std::string> cmds = parsCommands(client->getBuffer());
-
+		if (cmds.size() == 0 || cmds[0].empty() == true) {
+			return ;
+		}
+		
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
 
 		for (size_t i = 0; i < cmds.size(); i++) {
+			std::cout << "try exec" << std::endl;
 			exec(cmds[i], fd);
 		}
 	}
@@ -305,8 +311,7 @@ void	Server::signalHandler(int signum) {
 
 void Server::addChannel(Channel *newChannel, std::string name) {
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
-		if (it->getName() == name) {
-			std::cout << ">>>>>>> ARE WE HERE <<<<<<< " << std::endl;
+		if (toLower(it->getName()) == toLower(name)) {
 			return ;
 		}
 	}
@@ -316,7 +321,7 @@ void Server::addChannel(Channel *newChannel, std::string name) {
 
 Channel* Server::getChannel(std::string chanName) {
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
-		if (it->getName() == chanName) {
+		if (toLower(it->getName()) == toLower(chanName)) {
 			return &(*it);
 		}
 	}
@@ -326,7 +331,7 @@ Channel* Server::getChannel(std::string chanName) {
 
 void	Server::deleteChannel(std::string toDelete) {
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
-		if (it->getName() == toDelete) {
+		if (toLower(it->getName()) == toLower(toDelete)) {
 			this->_channels.erase(it);
 			std::cout << "[INFO]: channel name=" << toDelete << " was deleted" << std::endl;
 			break;

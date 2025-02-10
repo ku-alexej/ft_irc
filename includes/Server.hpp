@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 16:11:00 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:57:48 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sstream>
 # include <algorithm>    // std::find
 # include <unistd.h>
+# include <cctype>
 
 // # include <sstream>
 // # include <sys/socket.h>
@@ -91,17 +92,17 @@ class Server {
 		void	cmdQuit(std::vector<std::string> tokens, int fd);
 		void	cmdWho(std::vector<std::string> tokens, int fd);
 
-		Channel* getChannel(std::string chanName);
-		void	addChannel(Channel *newChannel, std::string name);
-		Client	*getClientByFd(int fd);
-		Client	*getClientByNick(std::string nick);
-		void	deleteChannel(std::string toDelete);
-		void	deleteEmptyChannel(Channel *ch);
-		void	deleteClient(Client toDelete);
-		void	deleteFromFds(int fdsIndex);
-		void	startListening();
-		void	turnOn();
-		void	turnOff();
+		Channel* 	getChannel(std::string chanName);
+		void		addChannel(Channel *newChannel, std::string name);
+		Client		*getClientByFd(int fd);
+		Client		*getClientByNick(std::string nick);
+		void		deleteChannel(std::string toDelete);
+		void		deleteEmptyChannel(Channel *ch);
+		void		deleteClient(Client toDelete);
+		void		deleteFromFds(int fdsIndex);
+		void		startListening();
+		void		turnOn();
+		void		turnOff();
 		static void	signalHandler(int signum);
 
 		//		functions for debug
