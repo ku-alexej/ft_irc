@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:11:46 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:11:11 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,7 @@ class Client {
 		std::vector<std::string>	_invites;
 		std::vector<std::string> 	_channelNames;
 };
+
+std::string	toLower(std::string str);
 
 #endif

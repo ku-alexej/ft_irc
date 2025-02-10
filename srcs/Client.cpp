@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:14:20 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:22:03 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	Client::clearBuffer() {
 
 void	Client::addInvite(std::string newInvite) {
 	for (std::vector<std::string>::iterator it = this->_invites.begin(); it != this->_invites.end(); it++) {
-		if (*it == newInvite)
+		if (toLower(*it) == toLower(newInvite))
 			return ;
 	}
 	this->_invites.push_back(newInvite);
@@ -136,23 +136,19 @@ void	Client::addInvite(std::string newInvite) {
 
 void	Client::deleteInvite(std::string toDelete) {
 	for (std::vector<std::string>::iterator it = this->_invites.begin(); it != this->_invites.end(); it++) {
-		if (*it == toDelete) {
+		if (toLower(*it) == toLower(toDelete)) {
 			this->_invites.erase(it);
 			return ;
 		}
 	}
 }
 
-void Client::deleteChannel(std::string &channelName)
-{
-	std::vector<std::string>::iterator it = std::find(
-		this->_channelNames.begin(),
-		this->_channelNames.end(),
-		channelName
-	);
-
-	if (it != this->_channelNames.end()) {
-		this->_channelNames.erase(it);
+void	Client::deleteChannel(std::string &toDelete) {
+	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
+		if (toLower(*it) == toLower(toDelete)) {
+			this->_channelNames.erase(it);
+			return ;
+		}
 	}
 }
 
@@ -166,14 +162,34 @@ void	Client::trimmReplyBuffer(size_t bytes) {
 
 
 void	Client::addChannel(std::string channelName) {
+
 	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
-		if (*it == channelName) {
+		if (toLower(*it) == toLower(channelName)) {
 			return ;
 		}
 	}
+
 	this->_channelNames.push_back(channelName);
 }
 
 bool	Client::isInvitedToChannel(std::string channelName) {
-	    return (std::find(_invites.begin(), _invites.end(), channelName) != _invites.end());
+
+	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
+		if (toLower(*it) == toLower(channelName)) {
+			return (true);
+		}
+	}
+
+	return (false);
+}
+
+std::string	toLower(std::string str) {
+
+	for (size_t i = 0; i < str.size(); i++) {
+		if (str[i] >= 'A' && str[i] <= 'Z') {
+			str[i] = std::tolower(str[i]);
+		}
+	}
+
+	return (str);
 }
