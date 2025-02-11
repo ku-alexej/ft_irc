@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 21:12:25 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 21:18:55 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	Server::cmdKick(std::vector<std::string> tokens, int fd) {
 	std::string					defaultReason = "Very boring and speaks about frogs all the time.";
 	std::vector<std::string>	listToKick;
 
-	int x = 0;
 	if (c->getRegistred() == false) {
 		c->setReplyBuffer(ERR_NOTREGISTERED(c->getNickname()));
 		return ;
@@ -69,7 +68,6 @@ void	Server::cmdKick(std::vector<std::string> tokens, int fd) {
 
 	for (size_t i = 0; i < listToKick.size(); i++) {
 
-		int y = 0;
 		Client	*t = getClientByNick(listToKick[i]);
 
 		if (t == NULL) {
