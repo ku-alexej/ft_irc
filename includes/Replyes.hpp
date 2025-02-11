@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 16:50:07 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 19:16:47 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
 # define QUIT_SERVER(msg)													"ERROR :" + msg + ""
 # define TOPIC(client, userName, hostName, channelName, topic)				std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " TOPIC " + channelName + " :" + topic + ""
+# define INVITE(client, userName, hostName, targetName, channelName)		std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " INVITE " + targetName + " " + channelName + ""
 
 // --- errors ---
 # define ERR_NOSUCHNICK(client, nickOrChannel)							"401 " + (client.empty() ? "*" : client) + " " + nickOrChannel + " :No such nick/channel"
@@ -86,6 +87,8 @@
 # define RPL_NOTOPIC(client, channelName)								"331 " + (client.empty() ? "*" : client) + " " + channelName + " :No topic is set"
 # define RPL_TOPIC(client, channelName, topic)							"332 " + (client.empty() ? "*" : client) + " " + channelName + " :" + topic + ""
 # define RPL_TOPICWHOTIME(client, channelName, nickName, setat)			"333 " + (client.empty() ? "*" : client) + " " + channelName + " " + nickName + " " + setat + ""
+# define RPL_INVITELIST(client, channelName)							"336 " + (client.empty() ? "*" : client) + " " + channelName + ""
+# define RPL_ENDOFINVITELIST(client)									"337 " + (client.empty() ? "*" : client) + " :End of /INVITE list"
 # define RPL_WHOISACTUALLY(client, nickName)							"338 " + (client.empty() ? "*" : client) + " " + nickName + " :is actually ..."
 # define RPL_INVITING(client, nickName, channelName)					"341 " + (client.empty() ? "*" : client) + " " + nickName + " " + channelName + ""
 # define RPL_NAMREPLY(client, symbol, channelName, nickList)			"353 " + (client.empty() ? "*" : client) + " " + symbol + " " + channelName + " :" + nickList + ""

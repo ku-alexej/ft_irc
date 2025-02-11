@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:19:15 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 19:26:05 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	Client::addChannel(std::string channelName) {
 
 bool	Client::isInvitedToChannel(std::string channelName) {
 
-	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
+	for (std::vector<std::string>::iterator it = this->_invites.begin(); it != this->_invites.end(); it++) {
 		if (toLower(*it) == toLower(channelName)) {
 			return (true);
 		}
