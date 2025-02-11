@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 18:57:48 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:18:30 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class Server {
 		void	handleNewInput(int fd);
 		void	sentReply(int fd);
 
-		std::vector<std::string>	parsCommands(std::string buffer);
+		std::vector<std::string>	parsCommands(Client *c);
 		std::vector<std::string>	splitIrssiCommandinToken(std::string cmd);
 
 		void	initCmdMap();
@@ -124,5 +124,7 @@ class Server {
 		std::vector<struct pollfd>	_fds;
 		std::map<std::string, void (Server::*)(std::vector<std::string>, int)> _cmdMap;
 };
+
 std::vector<std::string>	split(const std::string str, char delimiter);
+
 #endif

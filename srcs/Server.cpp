@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 20:08:37 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:17:57 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,16 @@ Server::~Server() {}
 // --- setters ---
 
 void	Server::deleteClient(Client toDelete) {
-	for (std::list<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+	for (std::list<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
 		if (it->getFd() == toDelete.getFd()) {
 			this->_clients.erase(it);
 			std::cout << "[INFO]: client fd=" << toDelete.getFd() << " was deleted" << std::endl;
 			return ;
 		}
+	}
 }
 
-Client* Server::getClientByFd(int fd) {
+Client*	Server::getClientByFd(int fd) {
 	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (it->getFd() == fd) {
 			return &(*it);
@@ -78,7 +79,7 @@ Client* Server::getClientByFd(int fd) {
 	return (NULL);
 }
 
-Client* Server::getClientByNick(std::string nick) {
+Client*	Server::getClientByNick(std::string nick) {
 	for (std::list<Client>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (toLower(it->getNickname()) == toLower(nick)) {
 			return &(*it);
@@ -89,10 +90,12 @@ Client* Server::getClientByNick(std::string nick) {
 
 void	Server::deleteFromFds(int fdsIndex) {
 	std::vector<struct pollfd>::iterator it = _fds.begin();
-	for (int i = 0; i < fdsIndex; i++)
+	for (int i = 0; i < fdsIndex; i++) {
 		it++;
-	if (it != _fds.end())
+	}
+	if (it != _fds.end()) {
 		_fds.erase(it);
+	}
 }
 
 // --- handle new client ---
@@ -145,24 +148,33 @@ std::vector<std::string>	Server::splitIrssiCommandinToken(std::string cmd) {
 	return (result);
 }
 
-std::vector<std::string>	Server::parsCommands(std::string buffer) {
-	std::vector<std::string>	commands;
+std::vector<std::string>	Server::parsCommands(Client *c) {
+
+	std::string					buffer = c->getBuffer();
+	std::vector<std::string>	cmds;
 	std::istringstream			stm(buffer);
 	std::string					line;
+
+
+	if (buffer.find_first_of("\r\n") == std::string::npos) {
+		return (cmds);
+	}
 
 	while (std::getline(stm, line)) {
 		size_t find = line.find_first_of("\r\n");
 		if(find != std::string::npos) {
 			line = line.substr(0,find);
 		}
-		commands.push_back(line);
+		cmds.push_back(line);
 	}
-	
-	return (commands);
+
+	c->clearBuffer();
+
+	return (cmds);
 }
 
 void	Server::disconnectClient(int fd, std::string reason) {
-	
+
 	Client		*c = getClientByFd(fd);
 
 	std::cout << "It is a reason for disconnectClient =[" << reason << "]" << std::endl;
@@ -209,16 +221,16 @@ void	Server::handleNewInput(int fd) {
 	} else {
 		client->setBuffer(buff);
 		printClientBuffer(*client);
-		std::vector<std::string> cmds = parsCommands(client->getBuffer());
+
+		std::vector<std::string> cmds = parsCommands(client);
 		if (cmds.size() == 0 || cmds[0].empty() == true) {
 			return ;
 		}
-		
+
 		std::cout << "[INFO]: " << GRN << "vector=" << RES;
 		printStringVector(cmds);
 
 		for (size_t i = 0; i < cmds.size(); i++) {
-			std::cout << "try exec" << std::endl;
 			exec(cmds[i], fd);
 		}
 	}
@@ -268,8 +280,9 @@ void	Server::turnOn() {
 	std::cout << "[INFO]: Waiting for connections ..." << std::endl;
 
 	while (Server::_stayTurnedOn) {
-		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_stayTurnedOn)
+		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_stayTurnedOn) {
 			throw (std::runtime_error("Error: poll()"));
+		}
 
 		for (size_t i = 0; i < _fds.size(); i++) {
 			if (_fds[i].revents & POLLIN) {
@@ -281,7 +294,7 @@ void	Server::turnOn() {
 				}
 			}
 		}
-		
+
 		this->printServer();
 
 	}
@@ -309,7 +322,7 @@ void	Server::signalHandler(int signum) {
 	_stayTurnedOn = false;
 }
 
-void Server::addChannel(Channel *newChannel, std::string name) {
+void	Server::addChannel(Channel *newChannel, std::string name) {
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (toLower(it->getName()) == toLower(name)) {
 			return ;
@@ -319,7 +332,7 @@ void Server::addChannel(Channel *newChannel, std::string name) {
 	this->_channels.push_back(*newChannel);
 }
 
-Channel* Server::getChannel(std::string chanName) {
+Channel*	Server::getChannel(std::string chanName) {
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (toLower(it->getName()) == toLower(chanName)) {
 			return &(*it);
