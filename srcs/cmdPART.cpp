@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:08:29 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:25:47 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 
 	Client						*c = getClientByFd(fd);
 	Channel						*channel;
-	std::string					reason;
+	std::string					reason = "";
 	std::vector<std::string>	channelsNames;
 
 	if (c->getRegistred() == false) {
@@ -41,14 +41,18 @@ void	Server::cmdPart(std::vector<std::string> tokens, int fd) {
 	}
 
 	if (tokens.size() > 2) {
-		for (size_t i = 2; i < tokens.size(); ++i) {
-			if (i != 2) {
-				reason += " ";
+		if (tokens[2][0] == ':') {
+			tokens[2].erase(tokens[2].begin());
+			for (size_t i = 2; i < tokens.size(); i++) {
+				reason += tokens[i];
+				if (i < tokens.size() - 1) {
+					reason += " ";
+				}
 			}
-			reason += tokens[i];
+		} else {
+			reason += tokens[2];
 		}
 	}
-	reason.erase(0, 1);
 
 	channelsNames = split(tokens[1], ',');
 	for (size_t i = 0; i < channelsNames.size(); i++) {
