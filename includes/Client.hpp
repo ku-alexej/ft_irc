@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 17:11:11 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 20:10:14 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Client {
 		void	clearReplyBuffer();
 		void	clearBuffer();
 		void	addInvite(std::string newInvite);
-		void 	deleteChannel(std::string &channelName);
+		void 	deleteChannel(std::string channelName);
 		void	deleteInvite(std::string toDelete);
 		void	clearInvites();
 		void	trimmReplyBuffer(size_t bytes);

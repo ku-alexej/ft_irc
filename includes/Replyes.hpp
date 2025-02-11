@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 19:16:47 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 21:08:15 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define QUIT_SERVER(msg)													"ERROR :" + msg + ""
 # define TOPIC(client, userName, hostName, channelName, topic)				std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " TOPIC " + channelName + " :" + topic + ""
 # define INVITE(client, userName, hostName, targetName, channelName)		std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " INVITE " + targetName + " " + channelName + ""
+# define KICK(client, userName, hostName, channelName,targetName, msg)		std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " KICK " + channelName + " " + targetName + " :" + msg + ""
 
 // --- errors ---
 # define ERR_NOSUCHNICK(client, nickOrChannel)							"401 " + (client.empty() ? "*" : client) + " " + nickOrChannel + " :No such nick/channel"

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 19:26:05 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 20:10:06 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	Client::deleteInvite(std::string toDelete) {
 	}
 }
 
-void	Client::deleteChannel(std::string &toDelete) {
+void	Client::deleteChannel(std::string toDelete) {
 	for (std::vector<std::string>::iterator it = this->_channelNames.begin(); it != this->_channelNames.end(); it++) {
 		if (toLower(*it) == toLower(toDelete)) {
 			this->_channelNames.erase(it);
