@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:15 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 20:22:03 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:19:15 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ std::vector<std::string>	Client::getChannelNames()	{return (this->_channelNames)
 
 std::string	Client::getUserID() {
 	std::string userID = ":" + getNickname() + "!" + getUsername() + "@localhost";
-	return userID;
+	return (userID);
 }
 
 // --- setters ---
@@ -103,7 +103,7 @@ void	Client::setOnline(bool isOnline)					{this->_online		= isOnline;}
 void	Client::setOperator(bool isOperator)				{this->_operator	= isOperator;}
 void	Client::setPassOk(bool isPassOk)					{this->_passOk		= isPassOk;}
 void	Client::setRegistred(bool isRegistred)				{this->_registred	= isRegistred;}
-void	Client::setBuffer(std::string newBuffer)			{this->_buffer		= newBuffer;}
+void	Client::setBuffer(std::string newBuffer)			{this->_buffer		+= newBuffer;}
 void	Client::setIp(std::string newIp)					{this->_ip			= newIp;}
 void	Client::setUsername(std::string newUsername)		{this->_username	= newUsername;}
 void	Client::setHostname(std::string newHostname)		{this->_hostname	= newHostname;}
