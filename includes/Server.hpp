@@ -76,6 +76,7 @@ class Server {
 		void	cmdTopic(std::vector<std::string> tokens, int fd);
 		void	cmdInvite(std::vector<std::string> tokens, int fd);
 		void	cmdKick(std::vector<std::string> tokens, int fd);
+		void 	cmdPrivmsg(std::vector<std::string> tokens, int fd);
 		
 		//		functions MODE
 		void	cmdMode(std::vector<std::string> tokens, int fd);
