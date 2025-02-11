@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:15:35 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:31:12 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 // === in irssi documentation ===
 // TOPIC [-delete]	[<channel>]		[:<topic>]								// syntax of irssi (all 3 elem -> set topic)
 // TOPIC 			[#ch]													// show topic of #ch
-// TOPIC 			[#ch] 			[:The] [robots] [are] [taking] [over!]	// set topic of #ch 
-// TOPIC [-delete]	[#ch]													// delete topic of #ch 
-// TOPIC 			[#shakespeare]	[:/bb|[^b]{2}/]							// set topic 
+// TOPIC 			[#ch] 			[:The] [robots] [are] [taking] [over!]	// set topic of #ch
+// TOPIC [-delete]	[#ch]													// delete topic of #ch
+// TOPIC 			[#shakespeare]	[:/bb|[^b]{2}/]							// set topic
 
 void Server::cmdTopic(std::vector<std::string> tokens, int fd) {
-	
+
 	std::string	comment;
 	Channel		*ch;
 	Client		*c = getClientByFd(fd);
@@ -81,9 +81,9 @@ void Server::cmdTopic(std::vector<std::string> tokens, int fd) {
 			}
 		}
 	} else {
-		topic += tokens[2];	
+		topic += tokens[2];
 	}
-	
+
 	ch->setTopicText(topic);
 	ch->setReplyBufferForAllChannelClients(TOPIC(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), topic));
 }
