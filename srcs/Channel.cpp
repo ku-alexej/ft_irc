@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 18:02:09 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:43:50 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,14 @@ std::string	Channel::getModesArgs(bool isOnChannel) {
 void	Channel::setReplyBufferForAllChannelClients(std::string msg) {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
 		(*it)->setReplyBuffer(msg);
+	}
+}
+
+void	Channel::setReplyBufferForAllChannelClientsExeptFd(std::string msg, int fd) {
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
+		if ((*it)->getFd() != fd) {
+			(*it)->setReplyBuffer(msg);
+		}
 	}
 }
 

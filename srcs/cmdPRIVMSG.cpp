@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 18:05:31 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 18:43:23 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:53:15 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::sendPrivateMsgToChannel(std::string channelName, std::string messag
 		return ;
 	}
 
-	ch->setReplyBufferForAllChannelClients(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), message));
+	ch->setReplyBufferForAllChannelClientsExeptFd(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), message), fd);
 }
 
 void	Server::sendPrivateMsgToClient(std::string nickName, std::string message, int fd) {
@@ -38,7 +38,7 @@ void	Server::sendPrivateMsgToClient(std::string nickName, std::string message, i
 		return ;
 	}
 
-	t->setReplyBuffer(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), c->getNickname(), message));
+	t->setReplyBuffer(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), t->getNickname(), message));
 }
 
 // server doesn't use STATUSMSG=@
