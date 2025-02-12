@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:18 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 17:40:59 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:17:26 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static bool	isInputValid(int ac, char **av) {
 
 	std::string password = av[2];
 	if (password.empty()) {
-		std::cout << YEL << "[WARN]: password not set" << YEL << std::endl;
+		std::cout << RED << "Error: password can't be empty" << YEL << std::endl;
+		return (false);
 	}
 
 	return (true);

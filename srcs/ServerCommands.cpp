@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:52:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 18:12:08 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:18:23 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::exec(std::string cmd, int fd) {
 	}
 
 	bool	isRegistred = getClientByFd(fd)->getRegistred(); 
-	bool	isBasicCmd = (tokens[0] == "PASS" || tokens[0] == "CAP" || tokens[0] == "NICK" || tokens[0] == "USER");
+	bool	isBasicCmd = (tokens[0] == "PASS" || tokens[0] == "CAP" || tokens[0] == "NICK" || tokens[0] == "USER" || tokens[0] == "QUIT");
 	
 	std::cout << "[INFO]: " << YEL << "fd=" << RES << fd << GRN << " token=" << RES;
 	printStringVector(tokens);

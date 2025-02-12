@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:11 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 18:41:24 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:33:30 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 # define MODE_SET(client, userName, hostName, channelName, mode, variable)	std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " MODE " + channelName + " " + mode + " " + variable + ""
 # define JOIN_OK(client, userName, hostName, channelName)					std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " JOIN " + channelName + ""
-# define QUIT_CHANNEL(client, userName, hostName, msg)						std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " QUIT :" + msg + ""
+# define QUIT_CHANNEL(client, userName, hostName, channelName, msg)			std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " QUIT " + channelName + " :" + msg + ""
 # define QUIT_SERVER(msg)													std::string(":") + SERVER_NAME + " ERROR :" + msg + ""
 # define TOPIC(client, userName, hostName, channelName, topic)				std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " TOPIC " + channelName + " :" + topic + ""
 # define INVITE(client, userName, hostName, targetName, channelName)		std::string(":") + (client.empty() ? "*" : client) + "!" + userName + "@" + hostName + " INVITE " + targetName + " " + channelName + ""

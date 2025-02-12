@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 18:11:51 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:34:25 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,6 @@ void	Server::connectNewClient() {
 
 	newClient.setFd(fdIn);
 	newClient.setIp(inet_ntoa((clientAddress.sin_addr)));
-	if (_password == "") {
-		newClient.setPassOk(true);
-	}
 
 	_clients.push_back(newClient);
 	_fds.push_back(clientIn);
@@ -180,7 +177,8 @@ void	Server::disconnectClient(int fd, std::string reason) {
 		Channel *ch = getChannel(*it);
 		ch->deleteOperator(c);
 		ch->deleteClient(c);
-		ch->setReplyBufferForAllChannelClients(QUIT_CHANNEL(c->getNickname(), c->getUsername(), c->getHostname(), reason));
+		ch->setReplyBufferForAllChannelClients(QUIT_CHANNEL(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), reason));
+		c->setReplyBuffer(QUIT_CHANNEL(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), reason));
 		if (ch->getClients().size() == 0) {
 			deleteChannel(ch->getName());
 		}
