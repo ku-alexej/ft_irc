@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:03 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 19:31:09 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:36:40 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,9 @@ void  Server::cmdInvite(std::vector<std::string> tokens, int fd) {
 	}
 
 	if (t->isInvitedToChannel(ch->getName()) == false) {
-		std::cout << "set invite" << std::endl;
 		t->addInvite(ch->getName());
 	}
 
-	std::cout << "set invite rply" << std::endl;
 	c->setReplyBuffer(RPL_INVITING(c->getNickname(), t->getNickname(), ch->getName()));
 	t->setReplyBuffer(INVITE(c->getNickname(), c->getUsername(), c->getHostname(), t->getNickname(), ch->getName()));
 }

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:53:20 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 20:06:16 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:03:43 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	Server::printClientBuffer(Client client) {
 	std::cout << "]" << RES << std::endl;
 }
 
-// print info in Server class member functions for debug
 void	Server::printServer() {
 		std::cout << std::endl << "SERVER INFO" << std::endl;
 

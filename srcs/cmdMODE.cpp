@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:10 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 16:54:46 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:08:55 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 
 	switch (mode[0]) {
 		case '+':
-			std::cout << " TRY +l" << std::endl;
 			try {
 				int l = getNewLimitForChannel(variable);
 				if (ch->getL() == l) {
@@ -142,7 +141,6 @@ void	Server::setModeL(std::vector<std::string> tokens, int fd, std::string mode,
 				ch->setReplyBufferForAllChannelClients(MODE_SET(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), mode, variable));
 			} catch (const std::exception &e) {
 				c->setReplyBuffer(ERR_INVALIDMODEPARAM(c->getNickname(), ch->getName(), mode, variable, "use integer value"));
-				std::cout << " TRY +l: wrong argument!!!" << std::endl;
 				return ;
 			}
 			break;
@@ -222,42 +220,30 @@ void	Server::setModeO(std::vector<std::string> tokens, int fd, std::string mode,
 
 void	Server::setMode(std::vector<std::string> tokens, int fd, std::string mode, std::string variable) {
 
-	(void) tokens;
-	// Client *c = getClientByFd(fd);
-
-	std::cout << "try to set [" + mode + "]=[" + variable + "]" << std::endl;
-
-	if (isVariableNeeded(mode[1], mode[0]) && variable.empty()) {					// ignore mode
-		std::cout << " FAIL: no variable" << std::endl;
+	// ignore mode
+	if (isVariableNeeded(mode[1], mode[0]) && variable.empty()) {
 		return ;
 	}
 
-	switch (mode[1]) {															// set mode
+	// set mode
+	switch (mode[1]) {
 		case 't':
-			std::cout << " TRY t" << std::endl;
 			setModeT(tokens, fd, mode, variable);
 			break;
 		case 'i':
-			std::cout << " TRY i" << std::endl;
 			setModeI(tokens, fd, mode, variable);
 			break;
 		case 'l':
-			std::cout << " TRY l" << std::endl;
 			setModeL(tokens, fd, mode, variable);
 			break;
 		case 'k':
-			std::cout << " TRY k" << std::endl;
 			setModeK(tokens, fd, mode, variable);
 			break;
 		case 'o':
-			std::cout << " TRY o" << std::endl;
 			setModeO(tokens, fd, mode, variable);
 			break;
 	}
 }
-
-	// std::map<std::string, std::string> modesToUse = getModes(tokens),;
-	// runModes(modesToUse);
 
 static void	setIndexes(std::string &modestring, std::vector<std::string> tokens, size_t &i, size_t &variableIndex) {
 
@@ -300,10 +286,10 @@ void	Server::runModes(std::vector<std::string> tokens, int fd) {
 		}
 	}
 
-	std::cout << "[MODE]=[variable]" << std::endl;
-	for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {
-		std::cout << "[" + it->first + "]=[" + it->second + "]" << std::endl;
-	}
+	// std::cout << "[MODE]=[variable]" << std::endl;
+	// for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {
+	// 	std::cout << "[" + it->first + "]=[" + it->second + "]" << std::endl;
+	// }
 
 	//here we try to set each mode
 	for (std::vector<std::pair<std::string, std::string> >::iterator it = modesToUse.begin(); it != modesToUse.end(); it++) {

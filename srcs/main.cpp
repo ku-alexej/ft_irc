@@ -6,9 +6,12 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:18 by akurochk          #+#    #+#             */
-/*   Updated: 2025/01/30 18:15:55 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:40:59 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// /connect 127.0.0.1 1234 4545
+// valgrind  -s  --leak-check=full -leak-resolution=high --show-reachable=yes --track-origins=yes --track-fds=all ./ircserv 1234 4545
 
 #include "Server.hpp"
 

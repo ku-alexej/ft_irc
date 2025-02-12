@@ -6,13 +6,14 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:26 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 16:49:27 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:07:52 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 void	Server::cmdNick(std::vector<std::string> tokens, int fd) {
+
 	Client *c = getClientByFd(fd);
 
 	if (c->getPassOk() == false) {

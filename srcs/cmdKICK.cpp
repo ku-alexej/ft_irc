@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 21:18:55 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:24:41 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	Server::cmdKick(std::vector<std::string> tokens, int fd) {
 			tokens[3].erase(tokens[3].begin());
 			for (size_t i = 3; i < tokens.size(); i++) {
 				reason += tokens[i];
-				if (i < tokens.size() - 1) {
+				if (reason[reason.size() - 1] != ' ' && i < tokens.size() - 1 ) {
 					reason += " ";
 				}
 			}

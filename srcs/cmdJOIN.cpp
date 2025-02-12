@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:06 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 14:52:42 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:36:49 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ void	Server::joinChannel(Client *c, Channel *ch, std::string key) {
 	}
 
 	//limit
-	std::cout << "JOIN (+l) l=[" << ch->getL() << "] ch->getClients().size()=[" << ch->getClients().size() << "]" << std::endl;
 	if (ch->getL() != 0 && (size_t)ch->getL() <= ch->getClients().size()) {
 		c->setReplyBuffer(ERR_CHANNELISFULL(c->getNickname(), ch->getName()));
 		return ;
@@ -166,10 +165,8 @@ void	Server::cmdJoin(std::vector<std::string> tokens, int fd) {
 		}
 
 		if (ch == NULL) {
-			std::cout << "[DEBUG]: ----------- create ch" << std::endl;
 			createChannel(c, channelName);
 		} else {
-			std::cout << "[DEBUG]: ----------- join ch" << std::endl;
 			joinChannel(c, ch, channelsToJoin[i].second);
 		}
 	}

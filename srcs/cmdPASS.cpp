@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 17:57:28 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/10 15:29:46 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:07:33 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	Server::cmdPass(std::vector<std::string> tokens, int fd) {
 		return ;
 	}
 
-	size_t i = tokens.size() - 1; // protocol: last parameter is used as a password
+	// protocol: last parameter is used as a password
+	size_t i = tokens.size() - 1;
 
 	if(tokens.size() < 2 || tokens[i] == "") {
 		c->setReplyBuffer(ERR_NEEDMOREPARAMS(c->getNickname(), tokens[0]));
@@ -28,7 +29,7 @@ void	Server::cmdPass(std::vector<std::string> tokens, int fd) {
 	}
 
 	if(tokens[i] != _password) {
-		c->setReplyBuffer(ERR_PASSWDMISMATCH(c->getNickname()));					// WE MUST KICK IT
+		c->setReplyBuffer(ERR_PASSWDMISMATCH(c->getNickname()));
 		disconnectClient(fd, "Wrong password");
 		return ;
 	}
