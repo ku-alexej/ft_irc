@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:08 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 20:10:14 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:02:30 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@
 # include <string>
 # include <vector>
 # include <iostream>	
-# include <algorithm>    // std::find
-	// dell after
-# include "Colors.hpp"		// dell
+# include <algorithm> 
+# include "Colors.hpp"
 
 class Client {
 	public:

@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:14 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/08 13:51:26 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:02:09 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ std::string	Channel::getModesArgs(bool isOnChannel) {
 
 void	Channel::setReplyBufferForAllChannelClients(std::string msg) {
 	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-		std::cout << "setReplyBufferForAllChannelClients _clients.size()=" << this->_clients.size() << std::endl;
 		(*it)->setReplyBuffer(msg);
 	}
 }
@@ -169,7 +168,7 @@ bool isValidChannelName(const std::string &channel) {
 		return false;
 
 	char firstChar = channel[0];
-	if (firstChar != '#')								// after connection sent reply according Protocol: "CHANTYPES Parameter"
+	if (firstChar != '#')
 		return false;
 
 	for (std::size_t i = 0; i < channel.size(); ++i) {

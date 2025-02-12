@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/12 12:02:00 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:41:51 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,10 @@
 # include <fcntl.h>
 # include <arpa/inet.h>
 # include <sstream>
-# include <algorithm>    // std::find
+# include <algorithm>
 # include <unistd.h>
 # include <cctype>
 
-// # include <sstream>
-// # include <sys/socket.h>
-// # include <sys/types.h>
-// # include <unistd.h>
-// # include <netdb.h>
-// # include <fstream>
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Colors.hpp"

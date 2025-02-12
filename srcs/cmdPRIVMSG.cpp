@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmdPRIVMSG.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/12 18:05:31 by akurochk          #+#    #+#             */
+/*   Updated: 2025/02/12 18:43:23 by akurochk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Server.hpp"
 
 void	Server::sendPrivateMsgToChannel(std::string channelName, std::string message, int fd) {
@@ -17,13 +29,11 @@ void	Server::sendPrivateMsgToClient(std::string nickName, std::string message, i
 	Client	*t = getClientByNick(nickName);
 
 	if (t == NULL) {
-		std::cout << "t == NULL" << std::endl;
 		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), nickName));
 		return ;
 	}
 
 	if (t->getRegistred() == false) {
-		std::cout << "t->getRegistred()" << std::endl;
 		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), nickName));
 		return ;
 	}

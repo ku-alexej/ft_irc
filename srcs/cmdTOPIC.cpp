@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:11:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 17:31:12 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:21:45 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void Server::cmdTopic(std::vector<std::string> tokens, int fd) {
 		tokens[2].erase(tokens[2].begin());
 		for (size_t i = 2; i < tokens.size(); i++) {
 			topic += tokens[i];
-			if (i < tokens.size() - 1) {
-				topic += " ";
-			}
+				if (topic[topic.size() - 1] != ' ' && i < tokens.size() - 1 ) {
+					topic += " ";
+				}
 		}
 	} else {
 		topic += tokens[2];

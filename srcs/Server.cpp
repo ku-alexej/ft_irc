@@ -6,13 +6,12 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:17 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:17:57 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:11:51 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-// --- constructors ---
 Server::Server() {}
 
 Server::Server(const Server &src) {
@@ -48,18 +47,12 @@ Server::Server(int port, std::string password, std::string serverName) {
 	this->initCmdMap();
 }
 
-// --- operators ---
 Server	&Server::operator=(const Server &src) {
 	(void) src;
 	return (*this);
 }
 
-// --- destructors ---
 Server::~Server() {}
-
-// --- getters ---
-
-// --- setters ---
 
 void	Server::deleteClient(Client toDelete) {
 	for (std::list<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
@@ -127,6 +120,9 @@ void	Server::connectNewClient() {
 
 	newClient.setFd(fdIn);
 	newClient.setIp(inet_ntoa((clientAddress.sin_addr)));
+	if (_password == "") {
+		newClient.setPassOk(true);
+	}
 
 	_clients.push_back(newClient);
 	_fds.push_back(clientIn);
@@ -178,8 +174,6 @@ void	Server::disconnectClient(int fd, std::string reason) {
 
 	Client		*c = getClientByFd(fd);
 
-	std::cout << "It is a reason for disconnectClient =[" << reason << "]" << std::endl;
-
 	c->clearReplyBuffer();
 	std::vector<std::string> channelsNames = c->getChannelNames();
 	for (std::vector<std::string>::iterator it = channelsNames.begin(); it != channelsNames.end(); it++) {
@@ -206,13 +200,16 @@ void	Server::disconnectClient(int fd, std::string reason) {
 }
 
 void	Server::handleNewInput(int fd) {
-	char		buff[512];
-	memset(buff, 0, sizeof(buff));
-	Client *client = getClientByFd(fd);
-	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
-	std::string str(buff);
+	char		buff[CMD_LEN];
+	Client		*client = getClientByFd(fd);
+	ssize_t		bytes;
+	std::string	str(buff);
+	
 	std::cout << YEL << "[INFO]: recived data from client fd=" << fd << RES << std::endl;
 
+	memset(buff, 0, sizeof(buff));
+	bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
+	
 	if (bytes < 0) {
 		std::cout << RED << "[INFO]: client fd=" << client->getFd() << " can't read data" << RES << std::endl;
 		disconnectClient(fd, "server can't read client data");
@@ -273,9 +270,6 @@ void	Server::startListening() {
 
 void	Server::turnOn() {
 
-	// Client fox = Client(100, "akurochk", "akurochk");	// debug client
-	// _clients.push_back(fox);								// debug client
-
 	startListening();
 	std::cout << GRN << "[INFO]: the server fd=" << _fd << " was opened" << RES << std::endl;
 	std::cout << "[INFO]: Waiting for connections ..." << std::endl;
@@ -297,7 +291,6 @@ void	Server::turnOn() {
 		}
 
 		this->printServer();
-
 	}
 
 	turnOff();
@@ -324,6 +317,7 @@ void	Server::signalHandler(int signum) {
 }
 
 void	Server::addChannel(Channel *newChannel, std::string name) {
+
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (toLower(it->getName()) == toLower(name)) {
 			return ;
@@ -334,6 +328,7 @@ void	Server::addChannel(Channel *newChannel, std::string name) {
 }
 
 Channel*	Server::getChannel(std::string chanName) {
+
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
 		if (toLower(it->getName()) == toLower(chanName)) {
 			return &(*it);
@@ -344,6 +339,7 @@ Channel*	Server::getChannel(std::string chanName) {
 }
 
 void	Server::deleteChannel(std::string toDelete) {
+
 	for (std::list<Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
 		if (toLower(it->getName()) == toLower(toDelete)) {
 			this->_channels.erase(it);
