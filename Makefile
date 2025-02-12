@@ -33,7 +33,8 @@ SRC =	main.cpp \
 		cmdKICK.cpp \
 		cmdMODE.cpp \
 		cmdQUIT.cpp \
-		cmdWHO.cpp
+		cmdWHO.cpp \
+		cmdPRIVMSG.cpp
 
 # path of sources
 PATH_SRCS =	./srcs
