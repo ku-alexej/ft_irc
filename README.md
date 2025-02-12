@@ -2,4 +2,4 @@
 # ft_irc
 
 
-/server connect 127.0.0.1 1234 4545
+/connect 127.0.0.1 1234 4545

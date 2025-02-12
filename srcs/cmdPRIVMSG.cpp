@@ -1,86 +1,90 @@
 #include "Server.hpp"
 
-void Server::cmdPrivmsg(std::vector<std::string> tokens, int fd)
+void	Server::sendPrivateMsgToChannel(std::string channelName, std::string message, int fd) {
+	Client	*c = getClientByFd(fd);
+	Channel	*ch = getChannel(channelName);
+
+	if (ch == NULL) {
+		c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), channelName));
+		return ;
+	}
+
+	ch->setReplyBufferForAllChannelClients(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), ch->getName(), message));
+}
+
+void	Server::sendPrivateMsgToClient(std::string nickName, std::string message, int fd) {
+	Client	*c = getClientByFd(fd);
+	Client	*t = getClientByNick(nickName);
+
+	if (t == NULL) {
+		std::cout << "t == NULL" << std::endl;
+		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), nickName));
+		return ;
+	}
+
+	if (t->getRegistred() == false) {
+		std::cout << "t->getRegistred()" << std::endl;
+		c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), nickName));
+		return ;
+	}
+
+	t->setReplyBuffer(PRIVMSG(c->getNickname(), c->getUsername(), c->getHostname(), c->getNickname(), message));
+}
+
+// server doesn't use STATUSMSG=@
+// so we no need to manage "sent to operators of channel" @#channel
+
+// server doesn't use channe mode "+n"
+// so clients can sent messages to channels even if they are not in this channels
+void	Server::cmdPrivmsg(std::vector<std::string> tokens, int fd)
 {
-    Client *c = getClientByFd(fd);
+	Client      *c = getClientByFd(fd);
+	std::string message = "";
 
-    if (tokens.size() == 1)
-    {
-        c->setReplyBuffer(ERR_NORECIPIENT(c->getNickname(), tokens[0]));
-        return;
-    }
-    if (tokens.size() < 3)
-    {
-        c->setReplyBuffer(ERR_NOTEXTTOSEND(c->getNickname()));
-        return;
-    }
+	if (tokens.size() < 2) {
+		c->setReplyBuffer(ERR_NORECIPIENT(c->getNickname(), tokens[0]));
+		return ;
+	}
 
-    std::string message;
-    if (tokens[2][0] == ':')
-    {
-        tokens[2].erase(tokens[2].begin());
-        for (size_t i = 2; i < tokens.size(); ++i)
-        {
-            if (i != 2)
-            {
-                message += " ";
-            }
-            message += tokens[i];
-        }
-        std::vector<std::string> targets = split(tokens[1], ',');
-       for (size_t i = 0; i < targets.size(); ++i)
-        {
-            std::string target = targets[i];
-            
-            if (target.find('#') != std::string::npos)
-            {
-                bool operators = false;
+	if (tokens[1][0] == ':') {
+		c->setReplyBuffer(ERR_NORECIPIENT(c->getNickname(), tokens[0]));
+		return ;
+	}
 
-                for (std::string::iterator it = target.begin(); it != target.end() && *it != '#'; ++it)
-                {
-                    if (*it == '@')
-                    {
-                        operators = true;
-                        break;
-                    }
-                }
-                
-                size_t pos = target.find('#');
-                std::string channelName = target.substr(pos);
-                Channel *channel = getChannel(channelName);
-                if (!channel)
-                {
-                    c->setReplyBuffer(ERR_NOSUCHCHANNEL(c->getNickname(), channelName));
-                    continue;
-                }
-                else if (!channel->getClientByFd(c->getFd()))
-                {
-                    c->setReplyBuffer(ERR_NOTONCHANNEL(c->getNickname(), channelName));
-                    continue;
-                }
-                
-                std::stringstream ss;
-                ss << c ->getUserID() << " PRIVMSG " << channel -> getName() << " :" << message;
-                
-                if (operators)
-                    continue;
-                else
-                    channel->setReplyBufferForAllChannelClients(ss.str());
-            }
-            else
-            {
-                Client *recipient = getClientByNick(target); 
+	if (tokens.size() < 3) {
+		c->setReplyBuffer(ERR_NOTEXTTOSEND(c->getNickname()));
+		return ;
+	}
 
-                if (!recipient)
-                {
-                    c->setReplyBuffer(ERR_NOSUCHNICK(c->getNickname(), target)); 
-                    continue;  
-                }
+	// prepare msg
+	if (tokens.size() > 2) {
+		if (tokens[2][0] == ':') {
+			tokens[2].erase(tokens[2].begin());
+			for (size_t i = 2; i < tokens.size(); i++) {
+				message += tokens[i];
+				if (message[message.size() - 1] != ' ' && i < tokens.size() - 1 ) {
+					message += " ";
+				}
+			}
+		} else {
+			message += tokens[2];
+		}
+	}
 
-                std::stringstream ss;
-                ss << c->getNickname() << " PRIVMSG " << recipient -> getNickname() << " :" << message;
-                recipient->setReplyBuffer(ss.str()); 
-            }
-        }
-    }
+	if (message.size() == 0) {
+		c->setReplyBuffer(ERR_NOTEXTTOSEND(c->getNickname()));
+		return ;
+	}
+
+	std::vector<std::string> targets = split(tokens[1], ',');
+
+	for (size_t i = 0; i < targets.size(); i++) {
+		std::string target = targets[i];
+
+		if (target[0] == '#') {
+			sendPrivateMsgToChannel(target, message, fd);
+		} else {
+			sendPrivateMsgToClient(target, message, fd);
+		}
+	}
 }
