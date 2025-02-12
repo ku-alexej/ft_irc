@@ -6,7 +6,7 @@
 #    By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:21:16 by akurochk          #+#    #+#              #
-#    Updated: 2025/02/05 14:35:29 by akurochk         ###   ########.fr        #
+#    Updated: 2025/02/12 12:55:21 by akurochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRC =	main.cpp \
 		cmdKICK.cpp \
 		cmdMODE.cpp \
 		cmdQUIT.cpp \
-		cmdWHO.cpp
+		cmdWHO.cpp \
+		cmdPRIVMSG.cpp
 
 # path of sources
 PATH_SRCS =	./srcs

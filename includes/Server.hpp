@@ -6,7 +6,7 @@
 /*   By: akurochk <akurochk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:28:12 by akurochk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:18:30 by akurochk         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:02:00 by akurochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ class Server {
 		void	cmdTopic(std::vector<std::string> tokens, int fd);
 		void	cmdInvite(std::vector<std::string> tokens, int fd);
 		void	cmdKick(std::vector<std::string> tokens, int fd);
+
+		//		functions PRIVMSG
+		void 	cmdPrivmsg(std::vector<std::string> tokens, int fd);
+		void		sendPrivateMsgToChannel(std::string channelName, std::string message, int fd);
+		void		sendPrivateMsgToClient(std::string nickName, std::string message, int fd);
 		
 		//		functions MODE
 		void	cmdMode(std::vector<std::string> tokens, int fd);

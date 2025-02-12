@@ -34,6 +34,7 @@ void	Server::initCmdMap() {
 	this->_cmdMap["MODE"]	= &Server::cmdMode;
 	this->_cmdMap["QUIT"]	= &Server::cmdQuit;
 	this->_cmdMap["WHO"]	= &Server::cmdWho;
+	this->_cmdMap["PRIVMSG"] = &Server::cmdPrivmsg;
 }
 
 Server::Server(int port, std::string password, std::string serverName) {
